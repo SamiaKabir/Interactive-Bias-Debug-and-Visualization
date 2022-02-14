@@ -1,13 +1,10 @@
-# Ignore Mac system files
+# Ignored files
 .DS_Store
-
-# Ignore node_modules folder
 node_modules
-
-#Ignore Pre-trained models
 GoogleNews-vectors-negative300.bin
-
-
-#Ignore cache files
 __pycache__
+*.csv
+Tuned_model_wv.wordvectors
+Tuned_model_wv_wordvectors.vectors.npy
+
 
