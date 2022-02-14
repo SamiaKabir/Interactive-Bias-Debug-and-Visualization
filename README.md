@@ -14,7 +14,7 @@ You can downgrade to this version using the command below-
 
 2. Use python3 and pip3 throughout the setup process
 
-3. Download Tuned_model_wv.wordvectors and Tuned_model_wv_wordvectors.vectors.npy from the link below and add
+3. Download Tuned_model_wv.wordvectors and Tuned_model_wv.wordvectors.vectors.npy from the link below and add
    them to your root directory (Under the same directory as app.py)
    https://drive.google.com/drive/folders/1zmJzL3BVrPwkduamZ9znvV64F9FdAgZb?usp=sharing
 

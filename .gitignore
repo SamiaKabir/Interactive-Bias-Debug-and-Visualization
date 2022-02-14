@@ -5,6 +5,6 @@ GoogleNews-vectors-negative300.bin
 __pycache__
 *.csv
 Tuned_model_wv.wordvectors
-Tuned_model_wv_wordvectors.vectors.npy
+Tuned_model_wv.wordvectors.vectors.npy
 
 
