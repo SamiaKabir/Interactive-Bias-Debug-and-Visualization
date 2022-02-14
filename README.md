@@ -3,6 +3,7 @@
 **Platform:**
 FrontEnd: React.js, D3.js
 BackEnd: Python
+Server: Flask
 
 **Instructions to set up Flask:**
 
