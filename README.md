@@ -36,11 +36,11 @@ You can downgrade to this version using the command below-
 
 **Instructions to set up the new React app hosted on the Flask server**
 
-1.  Create a new directory e.g. "temp" and create a React app inside that directory.
-2.  Use the package.json given inside the frontend folder and repplace the new one with it.
+1.  Create a new directory e.g. "temp" inside root directory and create a React app inside that directory.
+2.  Use the package.json given inside the frontend folder and replace the new one with it.
 3.  Replace the public and src folder in your directory with the ones in "frontend" directory.
 4.  Delete the old "frontend" directory and name your "temp" directory "frontend"
-5.  You need to have **yarn** to run the react app on your Flask server.
+5.  You need to have **yarn** installed in order to run the react app on your Flask server.
 6.  After intsalling yarn, add all yarn dependencies.
     If you go to the frontend folder and run the command **yarn start**, it will show you what packages you need to add to yarn
 7.  Once you set up everything, go inside the frontend directory and open two seperate command prompt/terminal.
