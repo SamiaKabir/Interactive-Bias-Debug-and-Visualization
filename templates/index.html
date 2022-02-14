@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+
+<head>  
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Interactive visualization for Bias Detection</title>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">      
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script> -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css"/> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">                           
+    <link rel="stylesheet" href="./static/styles/style.css">
+</head>
+
+
+
+<body>
+    <div class="container">
+        <div class="row display-flex" id="top_row">
+          <!-- The Panel for Topic Search and Word Group -->
+          <div class="col-lg-4" >
+            <!-- Search Bar -->
+            <div class="searchBar">
+              <div class="dropdown" >
+                <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  Select Topic
+                </button>
+                <ul class="dropdown-menu" id="topicDropDown" aria-labelledby="dropdownMenuButton1">
+                </ul>
+              </div>
+           </div>
+          <!-- Edge Bundling Chart -->
+            <div id="edgeBundling">
+              <!-- <img src="./static/assets/images/word_group.png" alt="WordGroup" width="500" height="400"> -->
+            </div>
+          </div>
+          <!-- The Panel for the Main chord Diagram -->
+          <div class="col-lg-6">
+          <!-- Search Bar -->
+            <div class="searchBar">
+              <!-- Bias Metric Selection-->
+              <!-- <div class="input-group input-group-sm mb-3"> 
+                <form class="flexForm">
+                  <datalist id="suggestions">
+                    <option>Bias Score</option>
+                    <option>WEAT Score</option>
+                    <option>Cosine Dist. Difference</option>
+                </datalist>
+                  <input id="search-autocomplete" type="text" class="form-control input-text" placeholder="Select Bias Metric" aria-label="MetricSelection" aria-describedby="basic-addon2" style="max-height: 82%;" autoComplete="on" list="suggestions">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary btn-sm" type="button" id="search-metric">
+                      <i class="fa fa-check"></i>
+                    </button> 
+                  </div>
+                </form>
+              </div> -->
+              <!-- Word Search -->
+              <div class="input-group input-group-sm mb-3">
+                <form method="post" class="flexForm">
+                  <input type="text" name="searchWord" class="form-control input-text" id="search-input" placeholder="Search Words..." aria-label="Word Search" aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary btn-sm" type="submit" id="search-button">
+                      <i class="fa fa-search"></i>
+                    </button> 
+                  </div>
+               </form> 
+
+              </div>
+           </div>
+           <!-- Chord Diagram -->
+           <div id="chordDiagram">
+             <!-- <img src="./static/assets/images/chord.png" alt="Chord" width="500" height="500"> -->
+             <!-- <p>
+              {{UniversitySimilarities}}
+             </p> -->
+           </div>
+          </div>
+          <!-- Instance View -->
+          <div class="col-lg-2">
+            <div id="instance_view">
+
+            </div>
+          </div>
+        </div>
+        <div class="row display-flex" id="bottom_row"> 
+          <!-- The Panel for Bias Customization -->
+          <div class="col-lg-5">
+            <div id="cardTitle">
+               Add New Bias
+            </div>
+            <div id="addBias">
+              <div class="mb-3 row">
+                <!-- Insert new bias type -->
+                <label for="inputBias" class="col-sm-4 col-form-label" id="inputBiasLebel"> Bias Type: </label>
+                <div class="col-sm-8">
+                  <input class="form-control"  type="text" id="inputBias" placeholder="Insert Bias Type">
+                </div>
+              </div>
+            </div>
+            <!-- Suggested Subgroups -->
+            <div id="biasTable">
+              <h5> Suggested Sub Groups</h5>
+              <table class="table table-light">
+                <thead>
+                  <tr>
+                    <th scope="col">Subgroups</th>
+                    <th scope="col">Word List</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td> A </td>
+                    <td> B , C, D</td>
+                  </tr>
+                  <tr>
+                    <td>E</td>
+                    <td>F,G,H</td>
+                  </tr>
+                  <tr>
+                    <td>X</td>
+                    <td>Word Y, Word Z, Word V, Word W</td>
+                  </tr>
+                </tbody>
+              </table>        
+            </div>
+            <!-- Similar Bias Suggestions -->
+            <div id="biasSuggestTable">
+              <h5> Similar Bias Type</h5>
+              <table class="table table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">Bias Type</th>
+                    <th scope="col">Subgroup</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td> Bias X </td>
+                    <td> Subgroup 1, Subgroup 2, Subgroup3</td>
+                  </tr>
+                  <tr>
+                    <td> Bias Y </td>
+                    <td> Subgroup 1, Subgroup 2</td>
+                  </tr>
+                  <tr>
+                    <td> Bias Z </td>
+                    <td> Subgroup 1, Subgroup 2, Subgroup3, Subgroup 4</td>
+                  </tr>
+ 
+                </tbody>
+              </table>
+                       
+            </div>
+          </div>
+          <!-- The Panel for Bias Score visualization -->
+          <div class="col-lg-7">
+            <div id="cardTitle">
+              Bias Scores
+           </div>
+            <div id="barPlots">
+              <!-- <div class="graph_label"> Gender</div>
+              <img src="./static/assets/images/scatterplots.png" class="miniPlots" alt="ScatterPlot" width="200" height="200">
+              <div class="graph_label"> Race</div>
+              <img src="./static/assets/images/scatterplots.png" class="miniPlots" alt="ScatterPlot" width="200" height="200">
+              <div class="graph_label"> Religion</div>
+              <img src="./static/assets/images/scatterplots.png" class="miniPlots" alt="ScatterPlot" width="200" height="200">
+              <div class="graph_label"> Education</div>
+              <img src="./static/assets/images/scatterplots.png" class="miniPlots" alt="ScatterPlot" width="200" height="200">
+              <div class="graph_label"> Job </div>
+              <img src="./static/assets/images/scatterplots.png" class="miniPlots" alt="ScatterPlot" width="200" height="200"> -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="./static/scripts/edge_chord.js"></script>
+<script src="./static/scripts/bar_plots.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script> -->
+<script>
+// const basicAutocomplete = document.querySelector('#search-autocomplete');
+// const data = ['Bias Score', 'Difference of Cosine distance','WEAT Score'];
+// const dataFilter = (value) => {
+//   return data.filter((item) => {
+//     return item.toLowerCase().startsWith(value.toLowerCase());
+//   });
+// };
+
+// new mdb.Autocomplete(basicAutocomplete, {
+//   filter: dataFilter
+// });
+
+// const searchButton = document.getElementById('search-button');
+// const searchInput = document.getElementById('search-input');
+// searchButton.addEventListener('click', () => {
+//   const inputValue = searchInput.value;
+//   alert(inputValue);
+// });
+</script>
+
+
+</body>
