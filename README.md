@@ -36,14 +36,17 @@ You can downgrade to this version using the command below-
 
 **Instructions to set up the new React app hosted on the Flask server**
 
-1. Use the package.json given inside the frontend folder.
-2. You need to have **yarn** to run the react app on your Flask server.
-3. After intsalling yarn, add all yarn dependencies.
-   If you go to the frontend folder and run the command **yarn start**, it will show you what packages you need to add to yarn
-4. Once you set up everything, go inside the frontend directory and open two seperate command prompt/terminal.
-   run **yarn start** in one terminal and run **yarn start-api** in another terminal.
-   The first one will start the react app and the second one will start the Flask server.
-5. If everything is fine, it will open the react app on **localhost:3000**
+1.  Create a new directory e.g. "temp" and create a React app inside that directory.
+2.  Use the package.json given inside the frontend folder and repplace the new one with it.
+3.  Replace the public and src folder in your directory with the ones in "frontend" directory.
+4.  Delete the old "frontend" directory and name your "temp" directory "frontend"
+5.  You need to have **yarn** to run the react app on your Flask server.
+6.  After intsalling yarn, add all yarn dependencies.
+    If you go to the frontend folder and run the command **yarn start**, it will show you what packages you need to add to yarn
+7.  Once you set up everything, go inside the frontend directory and open two seperate command prompt/terminal.
+    run **yarn start** in one terminal and run **yarn start-api** in another terminal.
+    The first one will start the react app and the second one will start the Flask server.
+8.  If everything is fine, it will open the react app on **localhost:3000**
 
-6. Watch this link for more clarification
-   https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-project
+9.  Watch this link for more clarification on how to create a react app and set up with yarn to run on flask server
+    https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-project
