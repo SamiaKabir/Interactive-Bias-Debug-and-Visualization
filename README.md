@@ -10,9 +10,9 @@ Server: Flask <br />
 
 1. Install Gensim and other dependencies
 
-Make sure to have gensim version 3.8.3 <br />
-You can downgrade to this version using the command below- <br />
-**pip3 install gensim==3.8.3**
+   Make sure to have gensim version 3.8.3 <br />
+   You can downgrade to this version using the command below- <br />
+   **pip3 install gensim==3.8.3**
 
 2. Use python3 and pip3 throughout the setup process
 
