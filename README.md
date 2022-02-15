@@ -14,7 +14,7 @@ Server: Flask <br />
    You can downgrade to this version using the command below- <br />
    **pip3 install gensim==3.8.3**
 
-2. Use python3 and pip3 throughout the setup process
+2. Use python3 and pip3 throughout the setup process and execution afterwards
 
 3. Download Tuned_model_wv.wordvectors and Tuned_model_wv.wordvectors.vectors.npy from the link below and add
    them to your root directory (Under the same directory as app.py) <br />
@@ -23,7 +23,7 @@ Server: Flask <br />
 4. Download all the .csv files from the link below and add them inside **static/assets/data** folder of your project <br />
    https://drive.google.com/drive/folders/1qXWzj06k7o9hFZ_HpRecsE1FTnSvLUJi?usp=sharing
 
-5. To run the old version of the project, run **python3 app.py"** and open localhost:5000 in your browser to see the old version.
+5. To run the old version of the project, run **python3 app.py** and open localhost:5000 in your browser to see the old version.
 
 6. All Python and pip package versions are listed below- <br />
    Python- 3.7.0 <br />
@@ -39,10 +39,11 @@ Server: Flask <br />
 
 **Instructions to set up the new React app hosted on the Flask server**
 
-1.  Create a new directory e.g. "temp" inside root directory and create a React app inside that directory.
-2.  Use the package.json given inside the frontend folder and replace the new one with it.
-3.  Replace the public and src folder in your directory with the ones in "frontend" directory.
-4.  Delete the old "frontend" directory and name your "temp" directory "frontend"
+1.  Name the "frontend" directory something else, e.g. "temp". Create a new directory "frontend" inside root directory and create a React app inside that directory.
+2.  You can either Use the package.json given inside the "temp" folder and replace the new one with it. <br/>
+    Or copy "scripts" from "package.json" in "temp" and replace your "scripts" with it and copy "proxy" from the package.json in "temp" and add that to your package.json.
+3.  Replace the public and src folder in your directory with the ones in "temp" directory.
+4.  Delete the old frontend directory or "temp" directory in this case.
 5.  You need to have **yarn** installed in order to run the react app on your Flask server.
 6.  After intsalling yarn, add all yarn dependencies.
     If you go to the frontend folder and run the command **yarn start**, it will show you what packages you need to add to yarn
