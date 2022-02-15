@@ -42,7 +42,7 @@ Server: Flask <br />
 1.  Name the "frontend" directory something else, e.g. "temp".
 
 2.  Create a new directory "frontend" inside root directory. Go inside the new "frontend" directory and create a React app inside that directory
-    with the command **"create-react-app ."**.
+    with the command **"npx create-react-app ."**.
 3.  You can either Use the package.json given inside the "temp" folder and replace the new one with it. <br/>
     Or copy "scripts" from "package.json" in "temp" and replace your "scripts" with it and copy "proxy" from the package.json in "temp" and add that to your package.json.
 4.  Replace the public and src folder in your directory with the ones in "temp" directory.
