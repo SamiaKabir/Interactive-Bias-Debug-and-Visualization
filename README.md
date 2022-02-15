@@ -1,9 +1,10 @@
 # Interactive-Bias-Debugger
 
 **Platform:**
-FrontEnd: React.js, D3.js
-BackEnd: Python
-Server: Flask
+This is a React app hosted on Flask server. For visualization, D3.js is used.<br />
+FrontEnd: React.js, D3.js <br />
+BackEnd: Python <br />
+Server: Flask <br />
 
 **Instructions to set up Flask:**
 
