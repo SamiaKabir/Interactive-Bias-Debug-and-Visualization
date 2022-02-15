@@ -39,18 +39,21 @@ Server: Flask <br />
 
 **Instructions to set up the new React app hosted on the Flask server**
 
-1.  Name the "frontend" directory something else, e.g. "temp". Create a new directory "frontend" inside root directory and create a React app inside that directory.
-2.  You can either Use the package.json given inside the "temp" folder and replace the new one with it. <br/>
+1.  Name the "frontend" directory something else, e.g. "temp".
+
+2.  Create a new directory "frontend" inside root directory. Go inside the new "frontend" directory and create a React app inside that directory
+    with the command **create-react-app .**.
+3.  You can either Use the package.json given inside the "temp" folder and replace the new one with it. <br/>
     Or copy "scripts" from "package.json" in "temp" and replace your "scripts" with it and copy "proxy" from the package.json in "temp" and add that to your package.json.
-3.  Replace the public and src folder in your directory with the ones in "temp" directory.
-4.  Delete the old frontend directory or "temp" directory in this case.
-5.  You need to have **yarn** installed in order to run the react app on your Flask server.
-6.  After intsalling yarn, add all yarn dependencies.
+4.  Replace the public and src folder in your directory with the ones in "temp" directory.
+5.  Delete the old frontend directory or "temp" directory in this case.
+6.  You need to have **yarn** installed in order to run the react app on your Flask server.
+7.  After intsalling yarn, add all yarn dependencies.
     If you go to the frontend folder and run the command **yarn start**, it will show you what packages you need to add to yarn
-7.  Once you set up everything, go inside the frontend directory and open two seperate command prompt/terminal.
+8.  Once you set up everything, go inside the frontend directory and open two seperate command prompt/terminal.
     run **yarn start** in one terminal and run **yarn start-api** in another terminal.
     The first one will start the react app and the second one will start the Flask server.
-8.  If everything is fine, it will open the react app on **localhost:3000**
+9.  If everything is fine, it will open the react app on **localhost:3000**
 
-9.  Watch this link for more clarification on how to create a react app and set up with yarn to run on flask server
+10. Watch this link for more clarification on how to create a react app and set up with yarn to run on flask server
     https://blog.miguelgrinberg.com/post/how-to-create-a-react--flask-project
