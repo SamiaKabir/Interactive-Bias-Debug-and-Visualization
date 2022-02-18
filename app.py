@@ -470,6 +470,16 @@ def maxBiasDictData():
 def get_current_time():
     return {'time': time.time()}
 
+# just test
+
+
+@app.route('/topics', methods=['POST'])
+def testfn():
+    # POST request
+    if request.method == 'POST':
+        print(request.get_json())  # parse as JSON
+        return 'Sucesss', 200
+
 
 if __name__ == "__main__":
     app.run(debug=True)

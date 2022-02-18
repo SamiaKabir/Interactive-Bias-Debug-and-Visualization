@@ -6,6 +6,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import AddIcon from '@mui/icons-material/Add';
 import customStyles from './style';
 import RenderTopicCard from './TopicCard';
+import axios from 'axios';
 
 function App() {
 
@@ -18,8 +19,7 @@ function App() {
       setCurrentTime(data.time);
     });
   }, []);
-
-
+  
   // for expanding the bias editor
   const [size, setClicked] = useState([2.5,3.5,5.5,0.5]);
   const [expandFlag, setExpand]= useState(true);

@@ -24,6 +24,25 @@ import EditIcon from '@mui/icons-material/Edit';
 //   }
 // }
 
+function handleKeyWordTransfer(all_topics){
+  fetch('/topics', {
+    // Declare what type of data we're sending
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    // Specify the method
+    method: 'POST',
+    // A JSON payload
+    body: JSON.stringify({
+        "topics": all_topics
+    })
+    }).then(function (response) { // At this point, Flask has printed our JSON
+    return response.text();
+    }).then(function (text) {
+
+    });
+  }
+
 
 function RenderTopicCard(props) {
     const topics= props.topics;
@@ -42,6 +61,9 @@ function RenderTopicCard(props) {
       color[i]=e.target.value;
       setColor(color);
     };
+
+    //send the topic array to server
+    handleKeyWordTransfer(topics);
 
 
     // handle reading input for seedwords
@@ -104,7 +126,7 @@ function RenderTopicCard(props) {
             <CardHeader 
             title=
             {
-            <div style={{position:'relative'}}>
+            <div style={{position:'relative',fontSize:'1.1rem'}}>
               {element} 
               <IconButton edge="start" color="inherit" size="small">
                   <EditIcon style={{color: 'darkgrey', fontSize:'1.0rem'}} />
@@ -156,7 +178,7 @@ function RenderTopicCard(props) {
             </CardContent>
             <Divider variant="middle" />
             <CardActions>
-              <Button size="small">Generate Cluster</Button>
+              <Button size="small">Add similar words</Button>
             </CardActions>
           </Card>
           </>
