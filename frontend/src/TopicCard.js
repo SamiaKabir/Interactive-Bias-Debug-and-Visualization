@@ -24,7 +24,7 @@ import EditIcon from '@mui/icons-material/Edit';
 //   }
 // }
 
-function handleKeyWordTransfer(all_topics){
+function handleKeyWordTransfer(all_topics,KeyWords){
   fetch('/topics', {
     // Declare what type of data we're sending
     headers: {
@@ -34,9 +34,10 @@ function handleKeyWordTransfer(all_topics){
     method: 'POST',
     // A JSON payload
     body: JSON.stringify({
-        "topics": all_topics
+        "topics": all_topics,
+        "keyWords": KeyWords
     })
-    }).then(function (response) { // At this point, Flask has printed our JSON
+    }).then(function (response) {
     return response.text();
     }).then(function (text) {
 
@@ -61,9 +62,6 @@ function RenderTopicCard(props) {
       color[i]=e.target.value;
       setColor(color);
     };
-
-    //send the topic array to server
-    handleKeyWordTransfer(topics);
 
 
     // handle reading input for seedwords
@@ -106,8 +104,9 @@ function RenderTopicCard(props) {
           setKeyWords(keyWords);
           forceUpdate();
         }
-     }
-
+              //send the topic array to server
+        handleKeyWordTransfer(topics,keyWords);
+      }
     };
 
     //delete keywords onclick
@@ -115,6 +114,7 @@ function RenderTopicCard(props) {
       keyWords[indx2].splice(indx,1);
       setKeyWords(keyWords);
       forceUpdate();
+      handleKeyWordTransfer(topics,keyWords);
     };
 
 

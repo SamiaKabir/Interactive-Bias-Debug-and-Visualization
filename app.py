@@ -27,9 +27,6 @@ headlines = pd.read_csv('static/assets/data/articles1.csv',
 # Trim the dataset
 news = headlines.sample(frac=0.6, random_state=423)
 
-# docs = ['this this this book',
-#         'this cat good',
-#         'cat good shit']
 docs = []
 
 for row in news['title']:
@@ -91,6 +88,7 @@ topic_data = json.load(f)
 # Closing file
 f.close()
 
+
 # Word Similarities with Word2Vec or Glove
 
 # Load pretrained word2vec model
@@ -116,13 +114,8 @@ f.close()
 
 # model_2.save("Tuned_Model.model")
 # model_2 = models.Word2Vec.load("Tuned_Model.model")
-
 # model_2.wv.save("Tuned_model_wv.wordvectors")
-
 model = models.KeyedVectors.load("Tuned_model_wv.wordvectors", mmap='r')
-
-print(model.similarity('donald', 'trump'))
-
 
 # # Similar clusters based on Word2vec
 # similarity_clusters = {
@@ -172,6 +165,49 @@ cluster_data = json.load(f_2)
 f_2.close()
 
 
+# Topics and keywords
+global All_Topics_cache
+global All_Keywords_cache
+global Suggested_words
+
+All_Topics_cache = []
+All_Keywords_cache = []
+Suggested_words = []
+
+# generate suggestions based on keywords
+
+
+def generate_suggestions(All_Topics, All_Keywords):
+    global All_Topics_cache
+    global All_Keywords_cache
+    global Suggested_words
+    # print(All_Topics)
+    # print(All_Keywords)
+    # if(len(All_Topics) > len(All_Topics_cache)):
+    All_Topics_cache = All_Topics
+    # if(len(All_Keywords) > len(All_Keywords_cache)):
+    All_Keywords_cache = All_Keywords
+    Suggested_words = []
+    print(All_Topics_cache)
+    print(All_Keywords_cache)
+    print(Suggested_words)
+
+    for topicWords in All_Keywords_cache:
+        avg_vector = model.wv[topicWords[0]]*0
+        # create average word vector from the seed words
+        for words in topicWords:
+            avg_vector += model.wv[words]
+        avg_vector = avg_vector/len(topicWords)
+        # Find top 15 words close to those seed words
+        model_word_vector = np.array(avg_vector, dtype='f')
+        related_words = (model.most_similar(
+            positive=[model_word_vector], topn=6))
+        Suggested_words.append(related_words)
+    print(Suggested_words)
+
+    return
+
+
 # Load Pretrained Glove model
 # print(list(gensim.downloader.info()['models'].keys()))
 # glove_vectors = gensim.downloader.load('glove-twitter-25')
@@ -179,10 +215,7 @@ f_2.close()
 
 # # print(len(model.vocab))
 # UniversitySimilarities = model.most_similar(positive=['university'], topn=5)
-
-
 # print(model.most_similar(positive=['university'], topn=5))
-
 # Create and save default bias types
 # This bias array is editable by user
 bias_array = []
@@ -470,14 +503,18 @@ def maxBiasDictData():
 def get_current_time():
     return {'time': time.time()}
 
-# just test
+# read in keywords from client
 
 
 @app.route('/topics', methods=['POST'])
 def testfn():
     # POST request
     if request.method == 'POST':
-        print(request.get_json())  # parse as JSON
+        request_data = request.get_json()
+        All_Topics = request_data["topics"]
+        All_Keywords = request_data["keyWords"]
+        # print(request.get_json())  # parse as JSON
+        generate_suggestions(All_Topics, All_Keywords)
         return 'Sucesss', 200
 
 
