@@ -38,6 +38,9 @@ const customStyles= makeStyles((theme) => ({
     backgroundColor: 'transparent',
     position: 'absolute',
     right:'0px'
+  },
+  chipStyle:{
+    backgroundColor: '#e9f6fb!important'
   }
 
 }));

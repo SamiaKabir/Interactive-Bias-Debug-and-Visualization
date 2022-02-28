@@ -24,25 +24,6 @@ import EditIcon from '@mui/icons-material/Edit';
 //   }
 // }
 
-function handleKeyWordTransfer(all_topics,KeyWords){
-  fetch('/topics', {
-    // Declare what type of data we're sending
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    // Specify the method
-    method: 'POST',
-    // A JSON payload
-    body: JSON.stringify({
-        "topics": all_topics,
-        "keyWords": KeyWords
-    })
-    }).then(function (response) {
-    return response.text();
-    }).then(function (text) {
-
-    });
-  }
 
 
 function RenderTopicCard(props) {
@@ -70,21 +51,10 @@ function RenderTopicCard(props) {
       // console.log(e.target.value);
       setkeyWord(e.target.value);
     };
-
-    // handle keywords of each topics
-
-    // const tempArray=[];
-
-    // topics.map((topic)=>{
-    //   const newArray=[];
-    //   tempArray.push(newArray);
-
-    // });
-    // console.log(tempArray);
     
     const [keyWords,setKeyWords]= useState([]);
 
-    console.log(keyWords);
+    // console.log(keyWords);
 
     const handleKeySubmit = (e,indx) => {
       if(e.key == 'Enter'){
@@ -104,8 +74,6 @@ function RenderTopicCard(props) {
           setKeyWords(keyWords);
           forceUpdate();
         }
-              //send the topic array to server
-        handleKeyWordTransfer(topics,keyWords);
       }
     };
 
@@ -114,8 +82,45 @@ function RenderTopicCard(props) {
       keyWords[indx2].splice(indx,1);
       setKeyWords(keyWords);
       forceUpdate();
-      handleKeyWordTransfer(topics,keyWords);
     };
+
+    // send seedwords to server and read suggested words from server
+    const handleKeyWordTransfer=(e,all_topics,KeyWords,indx)=>{
+      fetch('/topics', {
+        // Declare what type of data we're sending
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        // Specify the method
+        method: 'POST',
+        // A JSON payload
+        body: JSON.stringify({
+            "topics": all_topics,
+            "keyWords": KeyWords
+        })
+        }).then(function (response) {
+        return response.text();
+        }).then(function (text) {
+        });
+    
+        var delayInMilliseconds = 6000; //10 second
+    
+        setTimeout(function() {
+          fetch('/gettopics').then(res => res.json()).then(data => {
+            console.log(data.words);
+            // for (let i = 0; i < keyWords.length; i++) {
+              for (let j = 0; j < data.words[0].length; j++) {
+                keyWords[indx].push(data.words[indx][j]);
+              }
+
+            // }
+            setKeyWords(keyWords);
+            forceUpdate();
+          });
+        }, delayInMilliseconds);
+    
+      }
+    
 
 
     if(topics.length>0){
@@ -157,14 +162,14 @@ function RenderTopicCard(props) {
               
               </div>
               {/* List of keywords in each topic card */}
-              <Paper variant='outlined' sx={{ p: '5px', display: 'block', alignItems: 'center',margin: '21px 2px 4px 1px',height:'10vh', maxHeight:'10%',overflowY:'auto'}}>
+              <Paper variant='outlined' sx={{ p: '5px', display: 'block', alignItems: 'center',margin: '21px 2px 4px 1px',height:'12vh', maxHeight:'12%',overflowY:'auto'}}>
                   { 
                     (keyWords.length>=topics.indexOf(element)+1)?
                     
                       <>
                       {
                         (keyWords[topics.indexOf(element)].length>0)? 
-                        keyWords[topics.indexOf(element)].map((keys)=> <Chip label={keys} variant="outlined" 
+                        keyWords[topics.indexOf(element)].map((keys)=> <Chip label={keys} variant="outlined" className={cssStyles_imported.chipStyle}
                           onDelete= {(e) => {handleDelete(e,keyWords[topics.indexOf(element)].indexOf(keys),topics.indexOf(element));}}/>)
                         :<></>
                       }
@@ -178,7 +183,9 @@ function RenderTopicCard(props) {
             </CardContent>
             <Divider variant="middle" />
             <CardActions>
-              <Button size="small">Add similar words</Button>
+              <Button size="small" onClick={(e)=>{handleKeyWordTransfer(e,topics,keyWords,topics.indexOf(element))}}>
+                Add similar words
+              </Button>
             </CardActions>
           </Card>
           </>

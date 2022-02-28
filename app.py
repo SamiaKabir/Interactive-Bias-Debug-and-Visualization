@@ -1,3 +1,4 @@
+from ast import Global
 from flask import Flask, send_from_directory, flash, redirect, render_template, request, session, abort, send_from_directory, send_file, jsonify
 import json
 import time
@@ -201,8 +202,11 @@ def generate_suggestions(All_Topics, All_Keywords):
         # Find top 15 words close to those seed words
         model_word_vector = np.array(avg_vector, dtype='f')
         related_words = (model.most_similar(
-            positive=[model_word_vector], topn=6))
-        Suggested_words.append(related_words)
+            positive=[model_word_vector], topn=10))
+        related_words_2 = []
+        for w in related_words:
+            related_words_2.append(w[0])
+        Suggested_words.append(related_words_2)
     print(Suggested_words)
 
     return
@@ -507,7 +511,7 @@ def get_current_time():
 
 
 @app.route('/topics', methods=['POST'])
-def testfn():
+def topicRdfn():
     # POST request
     if request.method == 'POST':
         request_data = request.get_json()
@@ -516,6 +520,12 @@ def testfn():
         # print(request.get_json())  # parse as JSON
         generate_suggestions(All_Topics, All_Keywords)
         return 'Sucesss', 200
+
+
+@app.route('/gettopics', methods=['GET'])
+def get_topic():
+    # global Suggested_words
+    return {'words': Suggested_words}
 
 
 if __name__ == "__main__":
