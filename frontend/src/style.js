@@ -18,6 +18,12 @@ const customStyles= makeStyles((theme) => ({
       borderColor: 'darkgrey!important',
       borderWidth: '1px!important',
   },
+  middlePanels2:{
+    height: '100vh',
+    backgroundColor:'white',
+    borderColor: 'darkgrey!important',
+    borderWidth: '1px!important',
+},
   biasEditorTitle:{
     transform: 'rotate(-90deg)',
     color: '#ededed!important',
@@ -41,7 +47,25 @@ const customStyles= makeStyles((theme) => ({
   },
   chipStyle:{
     backgroundColor: '#e9f6fb!important'
+  },
+  chartViz:{
+    color: '#1976d2!important',
+    height:'0.8em!important',
+    width:'0.8em!important',
+  },
+  chartPanel:{
+    height:'96.5%',
+    backgroundColor:'#EEEEEE!important',
+    borderColor:'#00000061'
+
+  },
+  barPanel:{
+    height:'3%',
+    backgroundColor:'#EEEEEE!important',
+    marginTop:'0.5%',
+    borderColor:'#00000061'
   }
+
 
 }));
 

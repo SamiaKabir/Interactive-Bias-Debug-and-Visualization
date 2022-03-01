@@ -139,11 +139,13 @@ function App() {
 
          {/* Bias chart panel */}
           <Grid item  md={size[2]}>
-            <Paper variant="outlined" square className={cssStyles.middlePanels}>
-              <header className="App-header">
-                ... to be deployed ...
-                {currentTime}
-              </header>
+            <Paper variant="outlined" square className={cssStyles.middlePanels2}>
+              <Paper variant="outlined" className={cssStyles.chartPanel}>
+                 <div id="chordChart">
+                   
+                 </div>
+              </Paper> 
+              <Paper variant="outlined" className={cssStyles.barPanel}/>
             </Paper>
           </Grid>
           {/* Bias Editor panel */}

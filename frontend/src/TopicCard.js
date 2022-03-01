@@ -5,6 +5,9 @@ import { CssBaseline, Grid, AppBar, Box, Typography, Toolbar, Paper, Container, 
 import customStyles from './style';
 import { ColorPicker, createColor, ColorButton } from "mui-color";
 import EditIcon from '@mui/icons-material/Edit';
+// import DonutLargeIcon from '@mui/icons-material/DonutLarge';
+import AddchartIcon from '@mui/icons-material/Addchart';
+
 
 // function RenderKeyWords(props){
 //   const keywords=props.keywords;
@@ -135,7 +138,7 @@ function RenderTopicCard(props) {
               {element} 
               <IconButton edge="start" color="inherit" size="small">
                   <EditIcon style={{color: 'darkgrey', fontSize:'1.0rem'}} />
-                </IconButton>
+              </IconButton>
               <input className={cssStyles_imported.colorPicker} type="color"  value={color[topics.indexOf(element)]} style={{}} 
               onChange={(e) => {
                  handleColorChange(e,topics.indexOf(element));
@@ -183,9 +186,15 @@ function RenderTopicCard(props) {
             </CardContent>
             <Divider variant="middle" />
             <CardActions>
-              <Button size="small" onClick={(e)=>{handleKeyWordTransfer(e,topics,keyWords,topics.indexOf(element))}}>
-                Add similar words
-              </Button>
+              <div style={{position:'relative',width:'100%'}}>
+                <Button size="small" style={{float:'left'}} onClick={(e)=>{handleKeyWordTransfer(e,topics,keyWords,topics.indexOf(element))}}>
+                  Add similar words
+                </Button>
+                <IconButton style={{ float:'right',margin:'0px'}}>
+                 <AddchartIcon className={cssStyles_imported.chartViz}/>
+                </IconButton>
+              </div>
+
             </CardActions>
           </Card>
           </>
