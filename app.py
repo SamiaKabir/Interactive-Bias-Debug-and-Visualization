@@ -202,7 +202,7 @@ def generate_suggestions(All_Topics, All_Keywords):
         # Find top 15 words close to those seed words
         model_word_vector = np.array(avg_vector, dtype='f')
         related_words = (model.most_similar(
-            positive=[model_word_vector], topn=10))
+            positive=[model_word_vector], topn=20))
         related_words_2 = []
         for w in related_words:
             related_words_2.append(w[0])
@@ -488,7 +488,7 @@ def clusterData():
 # Send bias array to script
 
 
-@ app.route('/bias_types')
+@ app.route('/bias_types', methods=['GET'])
 def biasTypeData():
     return jsonify(bias_array)
 

@@ -7,19 +7,25 @@ import AddIcon from '@mui/icons-material/Add';
 import customStyles from './style';
 import RenderTopicCard from './TopicCard';
 import axios from 'axios';
+import ChordChart from './views/ChordChart';
+import * as d3 from 'd3';
+
+
+
 
 function App() {
 
   // declare style variable
   const cssStyles= customStyles();
 
-  const [currentTime, setCurrentTime] = useState(0);
-  useEffect(() => {
-    fetch('/time').then(res => res.json()).then(data => {
-      setCurrentTime(data.time);
-    });
-  }, []);
-  
+  // const [currentTime, setCurrentTime] = useState(0);
+  // useEffect(() => {
+  //   fetch('/time').then(res => res.json()).then(data => {
+  //     setCurrentTime(data.time);
+  //   });
+  // }, []);
+
+
   // for expanding the bias editor
   const [size, setClicked] = useState([2.5,3.5,5.5,0.5]);
   const [expandFlag, setExpand]= useState(true);
@@ -96,6 +102,14 @@ function App() {
   };
 
 
+  const [chartData,setChartData]=useState(null);
+  // reRender the chart
+  const handleChartChange = (updatedChart) => {
+    console.log("updatedisChart: ", updatedChart);
+    setChartData(updatedChart);
+  };
+
+
 
   // Main Body Grid layout
   return (
@@ -128,7 +142,7 @@ function App() {
                     <AddIcon />
                 </IconButton>
               </Paper>
-              <RenderTopicCard topics={topics}/>
+              <RenderTopicCard topics={topics} isChartChange={handleChartChange}/>
             </Paper>
           </Grid>
 
@@ -141,8 +155,15 @@ function App() {
           <Grid item  md={size[2]}>
             <Paper variant="outlined" square className={cssStyles.middlePanels2}>
               <Paper variant="outlined" className={cssStyles.chartPanel}>
-                 <div id="chordChart">
+                 <div id="chordChart" style={{height:'100%'}}>
+                   {/* { */}
+                    {/* (chartData!== null)? */}
+                      <ChordChart data={chartData}/>
+                      {/* // : */}
+                      {/* // <div> </div> */}
                    
+                  {/* //  } */}
+
                  </div>
               </Paper> 
               <Paper variant="outlined" className={cssStyles.barPanel}/>

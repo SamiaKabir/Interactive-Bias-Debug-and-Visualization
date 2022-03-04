@@ -1,0 +1,8 @@
+.node {
+  font: 300 16px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  fill: #32363c;
+}
+
+.node:hover {
+  fill: #60a3d9;
+}

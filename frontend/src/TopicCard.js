@@ -31,10 +31,15 @@ import AddchartIcon from '@mui/icons-material/Addchart';
 
 function RenderTopicCard(props) {
     const topics= props.topics;
+    const onisChartChange = props.isChartChange;
     const cssStyles_imported= customStyles();
     
     // Use this to force rendering from child components/functions
     const forceUpdate = React.useReducer(bool => !bool)[1];
+
+    // chord chart rendering flag
+    const[isChart,setisChart]=useState(0);
+
 
     let allColor=[];
     topics.map(element => {
@@ -123,6 +128,17 @@ function RenderTopicCard(props) {
         }, delayInMilliseconds);
     
       }
+
+      // handle new chart render
+      const handleChartRender=(e,index) =>{
+        const updatedChart={
+          'index':index,
+          'data': keyWords[index]
+        }
+        setisChart(updatedChart);
+        onisChartChange(updatedChart);
+      }
+
     
 
 
@@ -190,7 +206,7 @@ function RenderTopicCard(props) {
                 <Button size="small" style={{float:'left'}} onClick={(e)=>{handleKeyWordTransfer(e,topics,keyWords,topics.indexOf(element))}}>
                   Add similar words
                 </Button>
-                <IconButton style={{ float:'right',margin:'0px'}}>
+                <IconButton style={{ float:'right',margin:'0px'}} onClick={(e)=>{handleChartRender(e,topics.indexOf(element))}} >
                  <AddchartIcon className={cssStyles_imported.chartViz}/>
                 </IconButton>
               </div>
