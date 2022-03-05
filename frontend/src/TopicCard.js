@@ -111,7 +111,7 @@ function RenderTopicCard(props) {
         }).then(function (text) {
         });
     
-        var delayInMilliseconds = 6000; //10 second
+        var delayInMilliseconds = 2000; //2 second
     
         setTimeout(function() {
           fetch('/gettopics').then(res => res.json()).then(data => {
@@ -151,7 +151,7 @@ function RenderTopicCard(props) {
             title=
             {
             <div style={{position:'relative',fontSize:'1.1rem'}}>
-              {element} 
+              Topic:{element} 
               <IconButton edge="start" color="inherit" size="small">
                   <EditIcon style={{color: 'darkgrey', fontSize:'1.0rem'}} />
               </IconButton>
@@ -161,7 +161,7 @@ function RenderTopicCard(props) {
               }}/>
             </div>} 
              style={{padding: '5px', paddingLeft:'16px',paddingTop:'8px'}}/>
-             <Divider variant="middle" />
+            <Divider variant="middle" />
 
             <CardContent>
               {/* Keyword input prompt */}
@@ -175,13 +175,23 @@ function RenderTopicCard(props) {
                      border: "black",
                      },
                   }}
+                  label="Add seed word"
                   onChange={handleKeyWordInput}
                   onKeyDown={(e)=>{handleKeySubmit(e,topics.indexOf(element))}}
                 />
               
               </div>
+
+              <CardActions style={{width:"100%", paddingLeft:'0px'}}>
+              <div style={{position:'relative',width:'100%'}}>
+                <Button size="small" style={{float:'left'}} onClick={(e)=>{handleKeyWordTransfer(e,topics,keyWords,topics.indexOf(element))}}>
+                  Suggest similar words
+                </Button>
+              </div>
+              </CardActions>
+
               {/* List of keywords in each topic card */}
-              <Paper variant='outlined' sx={{ p: '5px', display: 'block', alignItems: 'center',margin: '21px 2px 4px 1px',height:'12vh', maxHeight:'12%',overflowY:'auto'}}>
+              <Paper variant='outlined' sx={{ p: '5px', display: 'block', alignItems: 'center',margin: '2px 2px 4px 1px',height:'12vh', maxHeight:'12%',overflowY:'auto'}}>
                   { 
                     (keyWords.length>=topics.indexOf(element)+1)?
                     
@@ -197,15 +207,11 @@ function RenderTopicCard(props) {
                   }
                   
               </Paper>
-              
-  
+
             </CardContent>
             <Divider variant="middle" />
             <CardActions>
               <div style={{position:'relative',width:'100%'}}>
-                <Button size="small" style={{float:'left'}} onClick={(e)=>{handleKeyWordTransfer(e,topics,keyWords,topics.indexOf(element))}}>
-                  Add similar words
-                </Button>
                 <IconButton style={{ float:'right',margin:'0px'}} onClick={(e)=>{handleChartRender(e,topics.indexOf(element))}} >
                  <AddchartIcon className={cssStyles_imported.chartViz}/>
                 </IconButton>

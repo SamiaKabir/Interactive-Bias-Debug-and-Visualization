@@ -14,7 +14,7 @@ function ChordChart({ data }) {
       });
       return () => undefined;
     }, []);
-    console.log(bias_types);
+    // console.log(bias_types);
 
     // Read in Bias Dictionary
     const [bias_dictionary,setBias_dictionary]=useState(0);
@@ -24,7 +24,7 @@ function ChordChart({ data }) {
         });
         return () => undefined;
     }, []);
-    console.log(bias_dictionary);
+    // console.log(bias_dictionary);
 
 
     // Read in Maximum individual and intersectional bias score
@@ -35,7 +35,7 @@ function ChordChart({ data }) {
         });
         return () => undefined;
     }, []);
-    console.log(max_bias_scores);
+    // console.log(max_bias_scores);
 
     // generate a map of bias scores  and max bias scoresfor all words from the data from pyhton
     var Bias_map= new Map();
@@ -84,7 +84,7 @@ function ChordChart({ data }) {
     const ref = useD3(
         (svg) => {
             // measurement for chord diagram svg
-            const diameter_2 = 540;
+            const diameter_2 = 600;
             const radius_2 = diameter_2 / 2;
             const innerRadius_2 = radius_2 - 100;
 
@@ -100,7 +100,7 @@ function ChordChart({ data }) {
 
 
             // Declare new nodes for chord diagram
-            var node = svg.append("g").attr("transform", "translate(" + (radius_2+100) + "," + (radius_2+75)+ ")").selectAll(".node");
+            var node = svg.append("g").attr("transform", "translate(" + (radius_2+160) + "," + (radius_2+150)+ ")").selectAll(".node");
 
             if(data!==null){
                 var cluster_data=[]
@@ -119,19 +119,25 @@ function ChordChart({ data }) {
                 // Cluster the hierarchy file to get leaves of all nodes
                 cluster(root);
                 // console.log(data.data)
-                // console.log(root)
+                console.log(root)
 
 
 
                 // create a map to grab the word positions for rendering
                 var position_map= new Map();
+                var posY=0;
 
                 // create a map with all words and their position created by d3 cluster
                 root.children.forEach(function(obj){
-                    position_map.set(obj.data.key,[obj.x,obj.y+60]);
+                    if(!obj.children)
+                        posY=obj.y;
+                    position_map.set(obj.data.key,[obj.x,posY+60]);
+
                 });
-                // console.log(position_map)
+                console.log(position_map)
         
+
+
 
                 // Create the nodes for svg  for Chord diagram
                 node = node
@@ -140,10 +146,12 @@ function ChordChart({ data }) {
                 .attr("class", "node")
                 .attr("dy", "0.21em")
                 .attr("transform", function(d) { 
-                    var [pos_x,pos_y]=position_map.get(d);
+                    var str = d.split(".")[0];
+                    console.log(str);
+                    var [pos_x,pos_y]=position_map.get(str);
                     return "rotate(" + (pos_x - 90) + ")translate(" + (pos_y + 8) + ",0)" + (pos_x < 180 ? "" : "rotate(180)"); 
                 })
-                .attr("text-anchor", function(d) { var [pos_x,pos_y]=position_map.get(d); return pos_x < 180 ? "start" : "end"; })
+                .attr("text-anchor", function(d) { var str = d.split(".")[0]; var [pos_x,pos_y]=position_map.get(str); return pos_x < 180 ? "start" : "end"; })
                 .attr("id", function(d) { return "id"+d;})
                 .attr("title",function(d){return d;})
                 .text(function(d) { return d; });
