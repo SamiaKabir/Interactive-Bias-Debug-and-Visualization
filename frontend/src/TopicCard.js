@@ -151,7 +151,7 @@ function RenderTopicCard(props) {
             title=
             {
             <div style={{position:'relative',fontSize:'1.1rem'}}>
-              Topic:{element} 
+              Topic: {element} 
               <IconButton edge="start" color="inherit" size="small">
                   <EditIcon style={{color: 'darkgrey', fontSize:'1.0rem'}} />
               </IconButton>
@@ -191,7 +191,7 @@ function RenderTopicCard(props) {
               </CardActions>
 
               {/* List of keywords in each topic card */}
-              <Paper variant='outlined' sx={{ p: '5px', display: 'block', alignItems: 'center',margin: '2px 2px 4px 1px',height:'12vh', maxHeight:'12%',overflowY:'auto'}}>
+              <Paper variant='outlined' sx={{ p: '5px', display: 'block', alignItems: 'center',margin: '2px 2px 2px 1px',height:'15vh', maxHeight:'12%',overflowY:'auto'}}>
                   { 
                     (keyWords.length>=topics.indexOf(element)+1)?
                     
@@ -210,7 +210,7 @@ function RenderTopicCard(props) {
 
             </CardContent>
             <Divider variant="middle" />
-            <CardActions>
+            <CardActions style={{padding:"0px"}}>
               <div style={{position:'relative',width:'100%'}}>
                 <IconButton style={{ float:'right',margin:'0px'}} onClick={(e)=>{handleChartRender(e,topics.indexOf(element))}} >
                  <AddchartIcon className={cssStyles_imported.chartViz}/>
