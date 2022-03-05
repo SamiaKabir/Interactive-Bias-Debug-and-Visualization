@@ -184,7 +184,7 @@ function RenderTopicCard(props) {
 
               <CardActions style={{width:"100%", paddingLeft:'0px'}}>
               <div style={{position:'relative',width:'100%'}}>
-                <Button size="small" style={{float:'left'}} onClick={(e)=>{handleKeyWordTransfer(e,topics,keyWords,topics.indexOf(element))}}>
+                <Button size="small" style={{float:'left',fontSize:'0.7em'}} onClick={(e)=>{handleKeyWordTransfer(e,topics,keyWords,topics.indexOf(element))}}>
                   Suggest similar words
                 </Button>
               </div>
