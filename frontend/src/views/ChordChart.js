@@ -110,7 +110,7 @@ function ChordChart({ data }) {
 
 
                 })
-                console.log(cluster_data)
+                // console.log(cluster_data)
 
                 // create higherarchy for D3 clustering
                 var root = packageHierarchy(cluster_data)
@@ -119,7 +119,7 @@ function ChordChart({ data }) {
                 // Cluster the hierarchy file to get leaves of all nodes
                 cluster(root);
                 // console.log(data.data)
-                console.log(root)
+                // console.log(root)
 
 
 
@@ -134,7 +134,7 @@ function ChordChart({ data }) {
                     position_map.set(obj.data.key,[obj.x,posY+60]);
 
                 });
-                console.log(position_map)
+                // console.log(position_map)
         
 
 
@@ -147,7 +147,6 @@ function ChordChart({ data }) {
                 .attr("dy", "0.21em")
                 .attr("transform", function(d) { 
                     var str = d.split(".")[0];
-                    console.log(str);
                     var [pos_x,pos_y]=position_map.get(str);
                     return "rotate(" + (pos_x - 90) + ")translate(" + (pos_y + 8) + ",0)" + (pos_x < 180 ? "" : "rotate(180)"); 
                 })

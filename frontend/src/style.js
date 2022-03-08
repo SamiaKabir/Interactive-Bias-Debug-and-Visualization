@@ -17,12 +17,16 @@ const customStyles= makeStyles((theme) => ({
       backgroundColor:'#EEEEEE!important',
       borderColor: 'darkgrey!important',
       borderWidth: '1px!important',
+      maxHeight:'100vh',
+      overflow: 'auto!important',
   },
   middlePanels2:{
     height: '100vh',
     backgroundColor:'white',
     borderColor: 'darkgrey!important',
     borderWidth: '1px!important',
+    maxHeight:'100vh',
+    overflow: 'auto!important',
 },
   biasEditorTitle:{
     transform: 'rotate(-90deg)',

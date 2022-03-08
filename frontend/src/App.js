@@ -6,6 +6,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import AddIcon from '@mui/icons-material/Add';
 import customStyles from './style';
 import RenderTopicCard from './TopicCard';
+import RenderInstanceTable from './InstanceTable';
 import axios from 'axios';
 import ChordChart from './views/ChordChart';
 import * as d3 from 'd3';
@@ -101,12 +102,14 @@ function App() {
 
   };
 
-
+// reRender the chart and instance view
   const [chartData,setChartData]=useState(null);
-  // reRender the chart
+  const [instanceData,setInstanceData]=useState(null);
+  
   const handleChartChange = (updatedChart) => {
     console.log("updatedisChart: ", updatedChart);
     setChartData(updatedChart);
+    setInstanceData(updatedChart.data);
   };
 
 
@@ -148,7 +151,9 @@ function App() {
 
           {/*  intsance panel */}
           <Grid item  md={size[1]}>
-            <Paper variant="outlined" square  className={cssStyles.middlePanels}/>
+            <Paper variant="outlined" square  className={cssStyles.middlePanels}>
+              <RenderInstanceTable keyWords={instanceData}/>
+            </Paper>
           </Grid>
 
          {/* Bias chart panel */}
@@ -156,14 +161,7 @@ function App() {
             <Paper variant="outlined" square className={cssStyles.middlePanels2}>
               <Paper variant="outlined" className={cssStyles.chartPanel}>
                  <div id="chordChart" style={{height:'100%'}}>
-                   {/* { */}
-                    {/* (chartData!== null)? */}
                       <ChordChart data={chartData}/>
-                      {/* // : */}
-                      {/* // <div> </div> */}
-                   
-                  {/* //  } */}
-
                  </div>
               </Paper> 
               <Paper variant="outlined" className={cssStyles.barPanel}/>
