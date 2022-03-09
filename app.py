@@ -524,7 +524,11 @@ def topicRdfn():
 
 @app.route('/gettopics', methods=['GET'])
 def get_topic():
+    time.sleep(1)
     # global Suggested_words
+    count = 0
+    while Suggested_words == []:
+        count += 1
     return {'words': Suggested_words}
 
 

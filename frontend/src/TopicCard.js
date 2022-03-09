@@ -113,8 +113,9 @@ function RenderTopicCard(props) {
     
         var delayInMilliseconds = 2000; //2 second
     
-        setTimeout(function() {
-          fetch('/gettopics').then(res => res.json()).then(data => {
+        // setTimeout(function() {
+          const getSuggestions = async () => {
+          await fetch('/gettopics').then(res => res.json()).then(data => {
             console.log(data.words);
             // for (let i = 0; i < keyWords.length; i++) {
               for (let j = 0; j < data.words[0].length; j++) {
@@ -124,9 +125,9 @@ function RenderTopicCard(props) {
             // }
             setKeyWords(keyWords);
             forceUpdate();
-          });
-        }, delayInMilliseconds);
-    
+          }); }
+        // }, delayInMilliseconds);
+        getSuggestions();
       }
 
       // handle new chart render
