@@ -32,7 +32,7 @@ docs = []
 
 for row in news['title']:
     docs.append(row)
-# # print(docs)
+# print(len(docs))
 # count_model = CountVectorizer(ngram_range=(1, 1))  # default unigram model
 # X = count_model.fit_transform(news['title'])
 # Xc = (X.T * X)  # this is co-occurrence matrix in sparse csr format
@@ -210,6 +210,30 @@ def generate_suggestions(All_Topics, All_Keywords):
     print(Suggested_words)
 
     return
+
+
+# Search for matching Instances
+# global All_Instances
+
+# All_Instances = []
+
+
+def search_Instance():
+    global Suggested_words
+    All_Instances = []
+
+    for per_topics in Suggested_words:
+        per_topic_arr = []
+        for doc_sentences in docs:
+            for per_words in per_topics:
+                if per_words in doc_sentences:
+                    per_topic_arr.append(doc_sentences)
+                    # print("true")
+                    break
+
+        All_Instances.append(per_topic_arr)
+        print(All_Instances)
+    return All_Instances
 
 
 # Load Pretrained Glove model
@@ -530,6 +554,17 @@ def get_topic():
     while Suggested_words == []:
         count += 1
     return {'words': Suggested_words}
+
+
+@app.route('/getinstances', methods=['GET'])
+def get_instances():
+    # time.sleep(1)
+    # # global Suggested_words
+    # count = 0
+    # while Suggested_words == []:
+    #     count += 1
+    all_Instances = search_Instance()
+    return {'instances': all_Instances}
 
 
 if __name__ == "__main__":

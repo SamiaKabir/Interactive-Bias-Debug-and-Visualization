@@ -102,15 +102,33 @@ function App() {
 
   };
 
+  // get the matching isnatnces from backend
+  const [All_instances, setAll_instances]=useState([]);
+
+  const getInstances = async () => {
+      await fetch('/getinstances').then(res => res.json()).then(data => {
+          console.log(data.instances);
+          setAll_instances(data.instances)
+      }); }
+
+  
+
 // reRender the chart and instance view
   const [chartData,setChartData]=useState(null);
   const [instanceData,setInstanceData]=useState(null);
+  const [instanceIndex,setInstanceIndex]=useState(0);
   
   const handleChartChange = (updatedChart) => {
     console.log("updatedisChart: ", updatedChart);
     setChartData(updatedChart);
     setInstanceData(updatedChart.data);
+    setInstanceIndex(updatedChart.index)
+    getInstances();
   };
+
+
+
+
 
 
 
@@ -152,7 +170,7 @@ function App() {
           {/*  intsance panel */}
           <Grid item  md={size[1]}>
             <Paper variant="outlined" square  className={cssStyles.middlePanels}>
-              <RenderInstanceTable keyWords={instanceData}/>
+              <RenderInstanceTable keyWords={instanceData} index={instanceIndex} All_instances={All_instances}/>
             </Paper>
           </Grid>
 
