@@ -29,8 +29,8 @@ function RenderInstanceTable(props) {
     var count=1;
 
     
-    console.log(All_instances.at(index))
-    console.log(index)
+    // console.log(All_instances.at(index))
+    // console.log(index)
     
     if(All_instances){
         if(All_instances.length>index){

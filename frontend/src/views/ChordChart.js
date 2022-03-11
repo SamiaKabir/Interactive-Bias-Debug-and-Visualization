@@ -17,24 +17,24 @@ function ChordChart({ data }) {
     // console.log(bias_types);
 
     // Read in Bias Dictionary
-    const [bias_dictionary,setBias_dictionary]=useState(0);
-    useEffect(() => {
-        d3.json("/bias_dictionary").then((d) => {
-          setBias_dictionary(d);
-        });
-        return () => undefined;
-    }, []);
-    // console.log(bias_dictionary);
+    // const [bias_dictionary,setBias_dictionary]=useState(0);
+    // useEffect(() => {
+    //     d3.json("/bias_dictionary").then((d) => {
+    //       setBias_dictionary(d);
+    //     });
+    //     return () => undefined;
+    // }, []);
+    // // console.log(bias_dictionary);
 
 
-    // Read in Maximum individual and intersectional bias score
-    const [max_bias_scores,set_max_bias_scores]=useState(0);
-    useEffect(() => {
-        d3.json("/max_bias_dictionary").then((d) => {
-            set_max_bias_scores(d);
-        });
-        return () => undefined;
-    }, []);
+    // // Read in Maximum individual and intersectional bias score
+    // const [max_bias_scores,set_max_bias_scores]=useState(0);
+    // useEffect(() => {
+    //     d3.json("/max_bias_dictionary").then((d) => {
+    //         set_max_bias_scores(d);
+    //     });
+    //     return () => undefined;
+    // }, []);
     // console.log(max_bias_scores);
 
     // generate a map of bias scores  and max bias scoresfor all words from the data from pyhton
@@ -43,18 +43,18 @@ function ChordChart({ data }) {
 
     // convert python dictionaries to JS map
 
-    function convert_to_map(){
-        Object.keys(bias_dictionary).map(function(key) {
-            Bias_map.set(key,bias_dictionary[key])
-        });
-        console.log(Bias_map)
+    // function convert_to_map(){
+    //     Object.keys(bias_dictionary).map(function(key) {
+    //         Bias_map.set(key,bias_dictionary[key])
+    //     });
+    //     console.log(Bias_map)
 
-        Object.keys(max_bias_scores).map(function(key) {
-            Max_Bias_map.set(key,max_bias_scores[key])
-        });
-        console.log(Max_Bias_map)
+    //     Object.keys(max_bias_scores).map(function(key) {
+    //         Max_Bias_map.set(key,max_bias_scores[key])
+    //     });
+    //     console.log(Max_Bias_map)
 
-    }
+    // }
 
     // Construct the package hierarchy data
     function packageHierarchy(classes) {
@@ -93,7 +93,7 @@ function ChordChart({ data }) {
                           .size([360, innerRadius_2]);
 
 
-            convert_to_map();
+            // convert_to_map();
 
             // Clear the svg to get rid off any previous chart
             svg.selectAll(".node").remove(); 

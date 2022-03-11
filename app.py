@@ -450,12 +450,12 @@ subgroup_glossary.append(subgroup_dict)
 #     json.dump(Max_Bias_Dict, json_f)
 
 # Calculate bias and max bias for each word
-Bias_Scores_Dict = {}
-Max_Bias_Dict = {}
-
 
 def calculate_bias():
     global Suggested_words
+    Bias_Scores_Dict = {}
+    Max_Bias_Dict = {}
+
     # Calculate bias for each word
     for per_topics in Suggested_words:
         for per_words in per_topics:
@@ -551,7 +551,7 @@ def calculate_bias():
 
     with open('./static/assets/jsons/max_bias_scores.json', "w") as json_f:
         json.dump(Max_Bias_Dict, json_f)
-    return
+    return {Bias_Scores_Dict, Max_Bias_Dict}
 
 
 # ******************************** Part to connect to React ***********************************//
@@ -618,14 +618,14 @@ def biasTypeData():
     return jsonify(bias_array)
 
 
-@ app.route('/bias_dictionary')
-def biasDictData():
-    return jsonify(Bias_Scores_Dict)
+# @ app.route('/bias_dictionary')
+# def biasDictData():
+#     return jsonify(Bias_Scores_Dict)
 
 
-@ app.route('/max_bias_dictionary')
-def maxBiasDictData():
-    return jsonify(Max_Bias_Dict)
+# @ app.route('/max_bias_dictionary')
+# def maxBiasDictData():
+#     return jsonify(Max_Bias_Dict)
 
 
 @app.route('/time')
@@ -659,14 +659,14 @@ def get_topic():
 
 @app.route('/getinstances', methods=['GET'])
 def get_instances():
-    # time.sleep(1)
-    # # global Suggested_words
-    # count = 0
-    # while Suggested_words == []:
-    #     count += 1
-    calculate_bias()
     all_Instances = search_Instance()
     return {'instances': all_Instances}
+
+
+@app.route('/getbiases', methods=['GET'])
+def get_biases():
+    all_biases = calculate_bias()
+    return {'biases': all_biases.Bias_Scores_Dict, 'max_biases': all_biases.Max_Bias_Dict}
 
 
 if __name__ == "__main__":

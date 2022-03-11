@@ -109,7 +109,21 @@ function App() {
       await fetch('/getinstances').then(res => res.json()).then(data => {
           // console.log(data.instances);
           setAll_instances(data.instances)
-      }); }
+      }); 
+  }
+
+  // get bias and max bias dictionary from backend
+  const [All_biases, set_allBiases]=useState(null);
+  const [max_biases, set_maxBiases]=useState(null);
+  const getBiasDicts = async() => {
+    await fetch('/getbiases').then(res => res.json()).then(data => {
+      // console.log(data.instances);
+      set_allBiases(data.biases);
+      set_maxBiases(data.max_biases)
+  }); 
+
+  }
+
 
   
 
