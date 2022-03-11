@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import { CssBaseline, Paper, Container, Button, IconButton,TextField,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,TableFooter,TablePagination} from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import PropTypes from 'prop-types';
+import { CssBaseline, Paper, Box, Container, Button, IconButton,TextField,Typography,Popper} from '@mui/material';
+import { DataGrid, GridToolbar,  GridToolbarContainer,GridToolbarColumnsButton, GridToolbarFilterButton,GridToolbarExport,GridToolbarDensitySelector } from '@mui/x-data-grid';
 import customStyles from './style';
 
 
@@ -20,12 +21,13 @@ function RenderInstanceTable(props) {
 
     const columns=[
         { field: 'id', headerName: 'id', width: '90' },
-        { field: 'instance', headerName: 'Instance', width: '350',
-            renderCell: (params) => (
-            <div style={{overflowWrap:'anywhere'}}>
-              <Typography>{params.value}</Typography>
-            </div>
-          ) },
+        { field: 'instance', headerName: 'Instance', width: '400',
+        //     renderCell: (params) => (
+        //     // <div  style={{overflow:'auto'}}>
+        //       <Typography>{params.value}</Typography>
+        //     // </div>
+        //   ) },
+          renderCell: renderCellExpand },
     ]; 
       
     const rows = [];
@@ -44,43 +46,166 @@ function RenderInstanceTable(props) {
         }
     }
 
+    // generate custom toolbar for the data grid
+    function CustomToolbar() {
+        return (
+          <GridToolbarContainer 
+          style={{borderBottom:'1px solid',borderColor:'#a1969654', backgroundColor:'black'}}
+          >
+            <GridToolbarColumnsButton style={{color:'white',fontSize:'0.8em',paddingRight:'10px'}}/>
+            <GridToolbarFilterButton style={{color:'white',fontSize:'0.8em',paddingRight:'10px'}}/>
+            <GridToolbarDensitySelector style={{color:'white',fontSize:'0.8em',paddingRight:'10px'}} />
+          </GridToolbarContainer>
+        );
+      }
 
+    //expand on hover for large sentence
+    function isOverflown(element) {
+        return (
+          element.scrollHeight > element.clientHeight ||
+          element.scrollWidth > element.clientWidth
+        );
+      }
+      
+    const GridCellExpand = React.memo(function GridCellExpand(props) {
+        const { width, value } = props;
+        const wrapper = React.useRef(null);
+        const cellDiv = React.useRef(null);
+        const cellValue = React.useRef(null);
+        const [anchorEl, setAnchorEl] = React.useState(null);
+        const [showFullCell, setShowFullCell] = React.useState(false);
+        const [showPopper, setShowPopper] = React.useState(false);
+      
+        const handleMouseEnter = () => {
+          const isCurrentlyOverflown = isOverflown(cellValue.current);
+          setShowPopper(isCurrentlyOverflown);
+          setAnchorEl(cellDiv.current);
+          setShowFullCell(true);
+        };
+      
+        const handleMouseLeave = () => {
+          setShowFullCell(false);
+        };
+      
+        React.useEffect(() => {
+          if (!showFullCell) {
+            return undefined;
+          }
+      
+          function handleKeyDown(nativeEvent) {
+            // IE11, Edge (prior to using Bink?) use 'Esc'
+            if (nativeEvent.key === 'Escape' || nativeEvent.key === 'Esc') {
+              setShowFullCell(false);
+            }
+          }
+      
+          document.addEventListener('keydown', handleKeyDown);
+      
+          return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+          };
+        }, [setShowFullCell, showFullCell]);
+      
+        return (
+          <Box
+            ref={wrapper}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            sx={{
+              alignItems: 'center',
+              lineHeight: '24px',
+              width: 1,
+              height: 1,
+              position: 'relative',
+              display: 'flex',
+            }}
+          >
+            <Box
+              ref={cellDiv}
+              sx={{
+                height: 1,
+                width,
+                display: 'block',
+                position: 'absolute',
+                top: 0,
+              }}
+            />
+            <Box
+              ref={cellValue}
+              sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+            >
+              {value}
+            </Box>
+            {showPopper && (
+              <Popper
+                open={showFullCell && anchorEl !== null}
+                anchorEl={anchorEl}
+                style={{ width, offset: -17 }}
+              >
+                <Paper
+                  elevation={1}
+                  style={{ minHeight: wrapper.current.offsetHeight - 3 }}
+                >
+                  <Typography variant="body2" style={{ padding: 8 ,backgroundColor:'#e9f6fb' }}>
+                    {value}
+                  </Typography>
+                </Paper>
+              </Popper>
+            )}
+          </Box>
+        );
+    });
+      
+    GridCellExpand.propTypes = {
+        value: PropTypes.string.isRequired,
+        width: PropTypes.number.isRequired,
+    };
+      
+    function renderCellExpand(params) {
+        return (
+          <GridCellExpand value={params.value || ''} width={params.colDef.computedWidth} />
+        );
+    }
+
+    renderCellExpand.propTypes = {
+        /**
+         * The column of the row that the current cell belongs to.
+         */
+        colDef: PropTypes.object.isRequired,
+        /**
+         * The cell value, but if the column has valueGetter, use getValue.
+         */
+        value: PropTypes.string.isRequired,
+    };
+      
+
+      
+
+
+    // Final rendering of the table
     if(keyWords){
         return (
-            // <TableContainer sx={{maxWidth:'100%'}} component={Paper}>
-            // <Table  aria-label="simple table">
-            //     <TableHead>
-            //     <TableRow>
-            //         <TableCell>Index</TableCell>
-            //         <TableCell align="right">Instance</TableCell>
-            //     </TableRow>
-            //     </TableHead>
-            //     <TableBody>
-            //     {rows.map((row) => (
-            //         <TableRow
-            //         key={row.index}
-            //         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            //         >
-            //         <TableCell component="th" scope="row">
-            //             {row.index}
-            //         </TableCell>
-            //         <TableCell align="right">{row.instance}</TableCell>
-            //         </TableRow>
-            //     ))}
-            //     </TableBody>
-            // </Table>
-            // </TableContainer>
-            // <div>
-             <DataGrid
+            <DataGrid
             rows={rows}
             columns={columns}
             pageSize={10}
             rowsPerPageOptions={[10]}
-            // checkboxSelection
+            components={{ Toolbar: CustomToolbar }}
+            sx={{
+                // borderColor:'black',
+               '& .MuiDataGrid-virtualScroller':
+               {
+                 backgroundColor:'white',
+               },
+               '& .MuiDataGrid-footerContainer':{
+                   borderColor:'#a1969670'
+               },
+               '& .MuiDataGrid-columnHeaders':{
+                borderColor:'#a1969670'
+               },
+            
+            }}
           />
-
-            // </div>
-
         );
     }
     else 
