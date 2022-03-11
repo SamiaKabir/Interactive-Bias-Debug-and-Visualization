@@ -8,7 +8,7 @@ const customStyles= makeStyles((theme) => ({
   leftRightPanel:{
         height: '100%',
         backgroundColor: '#476072eb!important',
-        maxHeight:'100vh',
+        maxHeight:'95vh',
         overflow: 'auto!important',
         // backgroundColor: '#476072b8!important'
   },
@@ -17,15 +17,15 @@ const customStyles= makeStyles((theme) => ({
       backgroundColor:'#EEEEEE!important',
       borderColor: 'darkgrey!important',
       borderWidth: '1px!important',
-      maxHeight:'100vh',
+      maxHeight:'95vh',
       overflow: 'auto!important',
   },
   middlePanels2:{
-    height: '100vh',
+    height: '95vh',
     backgroundColor:'white',
     borderColor: 'darkgrey!important',
     borderWidth: '1px!important',
-    maxHeight:'100vh',
+    maxHeight:'95vh',
     overflow: 'auto!important',
 },
   biasEditorTitle:{

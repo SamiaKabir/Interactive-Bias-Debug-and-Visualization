@@ -9,26 +9,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddchartIcon from '@mui/icons-material/Addchart';
 
 
-// function RenderKeyWords(props){
-//   const keywords=props.keywords;
-
-//   console.log(keywords);
-
-//   const handleDelete = () => {
-//     console.info('You clicked the delete icon.');
-//   };
-
-
-//    if (keywords.length > 0){
-//     return  keywords.map((keys)=> <Chip label={keys} variant="outlined" onDelete={handleDelete}/>);
-//    }
-//    else {
-//       return <></>;
-//   }
-// }
-
-
-
 function RenderTopicCard(props) {
     const topics= props.topics;
     const onisChartChange = props.isChartChange;

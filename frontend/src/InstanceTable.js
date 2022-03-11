@@ -188,8 +188,8 @@ function RenderInstanceTable(props) {
             <DataGrid
             rows={rows}
             columns={columns}
-            pageSize={10}
-            rowsPerPageOptions={[10]}
+            pageSize={15}
+            rowsPerPageOptions={[15]}
             components={{ Toolbar: CustomToolbar }}
             sx={{
                 // borderColor:'black',
