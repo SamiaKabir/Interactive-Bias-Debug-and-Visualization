@@ -107,7 +107,7 @@ function App() {
 
   const getInstances = async () => {
       await fetch('/getinstances').then(res => res.json()).then(data => {
-          console.log(data.instances);
+          // console.log(data.instances);
           setAll_instances(data.instances)
       }); }
 
@@ -125,11 +125,6 @@ function App() {
     setInstanceIndex(updatedChart.index)
     getInstances();
   };
-
-
-
-
-
 
 
   // Main Body Grid layout

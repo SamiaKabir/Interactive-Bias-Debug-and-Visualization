@@ -22,11 +22,6 @@ function RenderInstanceTable(props) {
     const columns=[
         { field: 'id', headerName: 'id', width: '90' },
         { field: 'instance', headerName: 'Instance', width: '400',
-        //     renderCell: (params) => (
-        //     // <div  style={{overflow:'auto'}}>
-        //       <Typography>{params.value}</Typography>
-        //     // </div>
-        //   ) },
           renderCell: renderCellExpand },
     ]; 
       
