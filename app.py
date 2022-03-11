@@ -184,14 +184,12 @@ def generate_suggestions(All_Topics, All_Keywords):
     global Suggested_words
     # print(All_Topics)
     # print(All_Keywords)
-    # if(len(All_Topics) > len(All_Topics_cache)):
     All_Topics_cache = All_Topics
-    # if(len(All_Keywords) > len(All_Keywords_cache)):
     All_Keywords_cache = All_Keywords
     Suggested_words = []
-    print(All_Topics_cache)
-    print(All_Keywords_cache)
-    print(Suggested_words)
+    # print(All_Topics_cache)
+    # print(All_Keywords_cache)
+    # print(Suggested_words)
 
     for topicWords in All_Keywords_cache:
         avg_vector = model.wv[topicWords[0]]*0
@@ -207,7 +205,7 @@ def generate_suggestions(All_Topics, All_Keywords):
         for w in related_words:
             related_words_2.append(w[0])
         Suggested_words.append(related_words_2)
-    print(Suggested_words)
+    # print(Suggested_words)
 
     return
 
@@ -232,7 +230,7 @@ def search_Instance():
                     break
 
         All_Instances.append(per_topic_arr)
-        print(All_Instances)
+        # print(All_Instances)
     return All_Instances
 
 

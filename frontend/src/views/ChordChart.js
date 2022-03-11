@@ -80,6 +80,7 @@ function ChordChart({ data }) {
         return d3.hierarchy(map[""]);
     }
     
+    // var test_intr=1;
 
     const ref = useD3(
         (svg) => {
@@ -153,26 +154,92 @@ function ChordChart({ data }) {
                 .attr("text-anchor", function(d) { var str = d.split(".")[0]; var [pos_x,pos_y]=position_map.get(str); return pos_x < 180 ? "start" : "end"; })
                 .attr("id", function(d) { return "id"+d;})
                 .attr("title",function(d){return d;})
-                .text(function(d) { return d; });
+                .text(function(d) { return d; })
+                .on("click",function(d){
+                    var clicked_word=d3.select(this).attr("title")
+                    console.log(clicked_word)
+                    // d3.select(this).style("fill","black");
+                });
                 // .on("click", function(d){
                 //     var clicked_word=d3.select(this).attr("title");
                 //     scrollToPlot(clicked_word);
                 // });
 
-   
+                // Create the three matrix from the data
+                var onclick_bias_map= new Map();
+                var onclick_types=[];
+                var onclick_subgroups=[];
+
+                //create a bucket/map for the bias and array for subgroups and types presented in the data
+                data.data.forEach((word)=>{
+                    const temp_bias_array=Max_Bias_map.get(word)
+                    var temp_subgroup_array=[]
+                    if(temp_bias_array){
+                        temp_bias_array.forEach((obj)=>{
+                            if(!onclick_subgroups.includes(obj.subgroup))
+                                onclick_subgroups.push(obj.subgroup)
+                            if(!onclick_types.includes(obj.type))
+                                onclick_types.push(obj.type)
+                            temp_subgroup_array.push(obj.subgroup)
+                        })
+                    }
+
+                    
+                    if(temp_subgroup_array.length>0){
+                        const map_key=JSON.stringify(temp_subgroup_array)
+                        if(onclick_bias_map.has(map_key))
+                            onclick_bias_map.get(map_key).push(word);
+                        else 
+                            onclick_bias_map.set(map_key,[word])
+                    }
+
+                });
+
+                // console.log(onclick_types)
+                // console.log(onclick_subgroups)
+                // console.log(onclick_bias_map)
+
+                // Reorder the types and subgroups for visualization so that same subgroups of same type stay next to each other
+                var re_onclick_types=[];
+                var re_onclick_subgroups=[];
+                if(bias_types){
+                    bias_types.forEach((obj)=>{
+                        if(onclick_types.includes(obj.type)){
+                            re_onclick_types.push(obj.type);
+                        }
+    
+                        obj.subgroup.forEach((sb)=>{
+                            if(onclick_subgroups.includes(sb))
+                                re_onclick_subgroups.push(sb);
+                        })
+                    })
+                }
+
+                // console.log(re_onclick_types)
+                // console.log(re_onclick_subgroups)
+
+                const N= re_onclick_subgroups.length;
+                const M= re_onclick_types.length;
+
+                // create two NxN matrix
+    
+                let Bias_Matrix=[...Array(N)].map(e => Array(N).fill(0));
+                let Color_Matrix=[...Array(N)].map(e => Array(N).fill(0));
+                let Type_Matrix=[...Array(M)].map(e => Array(M).fill(0));
+
+
+                // create one MxM matrix for outer layer of the chord diagram
+                let type_Matrix=[];
+                for(let i=0;i<M;i++){
+                    let temp_matrix=[]
+                    for(var j=0;j<M;j++){
+                        temp_matrix.push(0);
+                    }
+                    type_Matrix.push(temp_matrix);
+                }
 
 
             }
-
-            
-            
-
-
-
-
-
-
-
 
         },
         [data]
