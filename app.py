@@ -348,108 +348,8 @@ subgroup_glossary.append(subgroup_dict)
 # print(model.most_similar("indian", topn=35))
 # print(model.similarity("white", "light_skinned"))
 
-
-# # Calculate bias for each word
-# Bias_Scores_Dict = {}
-# for i in range(0, 5):
-#     for j in range(0, 50):
-
-#         word = topic_data["topics"][i]["words"][j]
-#         len_glossary = len(subgroup_glossary)
-#         Bias_Score_Array = []
-#         for x in range(0, len_glossary):
-#             len_sb = len(subgroup_glossary[x]["group"])
-#             sum = 0
-#             bias_score = 0
-#             for y in range(0, len_sb):
-#                 sum += model.similarity(word, subgroup_glossary[x]["group"][y])
-#             # print("word " + word + ","+" Bias Subgroup " +
-#                 #   subgroup_glossary[x]["word"]+",Bias Score "+":")
-#             if len_sb > 0:
-#                 # print(sum/len_sb)
-#                 bias_score = sum/len_sb
-#             else:
-#                 # print(0)
-#                 bias_score = 0
-#             bias_score_obj = {
-#                 "subgroup": subgroup_glossary[x]["word"],
-#                 "type": subgroup_glossary[x]["type"],
-#                 "bias_score": bias_score
-#             }
-#             Bias_Score_Array.append(bias_score_obj)
-#             # Bias_Score_Array[word] = bias_score_obj
-#         Bias_Scores_Dict[word] = Bias_Score_Array
-
-
-# with open('./static/assets/jsons/bias_scores.json', "w") as json_f:
-#     json.dump(Bias_Scores_Dict, json_f)
-
-# # Calculate max bias for each word
-# Max_Bias_Dict = {}
-# for i in range(0, 5):
-#     for j in range(0, 50):
-#         word = topic_data["topics"][i]["words"][j]
-#         current_type = Bias_Scores_Dict[word][0]["type"]
-#         max = -2
-#         max_subgroup = ""
-#         min = 2
-#         min_subgroup = ""
-#         max_array = []
-#         length = len(Bias_Scores_Dict[word])
-#         # print(Bias_Scores_Dict[word])
-
-#         for k in range(0, length):
-
-#             if(Bias_Scores_Dict[word][k]["type"] == current_type):
-#                 if(Bias_Scores_Dict[word][k]["bias_score"] >= max):
-#                     max = Bias_Scores_Dict[word][k]["bias_score"]
-#                     max_subgroup = Bias_Scores_Dict[word][k]["subgroup"]
-#                 if(Bias_Scores_Dict[word][k]["bias_score"] <= min):
-#                     min = Bias_Scores_Dict[word][k]["bias_score"]
-#                     min_subgroup = Bias_Scores_Dict[word][k]["subgroup"]
-#                 if(k == length-1):
-#                     abs_dist = (max-min)
-#                     if((abs_dist) >= 0.05):
-#                         max_obj_current_type = {
-#                             "type": current_type,
-#                             "subgroup": max_subgroup,
-#                             "bias_score": max
-#                         }
-#                         max_array.append(max_obj_current_type)
-
-#             else:
-#                 abs_dist = (max-min)
-#                 if((abs_dist) >= 0.05):
-#                     max_obj_current_type = {
-#                         "type": current_type,
-#                         "subgroup": max_subgroup,
-#                         "bias_score": max
-#                     }
-#                     max_array.append(max_obj_current_type)
-#                     current_type = Bias_Scores_Dict[word][k]["type"]
-#                     max = -2
-#                     max_subgroup = ""
-#                     min = 2
-#                     min_subgroup = ""
-#                 else:
-#                     current_type = Bias_Scores_Dict[word][k]["type"]
-#                     max = -2
-#                     max_subgroup = ""
-#                     min = 2
-#                     min_subgroup = ""
-#                 if(Bias_Scores_Dict[word][k]["bias_score"] >= max):
-#                     max = Bias_Scores_Dict[word][k]["bias_score"]
-#                     max_subgroup = Bias_Scores_Dict[word][k]["subgroup"]
-#                 if(Bias_Scores_Dict[word][k]["bias_score"] <= min):
-#                     min = Bias_Scores_Dict[word][k]["bias_score"]
-#                     min_subgroup = Bias_Scores_Dict[word][k]["subgroup"]
-
-#         Max_Bias_Dict[word] = max_array
-
-# with open('./static/assets/jsons/max_bias_scores.json', "w") as json_f:
-#     json.dump(Max_Bias_Dict, json_f)
-
 # Calculate bias and max bias for each word
+
 
 def calculate_bias():
     global Suggested_words
@@ -551,22 +451,9 @@ def calculate_bias():
 
     with open('./static/assets/jsons/max_bias_scores.json', "w") as json_f:
         json.dump(Max_Bias_Dict, json_f)
-    return {Bias_Scores_Dict, Max_Bias_Dict}
+    return Bias_Scores_Dict, Max_Bias_Dict
 
 
-# ******************************** Part to connect to React ***********************************//
-# app = Flask(__name__, static_url_path='', static_folder='frontend/build')
-# CORS(app)  # comment this on deployment
-# api = Api(app)
-
-
-# @app.route("/", defaults={'path': ''})
-# def serve(path):
-#     return send_from_directory(app.static_folder, 'index.html')
-
-
-# api.add_resource(ApiHandler, '/flask/hello')
-# ************************************** Comment out this part for testing react **********************//
 # Declare application
 app = Flask(__name__)
 
@@ -666,7 +553,7 @@ def get_instances():
 @app.route('/getbiases', methods=['GET'])
 def get_biases():
     all_biases = calculate_bias()
-    return {'biases': all_biases.Bias_Scores_Dict, 'max_biases': all_biases.Max_Bias_Dict}
+    return {'biases': all_biases[0], 'max_biases': all_biases[1]}
 
 
 if __name__ == "__main__":

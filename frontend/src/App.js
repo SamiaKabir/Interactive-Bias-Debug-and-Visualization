@@ -117,11 +117,9 @@ function App() {
   const [max_biases, set_maxBiases]=useState(null);
   const getBiasDicts = async() => {
     await fetch('/getbiases').then(res => res.json()).then(data => {
-      // console.log(data.instances);
       set_allBiases(data.biases);
       set_maxBiases(data.max_biases)
-  }); 
-
+    }); 
   }
 
 
@@ -138,6 +136,7 @@ function App() {
     setInstanceData(updatedChart.data);
     setInstanceIndex(updatedChart.index)
     getInstances();
+    getBiasDicts();
   };
 
 
@@ -188,7 +187,7 @@ function App() {
             <Paper variant="outlined" square className={cssStyles.middlePanels2}>
               <Paper variant="outlined" className={cssStyles.chartPanel}>
                  <div id="chordChart" style={{height:'100%'}}>
-                      <ChordChart data={chartData}/>
+                      <ChordChart data={chartData} bias_dictionary={All_biases} max_bias_scores={max_biases}/>
                  </div>
               </Paper> 
               <Paper variant="outlined" className={cssStyles.barPanel}/>
