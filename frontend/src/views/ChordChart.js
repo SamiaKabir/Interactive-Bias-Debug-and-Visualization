@@ -161,6 +161,7 @@ function ChordChart(props) {
                 //create a bucket/map for the bias and array for subgroups and types presented in the data
                 data.data.forEach((word)=>{
                     const temp_bias_array=Max_Bias_map.get(word)
+                    // create the list of bias types and subgroup present in the current selection
                     var temp_subgroup_array=[]
                     if(temp_bias_array){
                         temp_bias_array.forEach((obj)=>{
@@ -171,14 +172,19 @@ function ChordChart(props) {
                             temp_subgroup_array.push(obj.subgroup)
                         })
                     }
-
-                    
+                    // createa map of single and intersectional biases present in the current selection
                     if(temp_subgroup_array.length>0){
-                        const map_key=JSON.stringify(temp_subgroup_array)
-                        if(onclick_bias_map.has(map_key))
-                            onclick_bias_map.get(map_key).push(word);
-                        else 
-                            onclick_bias_map.set(map_key,[word])
+                        const num_biases=temp_subgroup_array.length;
+                        
+                        for(let i=0; i<num_biases;i++){
+                            const map_key=JSON.stringify(temp_subgroup_array.slice(0,i+1));
+                            if(onclick_bias_map.has(map_key))
+                                onclick_bias_map.get(map_key).push(word);
+                            else 
+                                onclick_bias_map.set(map_key,[word])
+
+                        }
+                        
                     }
 
                 });
@@ -282,10 +288,18 @@ function ChordChart(props) {
                             var current_index=last_indx;
                             var next_index= mat_indx[i-1];
                             // console.log(current_index+","+next_index)
-                            Bias_Matrix[current_index][next_index]= ag_score_array[top_indx-1]*1000;
-                            Bias_Matrix[next_index][current_index]= ag_score_array[i-1]*1000;
-                            Color_Matrix[current_index][next_index]= indx;
-                            Color_Matrix[next_index][current_index]= indx;
+                            if(Bias_Matrix[current_index][next_index]==0){
+                                Bias_Matrix[current_index][next_index]= ag_score_array[top_indx-1]*1000;
+                                Bias_Matrix[next_index][current_index]= ag_score_array[i-1]*1000;
+                                Color_Matrix[current_index][next_index]= indx;
+                                Color_Matrix[next_index][current_index]= indx;
+
+                            }
+                            else{
+                                Bias_Matrix[current_index][next_index]+= ag_score_array[top_indx-1]*1000;
+                                Bias_Matrix[next_index][current_index]+= ag_score_array[i-1]*1000;
+                            }
+  
                             
             
                         }
