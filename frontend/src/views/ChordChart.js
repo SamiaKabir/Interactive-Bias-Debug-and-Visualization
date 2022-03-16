@@ -1,6 +1,7 @@
 import { useD3 } from '../hooks/useD3';
 import React , { useEffect, useState }from 'react';
 import * as d3 from 'd3';
+import {event} from 'd3-selection';
 import './ChordChart.css';
 
 
@@ -20,28 +21,6 @@ function ChordChart(props) {
 
     const bias_dictionary=props.bias_dictionary
     const max_bias_scores=props.max_bias_scores
-
-
-    // Read in Bias Dictionary
-    // const [bias_dictionary,setBias_dictionary]=useState(0);
-    // useEffect(() => {
-    //     d3.json("/bias_dictionary").then((d) => {
-    //       setBias_dictionary(d);
-    //     });
-    //     return () => undefined;
-    // }, []);
-    // console.log(bias_dictionary);
-
-
-    // // Read in Maximum individual and intersectional bias score
-    // const [max_bias_scores,set_max_bias_scores]=useState(0);
-    // useEffect(() => {
-    //     d3.json("/max_bias_dictionary").then((d) => {
-    //         set_max_bias_scores(d);
-    //     });
-    //     return () => undefined;
-    // }, []);
-    // console.log(max_bias_scores);
 
     // generate a map of bias scores  and max bias scoresfor all words from the data from pyhton
     var Bias_map= new Map();
@@ -109,7 +88,8 @@ function ChordChart(props) {
 
 
             // Declare new nodes for chord diagram
-            var node = svg.append("g").attr("transform", "translate(" + (radius_2+160) + "," + (radius_2+150)+ ")").selectAll(".node");
+            var svg_new = svg.append("g").attr("transform", "translate(" + (radius_2+160) + "," + (radius_2+150)+ ")")
+            var node=svg_new.selectAll(".node");
 
             if(data!==null){
                 var cluster_data=[]
@@ -246,6 +226,276 @@ function ChordChart(props) {
                     type_Matrix.push(temp_matrix);
                 }
 
+                // populate the bias and color matrix 
+                let indx=0;
+
+                for (let [key, value] of onclick_bias_map) {
+                    let sub_groups= JSON.parse(key);
+                    // console.log(key)
+                    // console.log(sub_groups);
+                    if(sub_groups.length==1){
+                        mat_indx= re_onclick_subgroups.indexOf(sub_groups[0])
+                        let agg_bias_score=0;
+                        value.forEach((word)=>{
+                            var tmp_array=Max_Bias_map.get(word);
+                            tmp_array.forEach((obj)=>{
+                                agg_bias_score+=obj.bias_score;
+                            });
+            
+                        });
+                        // console.log(mat_indx);
+                        Bias_Matrix[mat_indx][mat_indx]=(agg_bias_score*1000);
+                        Color_Matrix[mat_indx][mat_indx]=indx;
+                        indx++;
+                        // console.log(agg_bias_score);
+                        // console.log(Bias_Matrix);
+                    }
+            
+                    else if(sub_groups.length>1){
+                        var mat_indx=[];
+                        sub_groups.forEach((sb_group)=>{
+                            mat_indx.push(re_onclick_subgroups.indexOf(sb_group));
+                        })
+                        let top_indx=sub_groups.length
+                        var ag_score_array=[];
+                        for(var i=0;i<top_indx;i++){
+                            ag_score_array.push(0);
+                        }
+                        for(var i=0;i<top_indx;i++){
+                            let current_sb=sub_groups[i]
+                            value.forEach((word)=>{
+                                let tmp_array=Max_Bias_map.get(word);
+                                tmp_array.forEach((obj)=>{
+                                    let indx_sb= sub_groups.indexOf(obj.subgroup);
+                                    ag_score_array[indx_sb]+=obj.bias_score;
+                                    
+                                })
+                
+                            })
+                            
+                        }
+                        // console.log(ag_score_array);
+                        // console.log(mat_indx)
+                        // console.log(Bias_Matrix)
+                        let last_indx=mat_indx[top_indx-1]
+                        for(var i=top_indx-1;i>0;i--){
+                            var current_index=last_indx;
+                            var next_index= mat_indx[i-1];
+                            // console.log(current_index+","+next_index)
+                            Bias_Matrix[current_index][next_index]= ag_score_array[top_indx-1]*1000;
+                            Bias_Matrix[next_index][current_index]= ag_score_array[i-1]*1000;
+                            Color_Matrix[current_index][next_index]= indx;
+                            Color_Matrix[next_index][current_index]= indx;
+                            
+            
+                        }
+                        //per bias there will be one color
+                        indx++;
+                    }
+            
+                }
+
+                // populte the type matrix for outer layer
+                bias_types.forEach((obj)=>{
+                    if(re_onclick_types.includes(obj.type)){
+                        let type_idx=re_onclick_types.indexOf(obj.type);
+                        obj.subgroup.forEach((sb)=>{
+                            if(re_onclick_subgroups.includes(sb)){
+                                var tmp_idx= re_onclick_subgroups.indexOf(sb);
+                                var sum=0;
+                                
+                                for(var i=0; i<Bias_Matrix[0].length;i++){
+                                    sum+=Bias_Matrix[tmp_idx][i];
+                                }
+                                
+                            Type_Matrix[type_idx][type_idx]+=sum;
+
+                            }
+                                
+                        }) ;
+                    }
+
+                });
+
+                /////////////// Draw the chord diagram from the generated Matrix//////////////////////////
+
+                var colors=["#4682b4","#32a852","#a8324c","#8732a8","#e68619","#32a8a2","#9cde31","#90dafc","#b34286","#7da183","#9e5565","#B983FF","#94B3FD","#94DAFF","#99FEFF","#142F43","#FFAB4C",
+                "#FF5F7E","#B000B9","#E1701A","#F7A440"]
+
+                //give this matrix to d3.chord(): it will calculates all the info we need to draw arc and ribbon
+                var res = d3.chord()
+                .padAngle(0.03)     // padding between entities 
+                .sortSubgroups(d3.descending)
+                (Bias_Matrix);
+
+
+                //give this matrix to d3.chord(): it will calculates all the info we need to draw arc and ribbon
+                var res2 = d3.chord()
+                .padAngle(0.045)     // padding between entities 
+                .sortSubgroups(d3.descending)
+                (Type_Matrix);
+
+                // Define the div for the tooltip
+                var div = d3.select("body").append("div")	
+                .attr("class", "tooltip")				
+                .style("opacity", 0);
+
+                // add the groups on the inner part of the circle
+                svg_new
+                .datum(res)
+                .append("g")
+                .selectAll("g")
+                .data(function(d) { return d.groups; })
+                .enter()
+                .append("path")
+                .style("fill", "#bbbfca")
+                .style("stroke", "black")
+                .style("opacity",0.5)
+                .attr("d", d3.arc()
+                .innerRadius(200)
+                .outerRadius(225))
+                .attr("id",function(d,i){return "group"+i;})
+                .on("mouseover",function(event,d){
+                    div.transition()		
+                        .duration(200)		
+                        .style("opacity", .9);	
+                    div.html(re_onclick_subgroups[d.index])
+                        .style("left", (d3.pointer(event,d3.select(event.currentTarget))[0]) + "px")		
+                        .style("top", (d3.pointer(event,d3.select(event.currentTarget))[1] - 28) + "px");	
+                })
+                .on("mouseout", function(event,d) {		
+                    div.transition()		
+                        .duration(500)		
+                        .style("opacity", 0);	
+                });
+
+
+                // add the super groups on the outer part of the circle
+                svg_new
+                .datum(res2)
+                .append("g")
+                .selectAll("g")
+                .data(function(d) { return d.groups; })
+                .enter()
+                .append("path")
+                .style("fill", "#bbbfca")
+                .style("stroke", "black")
+                .style("opacity",0.7)
+                .attr("d", d3.arc()
+                .innerRadius(225)
+                .outerRadius(240))
+                .attr("id",function(d,i){return "group_2"+i;})
+                .on("mouseover",function(event,d){
+                    div.transition()		
+                        .duration(200)		
+                        .style("opacity", .9);	
+                    div.html(re_onclick_types[d.index])
+                        .style("left", (d3.pointer(event,d3.select(event.currentTarget))[0]) + "px")		
+                        .style("top", (d3.pointer(event,d3.select(event.currentTarget))[1] - 28) + "px");	
+                })
+                .on("mouseout", function(event,d) {		
+                    div.transition()		
+                        .duration(500)		
+                        .style("opacity", 0);	
+                });
+
+                // Add the links between groups
+                svg_new
+                .datum(res)
+                .append("g")
+                .selectAll("path")
+                .data(function(d) {return d; })
+                .enter()
+                .append("path")
+                .attr("d", d3.ribbon().radius(200))
+                .attr("class", function(d){return "class"+Color_Matrix[d.source.index][d.target.index];})
+                .attr("fill", function(d,i){ 
+                    // console.log(d);
+                    return colors[Color_Matrix[d.source.index][d.target.index]]})
+                .style("stroke", "black")
+                .style("opacity",0.3)
+                .on("mouseover",function(event,d){
+                    d3.select(this).style("opacity",1.0);
+                    var classname="."+d3.select(this).attr('class');
+                    d3.selectAll(classname).style("opacity",1.0); 
+                    console.log(event); 
+                    var index_in_bias_map= Color_Matrix[d.source.index][d.target.index];
+                    let related_words=[];
+                    // read the words related to this bias
+                    var tmp_count=0;
+                    for (let [key, value] of onclick_bias_map) {
+                        if(tmp_count==index_in_bias_map){
+                            value.forEach((w)=>{
+                                related_words.push(w);
+                            })
+                            break;
+                        }
+                        else
+                            tmp_count++;
+                    }
+                    console.log(related_words)
+                    // Highlight those words
+                    related_words.forEach((w)=>{
+                        let id_name= "#id"+w;
+                        let this_color= d3.select(this).attr('fill');
+                        d3.selectAll(id_name).style("fill",this_color).style("font-size","18px").style("font-weight","400");
+                        // .style("font-weight","400");
+                    });
+                })
+                .on("mouseout",function(event,d){
+                    d3.select(this).style("opacity",0.5);
+                    var classname="."+d3.select(this).attr('class');
+                    d3.selectAll(classname).style("opacity",0.3);
+                    console.log(event)
+                    var index_in_bias_map= Color_Matrix[d.source.index][d.target.index];
+                    let related_words=[];
+                    // read the words related to this bias
+                    var tmp_count=0;
+                    for (let [key, value] of onclick_bias_map) {
+                        if(tmp_count==index_in_bias_map){
+                            value.forEach((w)=>{
+                                related_words.push(w);
+                            })
+                            break;
+                        }
+                        else
+                            tmp_count++;
+                    }
+              
+                    // Unhighlight those words
+                    related_words.forEach((w)=>{
+                        let id_name= "#id"+w;
+                        d3.selectAll(id_name).style("fill","#495464").style("font-size","15px").style("font-weight","300");
+                    });
+                });
+            
+                // add labels
+                svg_new.append("g").selectAll("text")
+                .data(res.groups)
+                .enter().append("text")
+                .attr("dx", 2)
+                .attr("dy", 17)
+                .append("textPath")
+                .attr("class", "label")
+                .attr("xlink:href", function(d) { return "#group" + d.index; })
+                .text(function(d) { return re_onclick_subgroups[d.index]; })
+                .style("fill", "black")
+                .style("opacity",0.9)
+                .style("font-size","10px");
+
+                // add labels for super groups
+                svg_new.append("g").selectAll("text")
+                .data(res2.groups)
+                .enter().append("text")
+                .attr("dx", 14)
+                .attr("dy", 9)
+                .append("textPath")
+                .attr("class", "label")
+                .attr("xlink:href", function(d) { return "#group_2" + d.index; })
+                .text(function(d) { return re_onclick_types[d.index]; })
+                .style("fill", "black")
+                .style("opacity",0.9)
+                .style("font-size","10px");
 
             }
 

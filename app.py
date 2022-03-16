@@ -385,8 +385,8 @@ def calculate_bias():
                 Bias_Score_Array.append(bias_score_obj)
                 # Bias_Score_Array[word] = bias_score_obj
             Bias_Scores_Dict[word] = Bias_Score_Array
-    with open('./static/assets/jsons/bias_scores.json', "w") as json_f:
-        json.dump(Bias_Scores_Dict, json_f)
+    # with open('./static/assets/jsons/bias_scores.json', "w") as json_f:
+    #     json.dump(Bias_Scores_Dict, json_f)
 
     # Calculate max bias for each word
     for per_topics in Suggested_words:
@@ -449,8 +449,9 @@ def calculate_bias():
 
             Max_Bias_Dict[word] = max_array
 
-    with open('./static/assets/jsons/max_bias_scores.json', "w") as json_f:
-        json.dump(Max_Bias_Dict, json_f)
+    # with open('./static/assets/jsons/max_bias_scores.json', "w") as json_f:
+    #     json.dump(Max_Bias_Dict, json_f)
+
     return Bias_Scores_Dict, Max_Bias_Dict
 
 
