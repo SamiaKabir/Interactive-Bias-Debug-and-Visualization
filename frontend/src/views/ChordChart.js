@@ -88,7 +88,7 @@ function ChordChart(props) {
 
 
             // Declare new nodes for chord diagram
-            var svg_new = svg.append("g").attr("transform", "translate(" + (radius_2+160) + "," + (radius_2+150)+ ")")
+            var svg_new = svg.append("g").attr("transform", "translate(" + (radius_2+145) + "," + (radius_2+135)+ ")")
             var node=svg_new.selectAll(".node");
 
             if(data!==null){
@@ -140,7 +140,7 @@ function ChordChart(props) {
                     return "rotate(" + (pos_x - 90) + ")translate(" + (pos_y + 8) + ",0)" + (pos_x < 180 ? "" : "rotate(180)"); 
                 })
                 .attr("text-anchor", function(d) { var str = d.split(".")[0]; var [pos_x,pos_y]=position_map.get(str); return pos_x < 180 ? "start" : "end"; })
-                .attr("id", function(d) { return "id"+d;})
+                .attr("id", function(d) {var str = d.split(".")[0]; return "id"+str;})
                 .attr("title",function(d){return d;})
                 .text(function(d) { return d; })
                 .on("click",function(d){
@@ -448,7 +448,8 @@ function ChordChart(props) {
                     console.log(related_words)
                     // Highlight those words
                     related_words.forEach((w)=>{
-                        let id_name= "#id"+w;
+                        var str = w.split(".")[0];
+                        let id_name= "#id"+str;
                         let this_color= d3.select(this).attr('fill');
                         d3.selectAll(id_name).style("fill",this_color).style("font-size","18px").style("font-weight","400");
                         // .style("font-weight","400");
@@ -476,7 +477,8 @@ function ChordChart(props) {
               
                     // Unhighlight those words
                     related_words.forEach((w)=>{
-                        let id_name= "#id"+w;
+                        var str = w.split(".")[0];
+                        let id_name= "#id"+str;
                         d3.selectAll(id_name).style("fill","#495464").style("font-size","15px").style("font-weight","300");
                     });
                 });
