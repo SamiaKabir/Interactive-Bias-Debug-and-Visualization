@@ -288,20 +288,18 @@ function ChordChart(props) {
                             var current_index=last_indx;
                             var next_index= mat_indx[i-1];
                             // console.log(current_index+","+next_index)
-                            if(Bias_Matrix[current_index][next_index]==0){
+                            // if(Bias_Matrix[current_index][next_index]==0){
                                 Bias_Matrix[current_index][next_index]= ag_score_array[top_indx-1]*1000;
                                 Bias_Matrix[next_index][current_index]= ag_score_array[i-1]*1000;
                                 Color_Matrix[current_index][next_index]= indx;
                                 Color_Matrix[next_index][current_index]= indx;
 
-                            }
-                            else{
-                                Bias_Matrix[current_index][next_index]+= ag_score_array[top_indx-1]*1000;
-                                Bias_Matrix[next_index][current_index]+= ag_score_array[i-1]*1000;
-                            }
-  
-                            
-            
+                            // }
+                            // else{
+                            //     Bias_Matrix[current_index][next_index]+= ag_score_array[top_indx-1]*1000;
+                            //     Bias_Matrix[next_index][current_index]+= ag_score_array[i-1]*1000;
+                            // }
+
                         }
                         //per bias there will be one color
                         indx++;
