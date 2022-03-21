@@ -136,7 +136,7 @@ function RenderTopicCard(props) {
               <IconButton edge="start" color="inherit" size="small">
                   <EditIcon style={{color: 'darkgrey', fontSize:'1.0rem'}} />
               </IconButton>
-              <input className={cssStyles_imported.colorPicker} type="color"  value={color[topics.indexOf(element)]} style={{}} 
+              <input className={cssStyles_imported.colorPicker} type="color"  value={color[topics.indexOf(element)]}
               onChange={(e) => {
                  handleColorChange(e,topics.indexOf(element));
               }}/>
