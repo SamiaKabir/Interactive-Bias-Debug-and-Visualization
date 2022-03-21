@@ -12,6 +12,8 @@ function RenderBiasCard(props) {
     const bias_types= props.bias_types;
     const cssStyles_imported= customStyles();
 
+    console.log(bias_types)
+
     // Use this to force rendering from child components/functions
     const forceUpdate = React.useReducer(bool => !bool)[1];
 
@@ -35,8 +37,8 @@ function RenderBiasCard(props) {
         forceUpdate();
     }
 
-
-
+  
+    // Final Rendering of the cards
     if(bias_types.length>0)
     {
         return (
@@ -65,7 +67,11 @@ function RenderBiasCard(props) {
                     {(showSubGroup[bias_types.indexOf(element)])?
                     <>
                         <CardContent>
-                            {element.subgroup}
+                            {element.subgroup.map((subgroup)=>
+                                <div>
+                                {subgroup}
+                                </div>
+                            )}
                         
                         </CardContent>
                         <Divider variant="middle" />
