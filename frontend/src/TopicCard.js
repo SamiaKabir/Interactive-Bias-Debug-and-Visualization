@@ -193,8 +193,11 @@ function RenderTopicCard(props) {
             <Divider variant="middle" />
             <CardActions style={{padding:"0px"}}>
               <div style={{position:'relative',width:'100%'}}>
-                <IconButton style={{ float:'right',margin:'0px'}} onClick={(e)=>{handleChartRender(e,topics.indexOf(element))}} >
-                 <AddchartIcon className={cssStyles_imported.chartViz}/>
+                <IconButton className={cssStyles_imported.topicFooter} onClick={(e)=>{handleChartRender(e,topics.indexOf(element))}} >
+                 <AddchartIcon className={cssStyles_imported.chartViz}/> 
+                 <Typography variant="caption" style={{color:'#1976d2',fontSize: '0.45em'}}>
+                      SHOW CHARTS
+                 </Typography>
                 </IconButton>
               </div>
 

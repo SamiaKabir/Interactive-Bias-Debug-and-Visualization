@@ -68,6 +68,29 @@ const customStyles= makeStyles((theme) => ({
     backgroundColor:'#EEEEEE!important',
     marginTop:'0.5%',
     borderColor:'#00000061'
+  },
+  topicFooter:{
+    float:'right',
+    margin:'0px',
+    "&:hover": {
+      background: '#1976d20a!important',
+      borderRadius:'0px',
+    },
+    "&:active": {
+      background: '#1976d20a!important',
+      borderRadius:'0px',
+    },
+    "&:after": {
+      background: '#1976d20a!important',
+      borderRadius:'0px',
+    },
+  },
+  biasCardStyle:{
+    margin:'15px',
+    borderRadius:'2px',
+    padding:'10px',
+    borderLeft:'solid 4px',
+    borderLeftColor:'#b6dce7'
   }
 
 

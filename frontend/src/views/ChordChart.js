@@ -7,18 +7,7 @@ import './ChordChart.css';
 
 function ChordChart(props) {
     const data=props.data
-    // Read in Bias types
-    const [bias_types,setBias_types]=useState(0);
-    useEffect(() => {
-      d3.json("/bias_types").then((d) => {
-        setBias_types(d);
-
-      });
-      return () => undefined;
-    }, []);
-    // console.log(bias_types);
-
-
+    const bias_types=props.bias_types
     const bias_dictionary=props.bias_dictionary
     const max_bias_scores=props.max_bias_scores
 

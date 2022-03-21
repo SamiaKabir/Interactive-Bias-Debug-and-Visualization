@@ -7,6 +7,7 @@ import AddIcon from '@mui/icons-material/Add';
 import customStyles from './style';
 import RenderTopicCard from './TopicCard';
 import RenderInstanceTable from './InstanceTable';
+import RenderBiasCard from './BiasCard';
 import axios from 'axios';
 import ChordChart from './views/ChordChart';
 import * as d3 from 'd3';
@@ -75,6 +76,7 @@ function App() {
                 </Typography>
               </Toolbar>
             </AppBar>
+            <RenderBiasCard bias_types={bias_types}/>
          </Box>
       </>
       );
@@ -122,8 +124,16 @@ function App() {
     }); 
   }
 
+    // Read in Bias types
+    const [bias_types,setBias_types]=useState(0);
+    useEffect(() => {
+      d3.json("/bias_types").then((d) => {
+        setBias_types(d);
 
-  
+      });
+      return () => undefined;
+    }, []);
+
 
 // reRender the chart and instance view
   const [chartData,setChartData]=useState(null);
@@ -187,7 +197,7 @@ function App() {
             <Paper variant="outlined" square className={cssStyles.middlePanels2}>
               <Paper variant="outlined" className={cssStyles.chartPanel}>
                  <div id="chordChart" style={{height:'100%'}}>
-                      <ChordChart data={chartData} bias_dictionary={All_biases} max_bias_scores={max_biases}/>
+                      <ChordChart data={chartData} bias_types={bias_types} bias_dictionary={All_biases} max_bias_scores={max_biases}/>
                  </div>
               </Paper> 
               <Paper variant="outlined" className={cssStyles.barPanel}/>
@@ -196,7 +206,8 @@ function App() {
           {/* Bias Editor panel */}
           <Grid item  md={size[3]}>
             <Paper className={cssStyles.leftRightPanel} variant="outlined" square>
-              <ExpandBiasEditor isExpand={expandFlag} />
+              <ExpandBiasEditor isExpand={expandFlag}>
+              </ExpandBiasEditor>
             </Paper>
           </Grid>
     </Grid>
