@@ -506,6 +506,11 @@ def biasTypeData():
     return jsonify(bias_array)
 
 
+@ app.route('/bias_glossary', methods=['GET'])
+def biasGlossaryData():
+    return jsonify(subgroup_glossary)
+
+
 # @ app.route('/bias_dictionary')
 # def biasDictData():
 #     return jsonify(Bias_Scores_Dict)

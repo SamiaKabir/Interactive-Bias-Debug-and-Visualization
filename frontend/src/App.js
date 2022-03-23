@@ -76,7 +76,7 @@ function App() {
                 </Typography>
               </Toolbar>
             </AppBar>
-            <RenderBiasCard bias_types={bias_types}/>
+            <RenderBiasCard bias_types={bias_types} bias_glossary={bias_glossary}/>
          </Box>
       </>
       );
@@ -124,15 +124,26 @@ function App() {
     }); 
   }
 
-    // Read in Bias types
-    const [bias_types,setBias_types]=useState(0);
-    useEffect(() => {
-      d3.json("/bias_types").then((d) => {
-        setBias_types(d);
+  // Read in Bias types
+  const [bias_types,setBias_types]=useState(0);
+  useEffect(() => {
+    d3.json("/bias_types").then((d) => {
+      setBias_types(d);
 
-      });
-      return () => undefined;
-    }, []);
+    });
+    return () => undefined;
+  }, []);
+
+  // Read in Bias Glossary
+  const [bias_glossary,setBias_glossary]=useState(0);
+  useEffect(() => {
+    d3.json("/bias_glossary").then((d) => {
+      setBias_glossary(d);
+
+    });
+    return () => undefined;
+  }, []);
+
 
 
 // reRender the chart and instance view
