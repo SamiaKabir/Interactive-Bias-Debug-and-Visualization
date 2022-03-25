@@ -5,11 +5,22 @@ import {event} from 'd3-selection';
 import './ChordChart.css';
 
 
-function ChordChart(props) {
-    const data=props.data
-    const bias_types=props.bias_types
-    const bias_dictionary=props.bias_dictionary
-    const max_bias_scores=props.max_bias_scores
+const ChordChart= React.memo((props) => {
+    const data=props.data;
+    // const bias_types=props.bias_types;
+    const bias_dictionary=props.bias_dictionary;
+    const max_bias_scores=props.max_bias_scores;
+
+
+    // Read in Bias types
+    const [bias_types,setBias_types]=useState(0);
+    useEffect(() => {
+    d3.json("/bias_types").then((d) => {
+        setBias_types(d);
+
+    });
+    return () => undefined;
+    }, []);
 
     // generate a map of bias scores  and max bias scoresfor all words from the data from pyhton
     var Bias_map= new Map();
@@ -229,8 +240,8 @@ function ChordChart(props) {
                     // console.log(key)
                     // console.log(sub_groups);
                     if(sub_groups.length==1){
-                        mat_indx= re_onclick_subgroups.indexOf(sub_groups[0])
-                        let agg_bias_score=0;
+                        var mat_indx= re_onclick_subgroups.indexOf(sub_groups[0])
+                        var agg_bias_score=0;
                         value.forEach((word)=>{
                             var tmp_array=Max_Bias_map.get(word);
                             tmp_array.forEach((obj)=>{
@@ -238,7 +249,7 @@ function ChordChart(props) {
                             });
             
                         });
-                        // console.log(mat_indx);
+                        console.log(mat_indx);
                         Bias_Matrix[mat_indx][mat_indx]=(agg_bias_score*1000);
                         Color_Matrix[mat_indx][mat_indx]=indx;
                         indx++;
@@ -522,5 +533,6 @@ function ChordChart(props) {
   </svg>
     );
 }
+);
 
 export default ChordChart;

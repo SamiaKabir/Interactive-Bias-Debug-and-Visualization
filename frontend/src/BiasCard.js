@@ -6,31 +6,36 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done';
-// import ChipInput from 'material-ui-chip-input';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 
-function RenderBiasCard(props) {
-    const bias_types= props.bias_types;
+const RenderBiasCard= React.memo((props) =>{
+    // const bias_types= props.bias_types;
     const bias_glossary=props.bias_glossary;
     const cssStyles_imported= customStyles();
+
+    
+    const [reRender,setRerender]= useState(props.reRender);
+
+
+    // create a state variable with the bias_types
+    const [bias_types,setBiasTypes]=useState(props.bias_types);
 
     // console.log(bias_glossary)
 
     // convert the bias glossary to a javascript map
-    var bias_glossary_map= new Map();
+    var bias_glossary_map_init= new Map();
 
     // additional helper array for rendering input prompts
     var render_prompts=[];
 
     if(bias_glossary){
         Object.keys(bias_glossary).map(function(key) {
-            bias_glossary_map.set(bias_glossary[key].word,bias_glossary[key].group)
+            bias_glossary_map_init.set(bias_glossary[key].word,bias_glossary[key].group)
             render_prompts.push(bias_glossary[key].word);
         });
     }
 
-    // console.log(bias_glossary_map)
-    console.log(render_prompts)
 
     // Use this to force rendering from child components/functions
     const forceUpdate = React.useReducer(bool => !bool)[1];
@@ -56,8 +61,10 @@ function RenderBiasCard(props) {
     }
 
     //delete representative onclick
+    const [bias_glossary_map, setBias_glossary_map]= useState(bias_glossary_map_init);
     const handleDelete = (e,word,indx) => {
         bias_glossary_map.get(word).splice(indx,1);
+        setBias_glossary_map(bias_glossary_map);
         forceUpdate();
     };
 
@@ -86,6 +93,60 @@ function RenderBiasCard(props) {
         }
     }
 
+    // Delete a subgroup onclick
+    const handleSubgroupDelete = (e,bias,word,indx) => {
+        // delete from subgroup glossary
+        bias_glossary_map.delete(word);
+        setBias_glossary_map(bias_glossary_map);
+        // delete from bias types
+        bias_types.map((obj)=>{
+            if(obj.type==bias){
+                var index2=obj.subgroup.indexOf(word);
+                obj.subgroup.splice(index2,1);
+
+            }
+        });
+
+        setBiasTypes(bias_types);
+        // delete from render prompts
+        // render_prompts.splice(indx,1);
+        forceUpdate();
+    };
+
+    // Delete a bias onclick
+    const handleBiasDelete = (e,bias) => {
+   
+        // delete from subgroup glossary
+        bias_types.map((element)=>{
+            if(element.type==bias){
+                element.subgroup.map((sbgroups)=>{
+                    bias_glossary_map.delete(sbgroups);
+                    setBias_glossary_map(bias_glossary_map);
+                    // delete from render prompts
+                    // render_prompts.splice(render_prompts.indexOf(sbgroups),1);
+                    });
+                }
+            });
+
+        // delete from bias types
+        var index2= -1;
+        bias_types.map((obj)=>{
+            if(obj.type==bias){
+                index2=bias_types.indexOf(obj);
+            }
+        });
+
+        if(index2>-1){
+            bias_types.splice(index2,1);
+            setBiasTypes(bias_types);
+        }
+
+ 
+
+        // delete from wordinput
+        forceUpdate();
+    };
+
   
     // Final Rendering of the cards
     if(bias_types.length>0)
@@ -106,7 +167,9 @@ function RenderBiasCard(props) {
                                 <EditIcon style={{color: 'darkgrey', fontSize:'1.0rem'}} />
                             </IconButton>
                             <IconButton edge="start" color="inherit" size="small" 
-                            style={{position: 'absolute',right:'0px'}}>
+                            style={{position: 'absolute',right:'0px'}}
+                            onClick= {(e) => {handleBiasDelete(e,element.type);}}
+                            >
                                 <DeleteIcon style={{color: 'darkgrey', fontSize:'1.0rem'}} />
                             </IconButton>                        
                         </div>} 
@@ -119,8 +182,14 @@ function RenderBiasCard(props) {
                             {element.subgroup.map((subgroup)=>
                                 <div>
                                     {/* name of the subgroup */}
-                                    <div style={{fontSize:'0.9em'}}>
+                                    <div style={{fontSize:'0.9em',position:'relative'}}>
                                         {subgroup}:
+                                        <IconButton edge="start" color="inherit" size="small" 
+                                         style={{position: 'absolute',right:'0px'}}
+                                         onClick= {(e) => {handleSubgroupDelete(e,element.type,subgroup,subgroup,render_prompts.indexOf(subgroup));}}
+                                         >
+                                            <DeleteIcon style={{color: 'darkgrey', fontSize:'1.0rem'}}/>
+                                        </IconButton> 
                                     </div>
                                     {/* list of representative words of the subgroup */}
                                     <Paper variant='outlined' sx={{ p: '5px', display: 'block', alignItems: 'center',margin: '4px 2px 10px 2px',height:'9vh', maxHeight:'2%',overflowY:'auto'}}>
@@ -175,17 +244,28 @@ function RenderBiasCard(props) {
             <Button  style={{color: 'white', fontSize:'1.0rem',paddingLeft:'20px'}} startIcon={<AddIcon />}>
               ADD NEW BIAS
             </Button>
+            <Button  style={{color: 'white', fontSize:'1.0rem',paddingLeft:'20px',position:'absolute',right:'10px'}} startIcon={<RestartAltIcon />}>
+              RE-RENDER
+            </Button>
         </>
-
         );
-      
-        
     }
     else
     {
+        return ( 
+            <div style={{position:'relative'}}>
+                <Button  style={{color: 'white', fontSize:'1.0rem',paddingLeft:'20px'}} startIcon={<AddIcon />}>
+                    ADD NEW BIAS
+                </Button>
+                <Button  style={{color: 'white', fontSize:'1.0rem',paddingLeft:'20px',position:'absolute',right:'10px'}} startIcon={<RestartAltIcon />}>
+                RE-RENDER
+                </Button>
+            </div>
 
-    }  return ( <> </>);
+        );
+
+    }  
   
-}
+});
 
 export default RenderBiasCard;

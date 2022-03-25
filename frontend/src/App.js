@@ -47,8 +47,9 @@ function App() {
   };
 
   //bias editor conditional view on expand
-  function ExpandBiasEditor(props) {
-    const isExpand = props.isExpand;
+  const ExpandBiasEditor= React.memo((props)=> {
+    // if(isExpand!=props.isExpand){
+    const [isExpand,setIsExpand]=useState(props.isExpand)
     if (isExpand) {
       return (
       <>
@@ -63,24 +64,27 @@ function App() {
       </>
       );
     }
-    return (
-      <>
-         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" style={{backgroundColor: '#3381986e'}}>
-              <Toolbar variant="dense">
-                <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={handleCollapse}>
-                  <ArrowForwardIosIcon style={{ marginTop: '1vh', marginLeft: '0.6vw', color: '#ededed' }} />
-                </IconButton>
-                <Typography variant="h6" color="inherit" component="div" style={{marginLeft: '20%'}}>
-                  Bias Editor
-                </Typography>
-              </Toolbar>
-            </AppBar>
-            <RenderBiasCard bias_types={bias_types} bias_glossary={bias_glossary}/>
-         </Box>
-      </>
-      );
-  }
+    else{
+      return (
+        <>
+           <Box sx={{ flexGrow: 1 }}>
+              <AppBar position="static" style={{backgroundColor: '#3381986e'}}>
+                <Toolbar variant="dense">
+                  <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={handleCollapse}>
+                    <ArrowForwardIosIcon style={{ marginTop: '1vh', marginLeft: '0.6vw', color: '#ededed' }} />
+                  </IconButton>
+                  <Typography variant="h6" color="inherit" component="div" style={{marginLeft: '20%'}}>
+                    Bias Editor
+                  </Typography>
+                </Toolbar>
+              </AppBar>
+             <RenderBiasCard bias_types={bias_types} bias_glossary={bias_glossary} reRender={isExpand}/>
+           </Box>
+        </>
+        );
+    }
+  // }
+  });
 
   // Add new topic card
   const [topicTitle, setTopicTitle]= useState("");
@@ -217,8 +221,7 @@ function App() {
           {/* Bias Editor panel */}
           <Grid item  md={size[3]}>
             <Paper className={cssStyles.leftRightPanel} variant="outlined" square>
-              <ExpandBiasEditor isExpand={expandFlag}>
-              </ExpandBiasEditor>
+              <ExpandBiasEditor isExpand={expandFlag}></ExpandBiasEditor>
             </Paper>
           </Grid>
     </Grid>

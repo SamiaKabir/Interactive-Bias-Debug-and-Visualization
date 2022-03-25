@@ -5,8 +5,9 @@ export const useD3 = (renderChartFn, dependencies) => {
     const ref = React.useRef();
 
     React.useEffect(() => {
-        renderChartFn(d3.select(ref.current));
-        return () => {};
+        let isMounted = true; 
+        if (isMounted){renderChartFn(d3.select(ref.current));}
+        return () => {isMounted = false };
       }, dependencies);
     return ref;
 }
