@@ -147,6 +147,107 @@ const RenderBiasCard= React.memo((props) =>{
         forceUpdate();
     };
 
+    // show the add bias card on click of the add bias button
+    const [showAddBiasModule,setshowAddBiasModule]=useState(false);
+    const showAddBiasCard= (e)=>{
+        setshowAddBiasModule(true);
+    };
+    // show the add bias card upon update
+    const hideAddBiasCard= (e)=>{
+        setshowAddBiasModule(false);
+    };
+
+    // The Add new Bias Card
+    const AddBias= ((props)=>{
+        return (
+            <Card className={cssStyles_imported.biasCardStyle}>
+            <CardHeader 
+               title=
+               {
+               <div style={{position:'relative',fontSize:'1.0rem'}}>
+                   <Input
+                       size="small"
+                       sx={{fontSize: '0.9em', align:'center',marginLeft:'7px',width:'20vh'}}
+                       placeholder=" Add Bias Type"
+                       // value={}
+                       inputProps={{
+                           'aria-label': 'Description',
+
+                       }}
+                       // onChange={(e)=>{handleInputChange(e,render_prompts.indexOf(subgroup))}}
+                       // onKeyDown={(e)=>{handleKeySubmit(e,subgroup,render_prompts.indexOf(subgroup))}}
+                   />                    
+               </div>} 
+                   style={{padding: '5px', paddingLeft:'16px',paddingTop:'8px'}}
+           />
+           <Divider variant="middle" />
+           <CardContent>
+               <Input
+               size="small"
+               sx={{fontSize: '0.9em', align:'center',marginLeft:'7px',width:'10vh'}}
+               placeholder=" Add Subgroup"
+               // value={}
+               inputProps={{
+                   'aria-label': 'Description',
+
+               }}
+               // onChange={(e)=>{handleInputChange(e,render_prompts.indexOf(subgroup))}}
+               // onKeyDown={(e)=>{handleKeySubmit(e,subgroup,render_prompts.indexOf(subgroup))}}
+               /> 
+               {/* list of representative words of the subgroup */}
+               <Paper variant='outlined' sx={{ p: '5px', display: 'block', alignItems: 'center',margin: '4px 2px 10px 2px',height:'9vh', maxHeight:'2%',overflowY:'auto'}}>
+               {
+                   <>
+                   {/* {
+                       bias_glossary_map.get(subgroup).map((keys)=> (
+                       <Chip label={keys} variant="outlined" className={cssStyles_imported.chipStyle}
+                       onDelete= {(e) => {handleDelete(e,subgroup,bias_glossary_map.get(subgroup).indexOf(keys));}}
+                       />
+                       ))
+                   } */}
+                   <Input
+                       size="small"
+                       sx={{fontSize: '0.7em', align:'center',marginLeft:'7px',width:'8vh'}}
+                       placeholder=" Add word"
+                       // value={wordInputValue[render_prompts.indexOf(subgroup)]}
+                       // className={classes.input}
+                       inputProps={{
+                           'aria-label': 'Description',
+
+                       }}
+                       // onChange={(e)=>{handleInputChange(e,render_prompts.indexOf(subgroup))}}
+                       // onKeyDown={(e)=>{handleKeySubmit(e,subgroup,render_prompts.indexOf(subgroup))}}
+                   />
+
+                   </>                 
+               }
+              </Paper>   
+              <Button  style={{color: 'darkgrey', fontSize:'0.8em',paddingLeft:'2px'}} startIcon={<AddIcon />}
+               // onClick={(e)=>{showAddBiasCard(e)}} 
+               >
+               Add more subgroups
+              </Button>
+
+           </CardContent>
+           <Divider variant="middle" />
+           <CardActions style={{padding:"0px"}}>
+               <div style={{position:'relative',width:'100%'}}>
+               <Button varient='contained' className={cssStyles_imported.biasFooter} onClick={(e)=>{hideAddBiasCard(e)}}
+                   startIcon={<DoneIcon className={cssStyles_imported.biasViz}/>} color="success">
+                       Update
+               </Button>
+               </div>
+
+           </CardActions>
+
+       </Card>
+
+        );
+
+
+    });
+
+
   
     // Final Rendering of the cards
     if(bias_types.length>0)
@@ -241,26 +342,47 @@ const RenderBiasCard= React.memo((props) =>{
                     </Card>
                 </>
             )}
-            <Button  style={{color: 'white', fontSize:'1.0rem',paddingLeft:'20px'}} startIcon={<AddIcon />}>
-              ADD NEW BIAS
-            </Button>
-            <Button  style={{color: 'white', fontSize:'1.0rem',paddingLeft:'20px',position:'absolute',right:'10px'}} startIcon={<RestartAltIcon />}>
-              RE-RENDER
-            </Button>
+            {
+                (showAddBiasModule)?
+                <AddBias></AddBias>
+                :
+                <></>
+            }
+            <div style={{position:'relative',margin:'5px'}}>
+                <Button variant="contained" style={{backgroundColor:'#cfeeff',color: '#1976d2', fontSize:'0.9rem',paddingLeft:'20px'}} startIcon={<AddIcon />}
+                onClick={(e)=>{showAddBiasCard(e)}} 
+                >
+                ADD NEW BIAS
+                </Button>
+                <Button variant="contained"  style={{backgroundColor:'#cfeeff',color: '#1976d2', fontSize:'0.9rem',paddingLeft:'20px',float:'right'}} startIcon={<RestartAltIcon />}>
+                RE-RENDER
+                </Button>
+            </div>
         </>
         );
     }
     else
     {
         return ( 
-            <div style={{position:'relative'}}>
-                <Button  style={{color: 'white', fontSize:'1.0rem',paddingLeft:'20px'}} startIcon={<AddIcon />}>
-                    ADD NEW BIAS
+            <>
+            {
+                (showAddBiasModule)?
+                <AddBias></AddBias>
+                :
+                <></>
+            }
+            <div style={{position:'relative',margin:'5px'}}>
+                <Button  variant="contained"  style={{backgroundColor:'#cfeeff',color: '#1976d2', fontSize:'0.9rem',paddingLeft:'10px'}} startIcon={<AddIcon />}
+                 onClick={(e)=>{showAddBiasCard(e)}} 
+                >
+                ADD NEW BIAS
                 </Button>
-                <Button  style={{color: 'white', fontSize:'1.0rem',paddingLeft:'20px',position:'absolute',right:'10px'}} startIcon={<RestartAltIcon />}>
+                <Button variant="contained"  style={{backgroundColor:'#cfeeff',color: '#1976d2', fontSize:'0.9rem',paddingLeft:'10px',float:'right'}} startIcon={<RestartAltIcon />}>
                 RE-RENDER
                 </Button>
             </div>
+
+            </>
 
         );
 

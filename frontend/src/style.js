@@ -7,10 +7,11 @@ const theme = createTheme();
 const customStyles= makeStyles((theme) => ({
   leftRightPanel:{
         height: '100%',
-        backgroundColor: '#476072eb!important',
+        backgroundColor: '#f5f7f8eb!important',
         maxHeight:'95vh',
         overflow: 'auto!important',
-        // backgroundColor: '#476072b8!important'
+        borderColor: 'darkgrey!important',
+        borderWidth: '1.5px!important',
   },
   middlePanels:{
       height: '100%',
@@ -30,11 +31,11 @@ const customStyles= makeStyles((theme) => ({
 },
   biasEditorTitle:{
     transform: 'rotate(-90deg)',
-    color: '#ededed!important',
+    color: '#black!important',
     marginTop: '75vh!important'
   },
   biasEditorTitleTop:{
-    color: '#ededed!important',
+    color: '#white!important',
     marginTop: '1vh!important',
     marginLeft: '5vw!important',
     display: 'inline-flex'
@@ -59,7 +60,7 @@ const customStyles= makeStyles((theme) => ({
   },
   chartPanel:{
     height:'96.5%',
-    backgroundColor:'#EEEEEE!important',
+    backgroundColor:'#f5f7f8eb!important',
     borderColor:'#00000061'
 
   },
@@ -69,21 +70,18 @@ const customStyles= makeStyles((theme) => ({
     marginTop:'0.5%',
     borderColor:'#00000061'
   },
+  topicCardStyle:{
+    margin:'10px',
+    marginBottom:'15px',
+    borderRadius:'10px',
+    border:'solid 1.5px',
+    borderColor:'darkgrey'
+  },
   topicFooter:{
-    float:'right',
-    margin:'0px',
-    "&:hover": {
-      background: '#1976d20a!important',
-      borderRadius:'0px',
-    },
-    "&:active": {
-      background: '#1976d20a!important',
-      borderRadius:'0px',
-    },
-    "&:after": {
-      background: '#1976d20a!important',
-      borderRadius:'0px',
-    },
+
+    backgroundColor:'#cfeeff!important',
+    color:'#1976d2!important',
+    fontSize:'0.8rem!important',
   },
   biasCardStyle:{
     margin:'15px',

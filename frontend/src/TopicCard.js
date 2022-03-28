@@ -126,7 +126,7 @@ function RenderTopicCard(props) {
     if(topics.length>0){
         return topics.map((element) => 
             <>
-            <Card style={{margin:'10px', marginBottom:'15px', borderRadius:'10px'}}>
+            <Card className={cssStyles_imported.topicCardStyle}>
             
             <CardHeader 
             title=
@@ -191,14 +191,13 @@ function RenderTopicCard(props) {
 
             </CardContent>
             <Divider variant="middle" />
-            <CardActions style={{padding:"0px"}}>
-              <div style={{position:'relative',width:'100%'}}>
-                <IconButton className={cssStyles_imported.topicFooter} onClick={(e)=>{handleChartRender(e,topics.indexOf(element))}} >
-                 <AddchartIcon className={cssStyles_imported.chartViz}/> 
-                 <Typography variant="caption" style={{color:'#1976d2',fontSize: '0.45em'}}>
+            <CardActions sx={{justifyContent:'center'}}>
+              <div>
+                <Button variant="contained" className={cssStyles_imported.topicFooter} startIcon={<AddchartIcon className={cssStyles_imported.chartViz}/> }
+                onClick={(e)=>{handleChartRender(e,topics.indexOf(element))}}
+                >
                       SHOW CHARTS
-                 </Typography>
-                </IconButton>
+                </Button>
               </div>
 
             </CardActions>
