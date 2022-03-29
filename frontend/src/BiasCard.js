@@ -140,9 +140,6 @@ const RenderBiasCard= React.memo((props) =>{
             bias_types.splice(index2,1);
             setBiasTypes(bias_types);
         }
-
- 
-
         // delete from wordinput
         forceUpdate();
     };
@@ -155,6 +152,16 @@ const RenderBiasCard= React.memo((props) =>{
     // show the add bias card upon update
     const hideAddBiasCard= (e)=>{
         setshowAddBiasModule(false);
+    };
+
+    // Add bias number of subgroup
+    const [numSubgroup,setNumSubGroup]=useState([1]);
+
+    const addMoreSubGroups=(e)=>{
+        numSubgroup.push(1);
+        setNumSubGroup(numSubgroup);
+        forceUpdate();
+
     };
 
     // The Add new Bias Card
@@ -182,48 +189,57 @@ const RenderBiasCard= React.memo((props) =>{
            />
            <Divider variant="middle" />
            <CardContent>
-               <Input
-               size="small"
-               sx={{fontSize: '0.9em', align:'center',marginLeft:'7px',width:'10vh'}}
-               placeholder=" Add Subgroup"
-               // value={}
-               inputProps={{
-                   'aria-label': 'Description',
-
-               }}
-               // onChange={(e)=>{handleInputChange(e,render_prompts.indexOf(subgroup))}}
-               // onKeyDown={(e)=>{handleKeySubmit(e,subgroup,render_prompts.indexOf(subgroup))}}
-               /> 
-               {/* list of representative words of the subgroup */}
-               <Paper variant='outlined' sx={{ p: '5px', display: 'block', alignItems: 'center',margin: '4px 2px 10px 2px',height:'9vh', maxHeight:'2%',overflowY:'auto'}}>
                {
+                   numSubgroup.map((item) =>
                    <>
-                   {/* {
-                       bias_glossary_map.get(subgroup).map((keys)=> (
-                       <Chip label={keys} variant="outlined" className={cssStyles_imported.chipStyle}
-                       onDelete= {(e) => {handleDelete(e,subgroup,bias_glossary_map.get(subgroup).indexOf(keys));}}
-                       />
-                       ))
-                   } */}
-                   <Input
-                       size="small"
-                       sx={{fontSize: '0.7em', align:'center',marginLeft:'7px',width:'8vh'}}
-                       placeholder=" Add word"
-                       // value={wordInputValue[render_prompts.indexOf(subgroup)]}
-                       // className={classes.input}
-                       inputProps={{
-                           'aria-label': 'Description',
+                        <Input
+                        size="small"
+                        sx={{fontSize: '0.9em', align:'center',marginLeft:'7px',width:'10vh'}}
+                        placeholder=" Add Subgroup"
+                        // value={}
+                        inputProps={{
+                            'aria-label': {item},
 
-                       }}
-                       // onChange={(e)=>{handleInputChange(e,render_prompts.indexOf(subgroup))}}
-                       // onKeyDown={(e)=>{handleKeySubmit(e,subgroup,render_prompts.indexOf(subgroup))}}
-                   />
+                        }}
+                        // onChange={(e)=>{handleInputChange(e,render_prompts.indexOf(subgroup))}}
+                        // onKeyDown={(e)=>{handleKeySubmit(e,subgroup,render_prompts.indexOf(subgroup))}}
+                        /> 
 
-                   </>                 
+
+                        {/* list of representative words of the subgroup */}
+                        <Paper variant='outlined' sx={{ p: '5px', display: 'block', alignItems: 'center',margin: '4px 2px 10px 2px',height:'9vh', maxHeight:'2%',overflowY:'auto'}}>
+                        <>
+                            {/* {
+                            bias_glossary_map.get(subgroup).map((keys)=> (
+                            <Chip label={keys} variant="outlined" className={cssStyles_imported.chipStyle}
+                            onDelete= {(e) => {handleDelete(e,subgroup,bias_glossary_map.get(subgroup).indexOf(keys));}}
+                            />
+                            ))
+                            } */}
+                            <Input
+                            size="small"
+                            sx={{fontSize: '0.7em', align:'center',marginLeft:'7px',width:'8vh'}}
+                            placeholder=" Add word"
+                            // value={wordInputValue[render_prompts.indexOf(subgroup)]}
+                            // className={classes.input}
+                            inputProps={{
+                                'aria-label': 'Description',
+
+                            }}
+                            // onChange={(e)=>{handleInputChange(e,render_prompts.indexOf(subgroup))}}
+                            // onKeyDown={(e)=>{handleKeySubmit(e,subgroup,render_prompts.indexOf(subgroup))}}
+                            />
+                        </>                 
+                        </Paper>   
+
+                    </>
+
+
+                )
                }
-              </Paper>   
+
               <Button  style={{color: 'darkgrey', fontSize:'0.8em',paddingLeft:'2px'}} startIcon={<AddIcon />}
-               // onClick={(e)=>{showAddBiasCard(e)}} 
+               onClick={(e)=>{addMoreSubGroups(e)}} 
                >
                Add more subgroups
               </Button>
