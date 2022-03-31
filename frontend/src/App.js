@@ -73,7 +73,7 @@ function App() {
                   <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={handleCollapse}>
                     <ArrowForwardIosIcon style={{ marginTop: '1vh', marginLeft: '0.6vw', color: 'white' }} />
                   </IconButton>
-                  <Typography variant="h6" color="inherit" component="div" style={{marginLeft: '20%'}}>
+                  <Typography variant="h6" color="inherit" component="div" style={{marginLeft: '20%',fontSize:'1.20rem'}}>
                     Bias Editor
                   </Typography>
                 </Toolbar>

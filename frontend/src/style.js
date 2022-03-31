@@ -32,7 +32,7 @@ const customStyles= makeStyles((theme) => ({
   biasEditorTitle:{
     transform: 'rotate(-90deg)',
     color: '#black!important',
-    marginTop: '75vh!important'
+    marginTop: '75vh!important',
   },
   biasEditorTitleTop:{
     color: '#white!important',
