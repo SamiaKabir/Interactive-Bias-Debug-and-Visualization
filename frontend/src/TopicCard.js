@@ -41,6 +41,7 @@ function RenderTopicCard(props) {
     };
     
     const [keyWords,setKeyWords]= useState([]);
+    const [actualKeyWords,setActualKeyWords]= useState([]);
 
     // console.log(keyWords);
 
@@ -74,6 +75,20 @@ function RenderTopicCard(props) {
 
     // send seedwords to server and read suggested words from server
     const handleKeyWordTransfer=(e,all_topics,KeyWords,indx)=>{
+      var send_data_copy;
+      if(actualKeyWords.length>indx && actualKeyWords[indx].length>0){
+        send_data_copy=actualKeyWords
+      }
+      else if(actualKeyWords.length==indx){
+        send_data_copy=actualKeyWords;
+        send_data_copy.push(KeyWords[indx]);
+        
+      }
+      else{
+        send_data_copy=KeyWords
+      }
+
+      // console.log(actualKeyWords);
       fetch('/topics', {
         // Declare what type of data we're sending
         headers: {
@@ -84,7 +99,7 @@ function RenderTopicCard(props) {
         // A JSON payload
         body: JSON.stringify({
             "topics": all_topics,
-            "keyWords": KeyWords
+            "keyWords": send_data_copy
         })
         }).then(function (response) {
         return response.text();
@@ -98,9 +113,12 @@ function RenderTopicCard(props) {
           await fetch('/gettopics').then(res => res.json()).then(data => {
             console.log(data.words);
             // for (let i = 0; i < keyWords.length; i++) {
-              for (let j = 0; j < data.words[0].length; j++) {
-                keyWords[indx].push(data.words[indx][j]);
+              for (let j = 0; j < data.repWords[0].length; j++) {
+                if(!keyWords[indx].includes(data.repWords[indx][j])){
+                  keyWords[indx].push(data.repWords[indx][j]);
+                }
               }
+              setActualKeyWords(data.words);
 
             // }
             setKeyWords(keyWords);
@@ -114,7 +132,7 @@ function RenderTopicCard(props) {
       const handleChartRender=(e,index) =>{
         const updatedChart={
           'index':index,
-          'data': keyWords[index]
+          'data': actualKeyWords[index]
         }
         setisChart(updatedChart);
         onisChartChange(updatedChart);

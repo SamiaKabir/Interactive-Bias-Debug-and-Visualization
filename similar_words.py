@@ -7,50 +7,17 @@ Original file is located at
     https://colab.research.google.com/drive/1pBXC0PvrKhKjjVw4tVPc_mdooaDhzmw_
 """
 
+# from typing import final
 from nltk.stem import WordNetLemmatizer
-from collections import defaultdict
-from nltk.stem import PorterStemmer
-from nltk.tokenize import word_tokenize
 import nltk
 from collections import defaultdict
 
-ps = PorterStemmer()
-
-words = ["crime", "crimes", "Crime", "murders", "homicides", "criminality", "criminals", "homicide", "Crimes", "hate_crimes", "Violent_crime",
-         "drug_trafficking", "Violent_crimes", "cybercrime", "violence", "Homicides", "murder", "gangland_killings", "Violent_Crime", "cybercrime"]
+# nltk.download('wordnet')
+lemmatizer = WordNetLemmatizer()
 
 
-
-def remove_similar_words(words):
-
+def getWordLemma(words):
     distancedict = defaultdict(set)
-    for idx, w in enumerate(words):
-        w = w.replace("_", " ")
-        #print(w, " : ", ps.stem(w))
-        wordstem = ps.stem(w)
-        #distancedict = {defaultdict: list}
-        for jdx in range(idx, len(words)):
-            distance = nltk.edit_distance(
-                words[idx], words[jdx], transpositions=False)
-            # print(distance)
-            if distance <= 2:
-                distancedict[wordstem].add(words[jdx])
-
-    # print(dict(distancedict))
-    for key in distancedict:
-        print(key, distancedict[key])
-
-
-    nltk.download('wordnet')
-    lemmatizer = WordNetLemmatizer()
-
-    distancedict = defaultdict(set)
-    merged = defaultdict(lambda: False)
-    distancedictFinal = defaultdict(set)
-
-
-
-def getWordLemma():
     for w in words:
         wlower = w.lower()
         #w=w.replace("_", " ")
@@ -70,11 +37,14 @@ def getWordLemma():
             wordlemma = ' '.join(w_newlist)
 
         distancedict[wordlemma].add(w)
+    return distancedict
 
 # the distance is calculated after the lemmatization
 
 
-def calculateLemmaDistance():
+def calculateLemmaDistance(distancedict):
+    merged = defaultdict(lambda: False)
+    distancedictFinal = defaultdict(set)
     for key1 in distancedict:
         for key2 in distancedict:
             if key1 != key2:
@@ -93,19 +63,25 @@ def calculateLemmaDistance():
                     #print(key1, key2)
                     # print(distancedict[key1])
                     #distancedictFinal[key1] = defaultdict[key1].union(defaultdict[key2])
+    return distancedictFinal, merged
 
 
-def processMergedFalse():
+def processMergedFalse(distancedict, distancedictFinal, merged):
     for key in distancedict:
         #print(key, distancedict[key])
         if merged[key] == False:
             distancedictFinal[key] = distancedict[key]
 
 
-getWordLemma()
-calculateLemmaDistance()
-processMergedFalse()
+def remove_similar_words(words):
 
+    distancedict = getWordLemma(words)
+    distancedictFinal, merged = calculateLemmaDistance(distancedict)
+    processMergedFalse(distancedict, distancedictFinal, merged)
 
-for key in sorted(distancedictFinal.keys()):
-    print(key, distancedictFinal[key])
+    final_rep_words = []
+
+    for key in sorted(distancedictFinal.keys()):
+        final_rep_words.append(key)
+
+    return final_rep_words

@@ -13,6 +13,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.tokenize import RegexpTokenizer
 from flask_restful import Api, Resource, reqparse
+from similar_words import remove_similar_words
 # from flask_cors import CORS  # comment this on deployment
 # from api.ApiHandler import ApiHandler
 
@@ -547,7 +548,11 @@ def get_topic():
     count = 0
     while Suggested_words == []:
         count += 1
-    return {'words': Suggested_words}
+    lemmatize_words = []
+    for words in Suggested_words:
+        lemmatize_words.append(remove_similar_words(words))
+
+    return {'words': Suggested_words, 'repWords': lemmatize_words}
 
 
 @app.route('/getinstances', methods=['GET'])
