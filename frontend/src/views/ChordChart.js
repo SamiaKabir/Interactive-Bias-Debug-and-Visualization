@@ -112,55 +112,17 @@ const ChordChart= React.memo((props) => {
 
 
 
-                // create a map to grab the word positions for rendering
-                var position_map= new Map();
-                var posY=0;
-
-                // create a map with all words and their position created by d3 cluster
-                root.children.forEach(function(obj){
-                    if(!obj.children)
-                        posY=obj.y;
-                    position_map.set(obj.data.key,[obj.x,posY+60]);
-
-                });
-                // console.log(position_map)
-        
-
-
-
-                // Create the nodes for svg  for Chord diagram
-                node = node
-                .data(data.data)
-                .enter().append("text")
-                .attr("class", "node")
-                .attr("dy", "0.21em")
-                .attr("transform", function(d) { 
-                    var str = d.split(".")[0];
-                    var [pos_x,pos_y]=position_map.get(str);
-                    return "rotate(" + (pos_x - 90) + ")translate(" + (pos_y + 8) + ",0)" + (pos_x < 180 ? "" : "rotate(180)"); 
-                })
-                .attr("text-anchor", function(d) { var str = d.split(".")[0]; var [pos_x,pos_y]=position_map.get(str); return pos_x < 180 ? "start" : "end"; })
-                .attr("id", function(d) {var str = d.split(".")[0]; return "id"+str;})
-                .attr("title",function(d){return d;})
-                .text(function(d) { return d; })
-                .on("click",function(d){
-                    var clicked_word=d3.select(this).attr("title")
-                    console.log(clicked_word)
-                    // d3.select(this).style("fill","black");
-                });
-                // .on("click", function(d){
-                //     var clicked_word=d3.select(this).attr("title");
-                //     scrollToPlot(clicked_word);
-                // });
-
                 // Create the three matrix from the data
                 var onclick_bias_map= new Map();
                 var onclick_types=[];
                 var onclick_subgroups=[];
+                var perWord_Bias_map=new Map();
+                var bias_id_map=new Map();
 
                 //create a bucket/map for the bias and array for subgroups and types presented in the data
                 data.data.forEach((word)=>{
                     const temp_bias_array=Max_Bias_map.get(word)
+                    console.log(temp_bias_array)
                     // create the list of bias types and subgroup present in the current selection
                     var temp_subgroup_array=[]
                     if(temp_bias_array){
@@ -175,15 +137,18 @@ const ChordChart= React.memo((props) => {
                     // createa map of single and intersectional biases present in the current selection
                     if(temp_subgroup_array.length>0){
                         const num_biases=temp_subgroup_array.length;
+                        var per_word_biases=[]
                         
                         for(let i=0; i<num_biases;i++){
                             const map_key=JSON.stringify(temp_subgroup_array.slice(0,i+1));
+                            per_word_biases.push(map_key);
                             if(onclick_bias_map.has(map_key))
                                 onclick_bias_map.get(map_key).push(word);
                             else 
                                 onclick_bias_map.set(map_key,[word])
 
                         }
+                        perWord_Bias_map.set(word,per_word_biases);
                         
                     }
 
@@ -252,6 +217,8 @@ const ChordChart= React.memo((props) => {
                         console.log(mat_indx);
                         Bias_Matrix[mat_indx][mat_indx]=(agg_bias_score*1000);
                         Color_Matrix[mat_indx][mat_indx]=indx;
+                        // put into bias id map
+                        bias_id_map.set(key,indx);
                         indx++;
                         // console.log(agg_bias_score);
                         // console.log(Bias_Matrix);
@@ -301,6 +268,9 @@ const ChordChart= React.memo((props) => {
                             // }
 
                         }
+                        // put into bias id map
+                        bias_id_map.set(key,indx);
+                        
                         //per bias there will be one color
                         indx++;
                     }
@@ -329,8 +299,64 @@ const ChordChart= React.memo((props) => {
 
                 });
 
+                console.log(bias_id_map);
+
                 /////////////// Draw the chord diagram from the generated Matrix//////////////////////////
 
+                // create a map to grab the word positions for rendering
+                var position_map= new Map();
+                var posY=0;
+
+                // create a map with all words and their position created by d3 cluster
+                root.children.forEach(function(obj){
+                    if(!obj.children)
+                        posY=obj.y;
+                    position_map.set(obj.data.key,[obj.x,posY+60]);
+
+                });
+                // console.log(position_map)
+        
+                // Create the nodes/Texts for svg  for Chord diagram
+                node = node
+                .data(data.data)
+                .enter().append("text")
+                .attr("class", "node")
+                .attr("dy", "0.21em")
+                .attr("transform", function(d) { 
+                    var str = d.split(".")[0];
+                    var [pos_x,pos_y]=position_map.get(str);
+                    return "rotate(" + (pos_x - 90) + ")translate(" + (pos_y + 8) + ",0)" + (pos_x < 180 ? "" : "rotate(180)"); 
+                })
+                .attr("text-anchor", function(d) { var str = d.split(".")[0]; var [pos_x,pos_y]=position_map.get(str); return pos_x < 180 ? "start" : "end"; })
+                .attr("id", function(d) {var str = d.split(".")[0]; return "id"+str;})
+                .attr("title",function(d){return d;})
+                .text(function(d) { return d; })
+                .on("click",function(d){
+                })
+                .on("mouseover",function(event,d){
+                    d3.select(this).style('fill','#60a3d9');
+                    var all_bias_this_word=perWord_Bias_map.get(d);
+                    // Highlight related biases
+                    all_bias_this_word.forEach((bias)=>{
+                        
+                        var id = bias_id_map.get(bias)
+                        let id_name= "#id"+id;
+                        d3.selectAll(id_name).style("opacity",1.0);
+                    });
+                })
+                .on("mouseout",function(event,d){
+                    d3.select(this).style('fill','#0a0b0c');
+                    var all_bias_this_word=perWord_Bias_map.get(d);
+                    // Highlight related biases
+                    all_bias_this_word.forEach((bias)=>{
+                        var id = bias_id_map.get(bias)
+                        let id_name= "#id"+id;
+                        d3.selectAll(id_name).style("opacity",0.3);
+                    });
+                });
+                
+                
+                
                 var colors=["#4682b4","#32a852","#a8324c","#8732a8","#e68619","#32a8a2","#9cde31","#90dafc","#b34286","#7da183","#9e5565","#B983FF","#94B3FD","#94DAFF","#99FEFF","#142F43","#FFAB4C",
                 "#FF5F7E","#B000B9","#E1701A","#F7A440"]
 
@@ -421,6 +447,7 @@ const ChordChart= React.memo((props) => {
                 .append("path")
                 .attr("d", d3.ribbon().radius(200))
                 .attr("class", function(d){return "class"+Color_Matrix[d.source.index][d.target.index];})
+                .attr("id", function(d) {var index_in_bias_map= Color_Matrix[d.source.index][d.target.index]; return "id"+index_in_bias_map;})
                 .attr("fill", function(d,i){ 
                     // console.log(d);
                     return colors[Color_Matrix[d.source.index][d.target.index]]})
@@ -445,7 +472,7 @@ const ChordChart= React.memo((props) => {
                         else
                             tmp_count++;
                     }
-                    console.log(related_words)
+                    // console.log(related_words)
                     // Highlight those words
                     related_words.forEach((w)=>{
                         var str = w.split(".")[0];
@@ -456,7 +483,7 @@ const ChordChart= React.memo((props) => {
                     });
                 })
                 .on("mouseout",function(event,d){
-                    d3.select(this).style("opacity",0.5);
+                    d3.select(this).style("opacity",0.3);
                     var classname="."+d3.select(this).attr('class');
                     d3.selectAll(classname).style("opacity",0.3);
                     console.log(event)
