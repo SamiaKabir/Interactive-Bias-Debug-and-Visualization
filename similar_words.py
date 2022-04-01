@@ -7,7 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/1pBXC0PvrKhKjjVw4tVPc_mdooaDhzmw_
 """
 
-# from typing import final
 from nltk.stem import WordNetLemmatizer
 import nltk
 from collections import defaultdict
