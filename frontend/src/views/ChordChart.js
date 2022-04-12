@@ -79,7 +79,7 @@ const ChordChart= React.memo((props) => {
             var tspan = text.insert('tspan', ':first-child').text(words.join(' '));
             
             // Try the whole line
-            // if it's too long, and more words left, keep removing words
+            // if it's too long, and more characters left, keep removing one by one
             
             while (tspan.node().getComputedTextLength() > width && words.length) {
                 words.pop();
@@ -107,10 +107,11 @@ const ChordChart= React.memo((props) => {
     
     var colors=["#4682b4","#32a852","#a8324c","#8732a8","#e68619","#32a8a2","#9cde31","#90dafc","#b34286","#7da183",
                 "#9e5565","#B983FF","#94B3FD","#94DAFF","#99FEFF","#142F43","#FFAB4C","#FF5F7E","#B000B9","#E1701A",
-                '#4682b4', '#32a852', '#a8324c', '#8732a8', '#e68619', '#32a8a2', '#9cde31', '#90dafc', '#b34286', 
-                '#7da183', '#9e5565', '#B983FF', '#94B3FD', '#94DAFF', '#99FEFF', '#142F43', '#FFAB4C', '#FF5F7E',
-                '#B000B9', '#E1701A', '#e24f', '#abbbd5', '#43c4c5', '#b585b8', '#941cbe', '#80bac2', '#dccd3e', 
-                '#dbe15e', '#542342', '#dd908']
+                '#67fbd4', '#183d57', '#df19f6', '#3f2311', '#5e8885', '#7b4665', '#6e8f00', '#159c27', '#935f63', 
+                '#161933', '#d7b7eb', '#c770dd', '#251c0', '#567830', '#3a35ea', '#56b518', '#29e09c', '#24ad2', 
+                '#973f98', '#bb6d1d', '#c7d867', '#25009a', '#b51f33', '#f13a69', '#8677d4', '#e421aa', '#123950',
+                '#1d89a9', '#de2f46', '#42c0d2']
+    
 
     function getColor(index){
         if(colors.length<=index){
@@ -417,7 +418,7 @@ const ChordChart= React.memo((props) => {
                 
                 // uncomment this parto to create more colors
                 // create random color for all biases
-                // for(var i=0;i<30;i++){
+                // for(var i=0;i<50;i++){
                 //     getColor(i)
                 // }
                 // console.log(colors);
@@ -444,6 +445,24 @@ const ChordChart= React.memo((props) => {
                 .attr("class", "tooltip")				
                 .style("opacity", 0);
 
+                // Generate percentage of each bias w.r.t all bias
+                var percentage_bias=[];
+                var all_sum=0;
+                for(var i=0;i<Bias_Matrix.length;i++){
+                    var this_sum=0;
+                    for(var j=0;j<Bias_Matrix.length;j++){
+                        this_sum+=Bias_Matrix[i][j];
+                        all_sum+=Bias_Matrix[i][j];
+                    }
+                    percentage_bias.push(this_sum)
+                }
+                for(var i=0;i<percentage_bias.length;i++){
+                    var new_val=(percentage_bias[i]/all_sum)*100;
+                    percentage_bias[i]=new_val.toFixed(2)
+                }
+
+
+
                 // add the groups on the inner part of the circle
                 svg_new
                 .datum(res)
@@ -463,7 +482,7 @@ const ChordChart= React.memo((props) => {
                     div.transition()		
                         .duration(200)		
                         .style("opacity", .9);	
-                    div.html(re_onclick_subgroups[d.index])
+                    div.html(re_onclick_subgroups[d.index]+"<br/><br/>"+"Associated Bias: "+percentage_bias[d.index]+"%")
                         .style("left", (d3.pointer(event,d3.select(event.currentTarget))[0]) + "px")		
                         .style("top", (d3.pointer(event,d3.select(event.currentTarget))[1] - 28) + "px");	
                 })
@@ -551,7 +570,7 @@ const ChordChart= React.memo((props) => {
                     d3.select(this).style("opacity",0.3);
                     var classname="."+d3.select(this).attr('class');
                     d3.selectAll(classname).style("opacity",0.3);
-                    console.log(event)
+                    // console.log(event)
                     var index_in_bias_map= Color_Matrix[d.source.index][d.target.index];
                     let related_words=[];
                     // read the words related to this bias

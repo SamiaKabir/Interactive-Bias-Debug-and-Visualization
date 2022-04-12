@@ -10,9 +10,9 @@
 div.tooltip {
   position: absolute;
   text-align: center;
-  width: 60px;
-  height: 28px;
-  padding: 2px;
+  width: 160px;
+  height: 80px;
+  padding: 10px;
   font: 12px sans-serif;
   background: lightsteelblue;
   border: 0px;
