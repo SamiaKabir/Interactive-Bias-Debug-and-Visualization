@@ -32,12 +32,12 @@ const ChordChart= React.memo((props) => {
         Object.keys(bias_dictionary).map(function(key) {
             Bias_map.set(key,bias_dictionary[key])
         });
-        console.log(Bias_map)
+        // console.log(Bias_map)
 
         Object.keys(max_bias_scores).map(function(key) {
             Max_Bias_map.set(key,max_bias_scores[key])
         });
-        console.log(Max_Bias_map)
+        // console.log(Max_Bias_map)
     }
 
     // Construct the package hierarchy data
@@ -66,18 +66,75 @@ const ChordChart= React.memo((props) => {
     
     // var test_intr=1;
 
+    // function to trim a label if it's too big
+    function dotme(text) {
+        text.each(function() {
+            var text = d3.select(this);
+            var words = text.text().split("");
+            
+            var ellipsis = text.text('').append('tspan').attr('class', 'elip').text('...');
+            var width = parseFloat(text.attr('width')) - ellipsis.node().getComputedTextLength();
+            var numWords = words.length;
+            
+            var tspan = text.insert('tspan', ':first-child').text(words.join(' '));
+            
+            // Try the whole line
+            // if it's too long, and more words left, keep removing words
+            
+            while (tspan.node().getComputedTextLength() > width && words.length) {
+                words.pop();
+                tspan.text(words.join(' '));
+            }
+            
+            if (words.length === numWords) {
+                ellipsis.remove();
+            }
+        });
+    }
+
+    // get all subsets of an array
+    const getAllSubsets = theArray => theArray.reduce(
+        (subsets, value) => subsets.concat(
+        subsets.map(set => [value, ...set])
+        ),
+        [
+        []
+        ]
+    );
+
+                    
+    // create random color for all biases
+    
+    var colors=["#4682b4","#32a852","#a8324c","#8732a8","#e68619","#32a8a2","#9cde31","#90dafc","#b34286","#7da183",
+                "#9e5565","#B983FF","#94B3FD","#94DAFF","#99FEFF","#142F43","#FFAB4C","#FF5F7E","#B000B9","#E1701A",
+                '#4682b4', '#32a852', '#a8324c', '#8732a8', '#e68619', '#32a8a2', '#9cde31', '#90dafc', '#b34286', 
+                '#7da183', '#9e5565', '#B983FF', '#94B3FD', '#94DAFF', '#99FEFF', '#142F43', '#FFAB4C', '#FF5F7E',
+                '#B000B9', '#E1701A', '#e24f', '#abbbd5', '#43c4c5', '#b585b8', '#941cbe', '#80bac2', '#dccd3e', 
+                '#dbe15e', '#542342', '#dd908']
+
+    function getColor(index){
+        if(colors.length<=index){
+        var randomColor = Math.floor(Math.random()*16777215).toString(16);
+        while(colors.includes(randomColor)){
+            randomColor = Math.floor(Math.random()*16777215).toString(16);
+        }
+        colors.push("#"+randomColor);
+        }
+    }
+
+// D3 rendering hook of chord chart
+
     const ref = useD3(
         (svg) => {
             // measurement for chord diagram svg
             const diameter_2 = 600;
             const radius_2 = diameter_2 / 2;
-            const innerRadius_2 = radius_2 - 100;
+            const innerRadius_2 = radius_2 - 80;
 
             var cluster = d3.cluster()
                           .size([360, innerRadius_2]);
 
             if(bias_dictionary && max_bias_scores){
-                console.log('here')
                 convert_to_map();
             }
 
@@ -122,7 +179,7 @@ const ChordChart= React.memo((props) => {
                 //create a bucket/map for the bias and array for subgroups and types presented in the data
                 data.data.forEach((word)=>{
                     const temp_bias_array=Max_Bias_map.get(word)
-                    console.log(temp_bias_array)
+                    // console.log(temp_bias_array)
                     // create the list of bias types and subgroup present in the current selection
                     var temp_subgroup_array=[]
                     if(temp_bias_array){
@@ -139,8 +196,11 @@ const ChordChart= React.memo((props) => {
                         const num_biases=temp_subgroup_array.length;
                         var per_word_biases=[]
                         
-                        for(let i=0; i<num_biases;i++){
-                            const map_key=JSON.stringify(temp_subgroup_array.slice(0,i+1));
+                        var subset_array=getAllSubsets(temp_subgroup_array);
+                        
+                        for(let i=1; i<subset_array.length;i++){
+                            // const map_key=JSON.stringify(temp_subgroup_array.slice(0,i+1));
+                            const map_key=JSON.stringify(subset_array[i]);
                             per_word_biases.push(map_key);
                             if(onclick_bias_map.has(map_key))
                                 onclick_bias_map.get(map_key).push(word);
@@ -214,7 +274,7 @@ const ChordChart= React.memo((props) => {
                             });
             
                         });
-                        console.log(mat_indx);
+                        // console.log(mat_indx);
                         Bias_Matrix[mat_indx][mat_indx]=(agg_bias_score*1000);
                         Color_Matrix[mat_indx][mat_indx]=indx;
                         // put into bias id map
@@ -299,7 +359,7 @@ const ChordChart= React.memo((props) => {
 
                 });
 
-                console.log(bias_id_map);
+                // console.log(bias_id_map);
 
                 /////////////// Draw the chord diagram from the generated Matrix//////////////////////////
 
@@ -355,10 +415,16 @@ const ChordChart= React.memo((props) => {
                     });
                 });
                 
-                
-                
-                var colors=["#4682b4","#32a852","#a8324c","#8732a8","#e68619","#32a8a2","#9cde31","#90dafc","#b34286","#7da183","#9e5565","#B983FF","#94B3FD","#94DAFF","#99FEFF","#142F43","#FFAB4C",
-                "#FF5F7E","#B000B9","#E1701A","#F7A440"]
+                // uncomment this parto to create more colors
+                // create random color for all biases
+                // for(var i=0;i<30;i++){
+                //     getColor(i)
+                // }
+                // console.log(colors);
+
+                // arrays to save the width of each arc
+                var arc_width_in=[]
+                var arc_width_out=[]
 
                 //give this matrix to d3.chord(): it will calculates all the info we need to draw arc and ribbon
                 var res = d3.chord()
@@ -390,9 +456,9 @@ const ChordChart= React.memo((props) => {
                 .style("stroke", "black")
                 .style("opacity",0.5)
                 .attr("d", d3.arc()
-                .innerRadius(200)
-                .outerRadius(225))
-                .attr("id",function(d,i){return "group"+i;})
+                .innerRadius(210)
+                .outerRadius(245))
+                .attr("id",function(d,i){ arc_width_in.push(d3.select(this).node().getBBox().width);return "group"+i;})
                 .on("mouseover",function(event,d){
                     div.transition()		
                         .duration(200)		
@@ -407,7 +473,6 @@ const ChordChart= React.memo((props) => {
                         .style("opacity", 0);	
                 });
 
-
                 // add the super groups on the outer part of the circle
                 svg_new
                 .datum(res2)
@@ -420,16 +485,16 @@ const ChordChart= React.memo((props) => {
                 .style("stroke", "black")
                 .style("opacity",0.7)
                 .attr("d", d3.arc()
-                .innerRadius(225)
-                .outerRadius(240))
-                .attr("id",function(d,i){return "group_2"+i;})
+                .innerRadius(245)
+                .outerRadius(270))
+                .attr("id",function(d,i){arc_width_out.push(d3.select(this).node().getBBox().width);return "group_2"+i;})
                 .on("mouseover",function(event,d){
                     div.transition()		
                         .duration(200)		
                         .style("opacity", .9);	
                     div.html(re_onclick_types[d.index])
                         .style("left", (d3.pointer(event,d3.select(event.currentTarget))[0]) + "px")		
-                        .style("top", (d3.pointer(event,d3.select(event.currentTarget))[1] - 28) + "px");	
+                        .style("top", (d3.pointer(event,d3.select(event.currentTarget))[1] - 28) + "px");
                 })
                 .on("mouseout", function(event,d) {		
                     div.transition()		
@@ -445,7 +510,7 @@ const ChordChart= React.memo((props) => {
                 .data(function(d) {return d; })
                 .enter()
                 .append("path")
-                .attr("d", d3.ribbon().radius(200))
+                .attr("d", d3.ribbon().radius(210))
                 .attr("class", function(d){return "class"+Color_Matrix[d.source.index][d.target.index];})
                 .attr("id", function(d) {var index_in_bias_map= Color_Matrix[d.source.index][d.target.index]; return "id"+index_in_bias_map;})
                 .attr("fill", function(d,i){ 
@@ -457,7 +522,7 @@ const ChordChart= React.memo((props) => {
                     d3.select(this).style("opacity",1.0);
                     var classname="."+d3.select(this).attr('class');
                     d3.selectAll(classname).style("opacity",1.0); 
-                    console.log(event); 
+                    // console.log(event); 
                     var index_in_bias_map= Color_Matrix[d.source.index][d.target.index];
                     let related_words=[];
                     // read the words related to this bias
@@ -513,31 +578,36 @@ const ChordChart= React.memo((props) => {
                 // add labels
                 svg_new.append("g").selectAll("text")
                 .data(res.groups)
-                .enter().append("text")
-                .attr("dx", 2)
-                .attr("dy", 17)
+                .enter()
+                .append("text")
+                .attr("dx", 4)
+                .attr("dy", 20)
                 .append("textPath")
-                .attr("class", "label")
-                .attr("xlink:href", function(d) { return "#group" + d.index; })
+                .attr("class", "dotme")
+                .attr("xlink:href", function(d) {return "#group" + d.index; })
                 .text(function(d) { return re_onclick_subgroups[d.index]; })
+                .attr("width",function(d,i){return arc_width_in[i];})
                 .style("fill", "black")
                 .style("opacity",0.9)
-                .style("font-size","10px");
+                .style("font-size","12px");
+            
 
                 // add labels for super groups
                 svg_new.append("g").selectAll("text")
                 .data(res2.groups)
                 .enter().append("text")
                 .attr("dx", 14)
-                .attr("dy", 9)
+                .attr("dy", 15)
                 .append("textPath")
-                .attr("class", "label")
+                .attr("class", "dotme")
                 .attr("xlink:href", function(d) { return "#group_2" + d.index; })
                 .text(function(d) { return re_onclick_types[d.index]; })
+                .attr("width",function(d,i){return arc_width_out[i];})
                 .style("fill", "black")
                 .style("opacity",0.9)
-                .style("font-size","10px");
+                .style("font-size","12px");
 
+                d3.selectAll('.dotme').call(dotme);
             }
 
         },

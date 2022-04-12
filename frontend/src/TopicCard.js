@@ -214,7 +214,7 @@ function RenderTopicCard(props) {
                 <Button variant="contained" className={cssStyles_imported.topicFooter} startIcon={<AddchartIcon className={cssStyles_imported.chartViz}/> }
                 onClick={(e)=>{handleChartRender(e,topics.indexOf(element))}}
                 >
-                      SHOW CHARTS
+                      SHOW BIAS
                 </Button>
               </div>
 
