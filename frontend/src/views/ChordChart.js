@@ -101,7 +101,6 @@ const ChordChart= React.memo((props) => {
         []
         ]
     );
-
                     
     // create random color for all biases
     
@@ -200,8 +199,7 @@ const ChordChart= React.memo((props) => {
                         var subset_array=getAllSubsets(temp_subgroup_array);
                         
                         for(let i=1; i<subset_array.length;i++){
-                            // const map_key=JSON.stringify(temp_subgroup_array.slice(0,i+1));
-                            const map_key=JSON.stringify(subset_array[i]);
+                            const map_key=JSON.stringify(subset_array[i].reverse());
                             per_word_biases.push(map_key);
                             if(onclick_bias_map.has(map_key))
                                 onclick_bias_map.get(map_key).push(word);
@@ -212,6 +210,7 @@ const ChordChart= React.memo((props) => {
                         perWord_Bias_map.set(word,per_word_biases);
                         
                     }
+                    // console.log(perWord_Bias_map)
 
                 });
 
@@ -285,7 +284,7 @@ const ChordChart= React.memo((props) => {
                         // console.log(Bias_Matrix);
                     }
             
-                    else if(sub_groups.length>1){
+                    else if(sub_groups.length==2){
                         var mat_indx=[];
                         sub_groups.forEach((sb_group)=>{
                             mat_indx.push(re_onclick_subgroups.indexOf(sb_group));
@@ -590,7 +589,7 @@ const ChordChart= React.memo((props) => {
                     related_words.forEach((w)=>{
                         var str = w.split(".")[0];
                         let id_name= "#id"+str;
-                        d3.selectAll(id_name).style("fill","#495464").style("font-size","15px").style("font-weight","300");
+                        d3.selectAll(id_name).style("fill","#0a0b0c").style("font-size","15px");
                     });
                 });
             
