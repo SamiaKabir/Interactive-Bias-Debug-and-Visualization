@@ -14,6 +14,7 @@ const RenderBiasCard= React.memo((props) =>{
     // const bias_types= props.bias_types;
     const bias_glossary=props.bias_glossary;
     const cssStyles_imported= customStyles();
+    const onBiasUpdate=props.biasUpdate;
 
     
     const [reRender,setRerender]= useState(props.reRender);
@@ -22,14 +23,14 @@ const RenderBiasCard= React.memo((props) =>{
     // create a state variable with the bias_types
     const [bias_types,setBiasTypes]=useState(props.bias_types);
 
-    // console.log(bias_glossary)
-
     // convert the bias glossary to a javascript map
     var bias_glossary_map_init= new Map();
 
     // additional helper array for rendering input prompts
     var render_prompts=[];
 
+
+    
     if(bias_glossary){
         Object.keys(bias_glossary).map(function(key) {
             bias_glossary_map_init.set(bias_glossary[key].word,bias_glossary[key].group)
@@ -171,6 +172,36 @@ const RenderBiasCard= React.memo((props) =>{
         setshowAddBiasModule(false);
     };
 
+    // convert to array from map
+    const convert_map_to_list= () =>{
+        var new_glossary_map=[]
+
+        bias_types.map((bias)=>{
+            bias.subgroup.map((sbg)=>{
+                var obj={
+                    'word':sbg,
+                    'type':bias.type,
+                    'group': bias_glossary_map.get(sbg)
+                }
+                new_glossary_map.push(obj);
+
+            });
+
+        });
+        return new_glossary_map;
+
+    };
+
+    const onChartRerender= (e)=>{
+        const new_map=convert_map_to_list();
+        const updatedBiasData={
+            'biasTypes':bias_types,
+            'biasGlossary':new_map,
+        }
+        onBiasUpdate(updatedBiasData);
+    };
+
+
     // Final Rendering of the cards
     if(bias_types.length>0)
     {
@@ -276,7 +307,8 @@ const RenderBiasCard= React.memo((props) =>{
                 >
                 ADD NEW BIAS
                 </Button>
-                <Button variant="contained"  style={{backgroundColor:'#cfeeff',color: '#1976d2', fontSize:'0.9rem',paddingLeft:'20px',float:'right'}} startIcon={<RestartAltIcon />}>
+                <Button variant="contained"  style={{backgroundColor:'#cfeeff',color: '#1976d2', fontSize:'0.9rem',paddingLeft:'20px',float:'right'}} startIcon={<RestartAltIcon />}
+                onClick={(e)=>{onChartRerender(e)}}>
                 RE-RENDER
                 </Button>
             </div>
@@ -299,7 +331,8 @@ const RenderBiasCard= React.memo((props) =>{
                 >
                 ADD NEW BIAS
                 </Button>
-                <Button variant="contained"  style={{backgroundColor:'#cfeeff',color: '#1976d2', fontSize:'0.9rem',paddingLeft:'10px',float:'right'}} startIcon={<RestartAltIcon />}>
+                <Button variant="contained"  style={{backgroundColor:'#cfeeff',color: '#1976d2', fontSize:'0.9rem',paddingLeft:'10px',float:'right'}} startIcon={<RestartAltIcon />}
+                onClick={(e)=>{onChartRerender(e)}}>
                 RE-RENDER
                 </Button>
             </div>

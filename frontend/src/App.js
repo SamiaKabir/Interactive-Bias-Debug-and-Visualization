@@ -78,7 +78,7 @@ function App() {
                   </Typography>
                 </Toolbar>
               </AppBar>
-             <RenderBiasCard bias_types={bias_types} bias_glossary={bias_glossary} reRender={isExpand}/>
+             <RenderBiasCard bias_types={bias_types} bias_glossary={bias_glossary} reRender={isExpand} biasUpdate={handleBiasUpdate}/>
            </Box>
         </>
         );
@@ -156,13 +156,38 @@ function App() {
   const [instanceIndex,setInstanceIndex]=useState(0);
   
   const handleChartChange = (updatedChart) => {
-    console.log("updatedisChart: ", updatedChart);
     setChartData(updatedChart);
     setInstanceData(updatedChart.data);
     setInstanceIndex(updatedChart.index)
     getInstances();
     getBiasDicts();
   };
+
+// function to send the updated bias data back to app.py
+  const sendNewBiasData=(updatedBiasData)=>{
+        // console.log(actualKeyWords);
+        fetch('/biasupdates', {
+          // Declare what type of data we're sending
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          // Specify the method
+          method: 'POST',
+          // A JSON payload
+          body: JSON.stringify(updatedBiasData)
+          }).then(function (response) {
+          return response.text();
+          }).then(function (text) {
+       });
+  }
+// Receive changed bias data , Rerender chart based on bias update
+const handleBiasUpdate= (updatedBiasData)=>{
+  setBias_types(updatedBiasData.biasTypes);
+  setBias_glossary(updatedBiasData.biasGlossary);
+  // sendNewBiasData(updatedBiasData);
+  // getBiasDicts();
+
+} 
 
 
   // Main Body Grid layout
