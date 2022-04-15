@@ -243,110 +243,121 @@ def search_Instance():
 # # print(len(model.vocab))
 # UniversitySimilarities = model.most_similar(positive=['university'], topn=5)
 # print(model.most_similar(positive=['university'], topn=5))
-# Create and save default bias types
-# This bias array is editable by user
+
 global bias_array
 global subgroup_glossary
 bias_array = []
-bias_dict = {
-    "type": "Gender",
-    "subgroup": ["Male", "Transgender", "Female"]
-}
-bias_array.append(bias_dict)
-bias_dict = {
-    "type": "Race",
-    "subgroup": ["Black", "White", "Asian", "Hispanic", "South Asian"]
-}
-bias_array.append(bias_dict)
-# bias_dict = {
-#     "type": "Religion",
-#     "subgroup": ["Christian", "Muslim", "Athiest", "Budhhist", "Hindu"]
-# }
-# bias_array.append(bias_dict)
-bias_dict = {
-    "type": "Income",
-    "subgroup": ["High", "Low", "Mid"]
-}
-bias_array.append(bias_dict)
-
-# create vocab group for each subgroup
 subgroup_glossary = []
-subgroup_dict = {
-    "word": "Male",
-    "type": "Gender",
-    "group": ["he", "his", "him", "male", "man", "men", "boy", "boys"]
-}
-subgroup_glossary.append(subgroup_dict)
+# Create and save default bias types
+# This bias arrays are editable by user
 
-subgroup_dict = {
-    "word": "Transgender",
-    "type": "Gender",
-    "group": ["trans", "transsexual", "bisexual", "Transgender", "unisexual"]
-}
-subgroup_glossary.append(subgroup_dict)
 
-subgroup_dict = {
-    "word": "Female",
-    "type": "Gender",
-    "group": ["she", "her", "female", "woman", "women", "girl", "girls"]
-}
-subgroup_glossary.append(subgroup_dict)
+def bias_init():
+    global bias_array
+    global subgroup_glossary
+    bias_array = []
+    bias_dict = {
+        "type": "Gender",
+        "subgroup": ["Male", "Transgender", "Female"]
+    }
+    bias_array.append(bias_dict)
+    bias_dict = {
+        "type": "Race",
+        "subgroup": ["Black", "White", "Asian", "Hispanic", "South Asian"]
+    }
+    bias_array.append(bias_dict)
+    # bias_dict = {
+    #     "type": "Religion",
+    #     "subgroup": ["Christian", "Muslim", "Athiest", "Budhhist", "Hindu"]
+    # }
+    # bias_array.append(bias_dict)
+    bias_dict = {
+        "type": "Income",
+        "subgroup": ["High", "Low", "Mid"]
+    }
+    bias_array.append(bias_dict)
 
-subgroup_dict = {
-    "word": "Black",
-    "type": "Race",
-    "group": ["black", "colored", "blacks", "colorism", "african_american", "dark_skinned", "Black", "Blacks", "Afro", "african"]
-}
-subgroup_glossary.append(subgroup_dict)
+    # create vocab group for each subgroup
+    subgroup_glossary = []
+    subgroup_dict = {
+        "word": "Male",
+        "type": "Gender",
+        "group": ["he", "his", "him", "male", "man", "men", "boy", "boys"]
+    }
+    subgroup_glossary.append(subgroup_dict)
 
-subgroup_dict = {
-    "word": "White",
-    "type": "Race",
-    "group": ["white", "whites", "caucasian", "caucasians", "Caucasoid", "light_skinned", "European", "european", "anglo", "Caucasian"]
-}
-subgroup_glossary.append(subgroup_dict)
+    subgroup_dict = {
+        "word": "Transgender",
+        "type": "Gender",
+        "group": ["trans", "transsexual", "bisexual", "Transgender", "unisexual"]
+    }
+    subgroup_glossary.append(subgroup_dict)
 
-subgroup_dict = {
-    "word": "Asian",
-    "type": "Race",
-    "group": ["asian", "asians", "chinese", "japanese", "korean", "eastern", "Asian", "Asians", "China", "Chinese", "Japan", "Korea"]
-}
-subgroup_glossary.append(subgroup_dict)
+    subgroup_dict = {
+        "word": "Female",
+        "type": "Gender",
+        "group": ["she", "her", "female", "woman", "women", "girl", "girls"]
+    }
+    subgroup_glossary.append(subgroup_dict)
 
-subgroup_dict = {
-    "word": "Hispanic",
-    "type": "Race",
-    "group": ["hispanic", "hispanics", "latino", "latina", "spanish", "mexican", "Mexico"]
-}
-subgroup_glossary.append(subgroup_dict)
+    subgroup_dict = {
+        "word": "Black",
+        "type": "Race",
+        "group": ["black", "colored", "blacks", "colorism", "african_american", "dark_skinned", "Black", "Blacks", "Afro", "african"]
+    }
+    subgroup_glossary.append(subgroup_dict)
 
-subgroup_dict = {
-    "word": "South Asian",
-    "type": "Race",
-    "group": ["indian", "indians", "deshi", "modi", "pakistani", "sri_lankan", "tamil", "India", "Nepal", "Bangladesh"]
-}
-subgroup_glossary.append(subgroup_dict)
+    subgroup_dict = {
+        "word": "White",
+        "type": "Race",
+        "group": ["white", "whites", "caucasian", "caucasians", "Caucasoid", "light_skinned", "European", "european", "anglo", "Caucasian"]
+    }
+    subgroup_glossary.append(subgroup_dict)
 
-subgroup_dict = {
-    "word": "High",
-    "type": "Income",
-    "group": ["rich", "wealthy", "affluent", "prosperous", "richer", "richest", "affluence", "advantaged", "extravagant", "lavish", "luxuriant", "luxury", "classy", "privileged", "millionaire", "billionaire", "million", "billion"]
-}
-subgroup_glossary.append(subgroup_dict)
+    subgroup_dict = {
+        "word": "Asian",
+        "type": "Race",
+        "group": ["asian", "asians", "chinese", "japanese", "korean", "eastern", "Asian", "Asians", "China", "Chinese", "Japan", "Korea"]
+    }
+    subgroup_glossary.append(subgroup_dict)
 
-subgroup_dict = {
-    "word": "Low",
-    "type": "Income",
-    "group": ["poor", "poors", "poorer", "poorest", "impoverished", "poverty", "needy", "penniless", "moneyless", "insolvent", "underprivileged", "bankrupt", "bankrupcy", "homeless"]
-}
-subgroup_glossary.append(subgroup_dict)
+    subgroup_dict = {
+        "word": "Hispanic",
+        "type": "Race",
+        "group": ["hispanic", "hispanics", "latino", "latina", "spanish", "mexican", "Mexico"]
+    }
+    subgroup_glossary.append(subgroup_dict)
 
-subgroup_dict = {
-    "word": "Mid",
-    "type": "Income",
-    "group": ["middleclass", "workingclass", "bourgeois", "bourgeoisie", "common", "ordinary"]
-}
-subgroup_glossary.append(subgroup_dict)
+    subgroup_dict = {
+        "word": "South Asian",
+        "type": "Race",
+        "group": ["indian", "indians", "deshi", "modi", "pakistani", "sri_lankan", "tamil", "India", "Nepal", "Bangladesh"]
+    }
+    subgroup_glossary.append(subgroup_dict)
+
+    subgroup_dict = {
+        "word": "High",
+        "type": "Income",
+        "group": ["rich", "wealthy", "affluent", "prosperous", "richer", "richest", "affluence", "advantaged", "extravagant", "lavish", "luxuriant", "luxury", "classy", "privileged", "millionaire", "billionaire", "million", "billion"]
+    }
+    subgroup_glossary.append(subgroup_dict)
+
+    subgroup_dict = {
+        "word": "Low",
+        "type": "Income",
+        "group": ["poor", "poors", "poorer", "poorest", "impoverished", "poverty", "needy", "penniless", "moneyless", "insolvent", "underprivileged", "bankrupt", "bankrupcy", "homeless"]
+    }
+    subgroup_glossary.append(subgroup_dict)
+
+    subgroup_dict = {
+        "word": "Mid",
+        "type": "Income",
+        "group": ["middleclass", "workingclass", "bourgeois", "bourgeoisie", "common", "ordinary"]
+    }
+    subgroup_glossary.append(subgroup_dict)
+
+
+bias_init()
 
 # print(model.most_similar("indian", topn=35))
 # print(model.similarity("white", "light_skinned"))
@@ -517,12 +528,14 @@ def clusterData():
 
 @ app.route('/bias_types', methods=['GET'])
 def biasTypeData():
+    bias_init()
     global bias_array
     return jsonify(bias_array)
 
 
 @ app.route('/bias_glossary', methods=['GET'])
 def biasGlossaryData():
+    bias_init()
     global subgroup_glossary
     return jsonify(subgroup_glossary)
 

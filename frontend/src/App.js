@@ -132,15 +132,6 @@ function App() {
 
   // Read in Bias types
   const [bias_types,setBias_types]=useState([]);
-  // const getBiases = async () => {
-  //   await fetch('/bias_types').then(res => res.json()).then(data => {
-  //       setBias_types(data);
-  //       console.log(bias_types)
-  //   }); 
-  // }
-  // getBiases();
-
-
   useEffect(() => {
     d3.json("/bias_types").then((d) => {
       setBias_types(d);
