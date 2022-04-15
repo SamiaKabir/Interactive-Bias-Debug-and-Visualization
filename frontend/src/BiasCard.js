@@ -97,6 +97,7 @@ const RenderBiasCard= React.memo((props) =>{
 
     // Delete a subgroup onclick
     const handleSubgroupDelete = (e,bias,word,indx) => {
+        e.stopPropagation();
         // delete from subgroup glossary
         bias_glossary_map.delete(word);
         setBias_glossary_map(bias_glossary_map);
@@ -117,6 +118,7 @@ const RenderBiasCard= React.memo((props) =>{
 
     // Delete a bias onclick
     const handleBiasDelete = (e,bias) => {
+        e.stopPropagation();
    
         // delete from subgroup glossary
         bias_types.map((element)=>{

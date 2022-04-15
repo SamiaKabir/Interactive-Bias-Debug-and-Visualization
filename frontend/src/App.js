@@ -48,6 +48,7 @@ function App() {
 
   //bias editor conditional view on expand
   const ExpandBiasEditor= React.memo((props)=> {
+    // getBiases();
     // if(isExpand!=props.isExpand){
     const [isExpand,setIsExpand]=useState(props.isExpand)
     if (isExpand) {
@@ -119,17 +120,27 @@ function App() {
   }
 
   // get bias and max bias dictionary from backend
-  const [All_biases, set_allBiases]=useState(null);
-  const [max_biases, set_maxBiases]=useState(null);
+  const [All_biases, set_allBiases]=useState([]);
+  // const [max_biases, set_maxBiases]=useState([]);
   const getBiasDicts = async() => {
     await fetch('/getbiases').then(res => res.json()).then(data => {
-      set_allBiases(data.biases);
-      set_maxBiases(data.max_biases)
+      set_allBiases(data);
+      // console.log(All_biases)
+      // set_maxBiases(data.max_biases)
     }); 
   }
 
   // Read in Bias types
-  const [bias_types,setBias_types]=useState(0);
+  const [bias_types,setBias_types]=useState([]);
+  // const getBiases = async () => {
+  //   await fetch('/bias_types').then(res => res.json()).then(data => {
+  //       setBias_types(data);
+  //       console.log(bias_types)
+  //   }); 
+  // }
+  // getBiases();
+
+
   useEffect(() => {
     d3.json("/bias_types").then((d) => {
       setBias_types(d);
@@ -137,9 +148,10 @@ function App() {
     });
     return () => undefined;
   }, []);
+  console.log(bias_types)
 
   // Read in Bias Glossary
-  const [bias_glossary,setBias_glossary]=useState(0);
+  const [bias_glossary,setBias_glossary]=useState([]);
   useEffect(() => {
     d3.json("/bias_glossary").then((d) => {
       setBias_glossary(d);
@@ -182,11 +194,12 @@ function App() {
   }
 // Receive changed bias data , Rerender chart based on bias update
 const handleBiasUpdate= (updatedBiasData)=>{
+  console.log(updatedBiasData.biasGlossary);
   setBias_types(updatedBiasData.biasTypes);
   setBias_glossary(updatedBiasData.biasGlossary);
-  // sendNewBiasData(updatedBiasData);
-  // getBiasDicts();
-
+  sendNewBiasData(updatedBiasData);
+  // setTimeout(() => {  getBiasDicts(); }, 2000);
+  getBiasDicts();
 } 
 
 
@@ -237,7 +250,7 @@ const handleBiasUpdate= (updatedBiasData)=>{
             <Paper variant="outlined" square className={cssStyles.middlePanels2}>
               <Paper variant="outlined" className={cssStyles.chartPanel}>
                  <div id="chordChart" style={{height:'100%'}}>
-                      <ChordChart data={chartData} bias_types={bias_types} bias_dictionary={All_biases} max_bias_scores={max_biases}/>
+                      <ChordChart data={chartData} bias_types={bias_types} bias_dictionary={All_biases.biases} max_bias_scores={All_biases.max_biases}/>
                  </div>
               </Paper> 
               <Paper variant="outlined" className={cssStyles.barPanel}/>

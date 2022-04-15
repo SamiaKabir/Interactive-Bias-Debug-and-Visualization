@@ -1,4 +1,4 @@
-from ast import Global
+from ast import Global, Sub
 from flask import Flask, send_from_directory, flash, redirect, render_template, request, session, abort, send_from_directory, send_file, jsonify
 import json
 import time
@@ -245,6 +245,8 @@ def search_Instance():
 # print(model.most_similar(positive=['university'], topn=5))
 # Create and save default bias types
 # This bias array is editable by user
+global bias_array
+global subgroup_glossary
 bias_array = []
 bias_dict = {
     "type": "Gender",
@@ -354,9 +356,12 @@ subgroup_glossary.append(subgroup_dict)
 
 def calculate_bias():
     global Suggested_words
+    global bias_array
+    global subgroup_glossary
     Bias_Scores_Dict = {}
     Max_Bias_Dict = {}
 
+    # print(subgroup_glossary)
     # Calculate bias for each word
     for per_topics in Suggested_words:
         for per_words in per_topics:
@@ -456,6 +461,14 @@ def calculate_bias():
     return Bias_Scores_Dict, Max_Bias_Dict
 
 
+# Update bias
+def updateBias(new_bias_array, new_subgroup_glossary):
+    global bias_array
+    global subgroup_glossary
+    bias_array = new_bias_array
+    subgroup_glossary = new_subgroup_glossary
+
+
 # Declare application
 app = Flask(__name__)
 
@@ -504,11 +517,13 @@ def clusterData():
 
 @ app.route('/bias_types', methods=['GET'])
 def biasTypeData():
+    global bias_array
     return jsonify(bias_array)
 
 
 @ app.route('/bias_glossary', methods=['GET'])
 def biasGlossaryData():
+    global subgroup_glossary
     return jsonify(subgroup_glossary)
 
 
@@ -565,6 +580,19 @@ def get_instances():
 def get_biases():
     all_biases = calculate_bias()
     return {'biases': all_biases[0], 'max_biases': all_biases[1]}
+
+
+@app.route('/biasupdates', methods=['POST'])
+def biasUpdateRdfn():
+    # POST request
+    if request.method == 'POST':
+        request_data = request.get_json()
+        # print(request_data)
+        new_bias_array = request_data["biasTypes"]
+        new_subgroup_glossary = request_data["biasGlossary"]
+        if(new_bias_array and new_subgroup_glossary):
+            updateBias(new_bias_array, new_subgroup_glossary)
+        return 'Sucesss', 200
 
 
 if __name__ == "__main__":

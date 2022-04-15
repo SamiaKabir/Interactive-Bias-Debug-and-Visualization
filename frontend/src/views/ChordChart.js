@@ -7,28 +7,30 @@ import './ChordChart.css';
 
 const ChordChart= React.memo((props) => {
     const data=props.data;
-    // const bias_types=props.bias_types;
+    const bias_types=props.bias_types;
     const bias_dictionary=props.bias_dictionary;
     const max_bias_scores=props.max_bias_scores;
+    console.log(bias_types)
+    console.log(bias_dictionary)
+    console.log(max_bias_scores)
 
 
     // Read in Bias types
-    const [bias_types,setBias_types]=useState(0);
-    useEffect(() => {
-    d3.json("/bias_types").then((d) => {
-        setBias_types(d);
+    // const [bias_types,setBias_types]=useState(0);
+    // useEffect(() => {
+    // d3.json("/bias_types").then((d) => {
+    //     setBias_types(d);
+    // });
+    // return () => undefined;
+    // }, []);
+    // console.log(bias_types)
 
-    });
-    return () => undefined;
-    }, []);
 
-    // generate a map of bias scores  and max bias scoresfor all words from the data from pyhton
-    var Bias_map= new Map();
-    var Max_Bias_map= new Map();
 
     // convert python dictionaries to JS map
-
     function convert_to_map(){
+        var Bias_map= new Map();
+        var Max_Bias_map= new Map();
         Object.keys(bias_dictionary).map(function(key) {
             Bias_map.set(key,bias_dictionary[key])
         });
@@ -38,6 +40,7 @@ const ChordChart= React.memo((props) => {
             Max_Bias_map.set(key,max_bias_scores[key])
         });
         // console.log(Max_Bias_map)
+        return [Bias_map,Max_Bias_map];
     }
 
     // Construct the package hierarchy data
@@ -133,9 +136,13 @@ const ChordChart= React.memo((props) => {
 
             var cluster = d3.cluster()
                           .size([360, innerRadius_2]);
-
+            // generate a map of bias scores  and max bias scores for all words from the data from pyhton
+            var Bias_map= new Map();
+            var Max_Bias_map= new Map();
             if(bias_dictionary && max_bias_scores){
-                convert_to_map();
+               let both_maps= convert_to_map();
+               Bias_map= both_maps[0];
+               Max_Bias_map= both_maps[1];
             }
 
 
@@ -237,8 +244,8 @@ const ChordChart= React.memo((props) => {
                 // console.log(re_onclick_types)
                 // console.log(re_onclick_subgroups)
 
-                const N= re_onclick_subgroups.length;
-                const M= re_onclick_types.length;
+                var N= re_onclick_subgroups.length;
+                var M= re_onclick_types.length;
 
                 // create two NxN matrix
     
@@ -274,7 +281,7 @@ const ChordChart= React.memo((props) => {
                             });
             
                         });
-                        // console.log(mat_indx);
+                        console.log(mat_indx);
                         Bias_Matrix[mat_indx][mat_indx]=(agg_bias_score*1000);
                         Color_Matrix[mat_indx][mat_indx]=indx;
                         // put into bias id map
@@ -629,7 +636,7 @@ const ChordChart= React.memo((props) => {
             }
 
         },
-        [data,bias_dictionary,max_bias_scores]
+        [data,bias_types,bias_dictionary,max_bias_scores]
     );
 
     return(
