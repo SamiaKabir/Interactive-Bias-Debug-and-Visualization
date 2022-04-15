@@ -456,10 +456,8 @@ const ChordChart= React.memo((props) => {
                 var all_sum=0;
                 for(var i=0;i<Bias_Matrix.length;i++){
                     var this_sum=0;
-                    for(var j=0;j<Bias_Matrix.length;j++){
-                        this_sum+=Bias_Matrix[i][j];
-                        all_sum+=Bias_Matrix[i][j];
-                    }
+                    this_sum+=Bias_Matrix[i][i];
+                    all_sum+=Bias_Matrix[i][i];
                     percentage_bias.push(this_sum)
                 }
                 for(var i=0;i<percentage_bias.length;i++){
