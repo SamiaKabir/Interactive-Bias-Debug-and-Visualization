@@ -225,7 +225,7 @@ def search_Instance():
         per_topic_arr = []
         for doc_sentences in docs:
             for per_words in per_topics:
-                if per_words in doc_sentences:
+                if per_words in ''.join(doc_sentences.split()):
                     per_topic_arr.append(doc_sentences)
                     # print("true")
                     break
