@@ -19,67 +19,18 @@ from similar_words import remove_similar_words
 
 
 # load data
-fields = ['title']
-headlines = pd.read_csv('static/assets/data/articles1.csv',
-                        skipinitialspace=True, usecols=fields)
-
-
-# # Topic Modeling with LDA
-
-# Trim the dataset
-news = headlines.sample(frac=0.6, random_state=423)
+fields = ['title', 'content']
+news = pd.read_csv('static/assets/data/articles1.csv',
+                   skipinitialspace=True, usecols=fields)
 
 docs = []
 
 for row in news['title']:
     docs.append(row)
-# print(len(docs))
-# count_model = CountVectorizer(ngram_range=(1, 1))  # default unigram model
-# X = count_model.fit_transform(news['title'])
-# Xc = (X.T * X)  # this is co-occurrence matrix in sparse csr format
-# Xc.setdiag(0)  # sometimes you want to fill same word cooccurence to 0
-# print(Xc.todense())
 
-# # TFID vectrization
-# tf_vectorizer = TfidfVectorizer(stop_words='english', max_features=50000)
-# news_matrix = tf_vectorizer.fit_transform(news['title'])
+for row in news['content']:
+    docs.append(row)
 
-
-# # Fitting LDA
-# lda = LatentDirichletAllocation(n_components=5, learning_method='online',
-#                                 random_state=0, verbose=0, n_jobs=-1)
-# lda_model = lda.fit(news_matrix)
-# lda_matrix = lda_model.transform(news_matrix)
-
-
-# # Data to be written in json
-# topic_disctionary = {
-#     "topics": ""
-# }
-
-# # print topics
-# def print_topics(model, count_vectorizer, n_top_words):
-#     all_topics = []
-#     words = tf_vectorizer.get_feature_names()
-#     for topic_idx, topic in enumerate(model.components_):
-#         topics = {
-#             "topic": topic_idx,
-#             "words": [words[i]
-#                       for i in topic.argsort()[:-n_top_words - 1:-1]]
-#         }
-#         all_topics.append(topics)
-#         print("\nTopic #%d:" % topic_idx)
-#         print(" ".join([words[i]
-#                         for i in topic.argsort()[:-n_top_words - 1:-1]]))
-
-#     topic_disctionary["topics"] = all_topics
-#     with open('./static/assets/jsons/topics.json', "w") as json_file:
-#         json.dump(topic_disctionary, json_file)
-
-
-# # Print the topics found by the LDA model
-# print("Topics found via LDA:")
-# print_topics(lda_model, news_matrix, 50)
 
 # Opening the preproceesed JSON file
 f = open('./static/assets/jsons/topics.json',)
@@ -91,70 +42,31 @@ topic_data = json.load(f)
 f.close()
 
 
-# Word Similarities with Word2Vec or Glove
+# Train a word2vec model, save it and load it afterwards
 
-# Load pretrained word2vec model
-# model = models.KeyedVectors.load_word2vec_format('static/assets/model/GoogleNews-vectors-negative300.bin', binary=True)
+# read the news titles as string
+sentences = news['title'].astype('str').tolist()
+# read the news content as string
+sentences_2 = news['content'].astype('str').tolist()
 
-# # read the news titles as string
-# sentences = news['title'].astype('str').tolist()
+# create the list of lists of all vocab
+sentences = sentences+sentences_2
 
 # # toeknize
 # tokenizer = RegexpTokenizer(r'\w+')
-# sentences_tokenized = [w.lower() for w in sentences]
+# sentences_tokenized = [w for w in sentences]
 # sentences_tokenized = [tokenizer.tokenize(i) for i in sentences_tokenized]
 
-# # fine_tune
-# model_2 = models.Word2Vec(size=300, min_count=1)
-# model_2.build_vocab(sentences_tokenized)
-# total_examples = model_2.corpus_count
-# model_2.build_vocab([list(model.vocab.keys())], update=True)
-# model_2.intersect_word2vec_format(
-#     'static/assets/model/GoogleNews-vectors-negative300.bin', binary=True)
-# model_2.train(sentences_tokenized,
-#               total_examples=total_examples, epochs=model_2.iter)
+# total_examples_train = len(sentences_tokenized)
 
-# model_2.save("Tuned_Model.model")
-# model_2 = models.Word2Vec.load("Tuned_Model.model")
-# model_2.wv.save("Tuned_model_wv.wordvectors")
+# # train model with the news data
+# model = Word2Vec(sentences=sentences_tokenized, size=300,
+#  window=5, min_count=1, workers=4)
+# # save models and vectors
+# model.save("Tuned_Model.model")
+# model.wv.save("Tuned_model_wv.wordvectors")
+
 model = models.KeyedVectors.load("Tuned_model_wv.wordvectors", mmap='r')
-
-# # Similar clusters based on Word2vec
-# similarity_clusters = {
-#     "all_clusters": []
-# }
-# cluster_per_topic = {
-#     "per_topic": ""
-# }
-
-# use the model to find word similarities
-# use threshold 0.3
-# for i in range(0, 5):
-#     per_topic_cluster_array = []
-#     for j in range(0, 50):
-#         word_dictionary = {
-#             "word": "",
-#             "similar_index": []
-#         }
-#         word_dictionary["word"] = topic_data["topics"][i]["words"][j]
-#         similar_indices = []
-#         for k in range(0, 50):
-#             if j != k:
-#                 print("here")
-#                 word1 = topic_data["topics"][i]["words"][j]
-#                 word2 = topic_data["topics"][i]["words"][k]
-#                 if(word1 in model.vocab) and (word2 in model.vocab):
-#                     print("here2")
-#                     if(model.similarity(word1, word2) > 0.2):
-#                         print("here3")
-#                         similar_indices.append(word2)
-
-#         word_dictionary["similar_index"] = similar_indices
-#         per_topic_cluster_array.append(word_dictionary)
-#     similarity_clusters["all_clusters"].append(per_topic_cluster_array)
-
-# with open('./static/assets/jsons/word_group_2.json', "w") as json_f:
-#     json.dump(similarity_clusters, json_f)
 
 
 # Opening the preproceesed JSON file for clusters
@@ -223,12 +135,16 @@ def search_Instance():
 
     for per_topics in Suggested_words:
         per_topic_arr = []
-        for doc_sentences in docs:
+        sentence_count = 0
+        for doc_sentences in sentences:
             for per_words in per_topics:
-                if per_words in ''.join(doc_sentences.split()):
-                    per_topic_arr.append(doc_sentences)
+                if per_words in doc_sentences:
+                    # ''.join(doc_sentences.split()):
+                    # per_topic_arr.append(doc_sentences)
+                    per_topic_arr.append(docs[sentence_count])
                     # print("true")
                     break
+            sentence_count += 1
 
         All_Instances.append(per_topic_arr)
         # print(All_Instances)
@@ -289,7 +205,7 @@ def bias_init():
     subgroup_dict = {
         "word": "Transgender",
         "type": "Gender",
-        "group": ["trans", "transsexual", "bisexual", "Transgender", "unisexual"]
+        "group": ["trans", "transsexual", "bisexual", "Transgender"]
     }
     subgroup_glossary.append(subgroup_dict)
 
@@ -384,8 +300,11 @@ def calculate_bias():
                 sum = 0
                 bias_score = 0
                 for y in range(0, len_sb):
-                    sum += model.similarity(word,
-                                            subgroup_glossary[x]["group"][y])
+                    if not (subgroup_glossary[x]["group"][y] in model.vocab):
+                        len_sb -= 1
+                    else:
+                        sum += model.similarity(word,
+                                                subgroup_glossary[x]["group"][y])
                 # print("word " + word + ","+" Bias Subgroup " +
                     #   subgroup_glossary[x]["word"]+",Bias Score "+":")
                 if len_sb > 0:
