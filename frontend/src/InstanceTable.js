@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { CssBaseline, Paper, Box, Container, Button, IconButton,TextField,Typography,Popper} from '@mui/material';
 import { DataGrid, GridToolbar,  GridToolbarContainer,GridToolbarColumnsButton, GridToolbarFilterButton,GridToolbarExport,GridToolbarDensitySelector } from '@mui/x-data-grid';
 import customStyles from './style';
+import Highlighter from 'react-highlight-words';
 
 
 function RenderInstanceTable(props) {
@@ -129,7 +130,13 @@ function RenderInstanceTable(props) {
               ref={cellValue}
               sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
             >
-              {value}
+              {/* {value} */}
+              <Highlighter
+                searchWords={keyWords}
+                autoEscape={true}
+                textToHighlight={value}
+                highlightStyle={{backgroundColor:'#A0D4EE'}}
+              />
             </Box>
             {showPopper && (
               <Popper
@@ -139,10 +146,20 @@ function RenderInstanceTable(props) {
               >
                 <Paper
                   elevation={1}
-                  style={{ minHeight: wrapper.current.offsetHeight - 3 }}
+                  style={{ minHeight: wrapper.current.offsetHeight - 3 ,
+                           // border:'1px solid',
+                  
+                       }}
                 >
+
                   <Typography variant="body2" style={{ padding: 8 ,backgroundColor:'#e9f6fb' }}>
-                    {value}
+                    {/* {value} */}
+                    <Highlighter
+                      searchWords={keyWords}
+                      autoEscape={true}
+                      textToHighlight={value}
+                      highlightStyle={{backgroundColor:'#A0D4EE'}}
+                    />
                   </Typography>
                 </Paper>
               </Popper>
