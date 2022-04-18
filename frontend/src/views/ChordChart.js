@@ -186,6 +186,7 @@ const ChordChart= React.memo((props) => {
                 //create a bucket/map for the bias and array for subgroups and types presented in the data
                 data.data.forEach((word)=>{
                     const temp_bias_array=Max_Bias_map.get(word)
+                    // console.log(word)
                     // console.log(temp_bias_array)
                     // create the list of bias types and subgroup present in the current selection
                     var temp_subgroup_array=[]
@@ -198,11 +199,10 @@ const ChordChart= React.memo((props) => {
                             temp_subgroup_array.push(obj.subgroup)
                         })
                     }
-                    // createa map of single and intersectional biases present in the current selection
+                    // create a map of single and intersectional biases present in the current selection
                     if(temp_subgroup_array.length>0){
                         const num_biases=temp_subgroup_array.length;
                         var per_word_biases=[]
-                        
                         var subset_array=getAllSubsets(temp_subgroup_array);
                         
                         for(let i=1; i<subset_array.length;i++){
@@ -217,13 +217,14 @@ const ChordChart= React.memo((props) => {
                         perWord_Bias_map.set(word,per_word_biases);
                         
                     }
+                    
                     // console.log(perWord_Bias_map)
 
                 });
 
                 // console.log(onclick_types)
                 // console.log(onclick_subgroups)
-                // console.log(onclick_bias_map)
+                console.log(onclick_bias_map)
 
                 // Reorder the types and subgroups for visualization so that same subgroups of same type stay next to each other
                 var re_onclick_types=[];
@@ -343,6 +344,7 @@ const ChordChart= React.memo((props) => {
                     }
             
                 }
+                // console.log(bias_id_map)
 
                 // populte the type matrix for outer layer
                 bias_types.forEach((obj)=>{
@@ -545,22 +547,17 @@ const ChordChart= React.memo((props) => {
                     d3.select(this).style("opacity",1.0);
                     var classname="."+d3.select(this).attr('class');
                     d3.selectAll(classname).style("opacity",1.0); 
-                    // console.log(event); 
                     var index_in_bias_map= Color_Matrix[d.source.index][d.target.index];
-                    let related_words=[];
-                    // read the words related to this bias
-                    var tmp_count=0;
-                    for (let [key, value] of onclick_bias_map) {
-                        if(tmp_count==index_in_bias_map){
-                            value.forEach((w)=>{
-                                related_words.push(w);
-                            })
-                            break;
+
+                    // find the bias by using this index from bias_id_map
+                    var bias_key
+                    for (let [key, value] of bias_id_map) {
+                        if(value==index_in_bias_map){
+                            bias_key=key
                         }
-                        else
-                            tmp_count++;
                     }
-                    // console.log(related_words)
+
+                    let related_words=onclick_bias_map.get(bias_key)
                     // Highlight those words
                     related_words.forEach((w)=>{
                         var str = w.split(".")[0];
@@ -576,19 +573,16 @@ const ChordChart= React.memo((props) => {
                     d3.selectAll(classname).style("opacity",0.3);
                     // console.log(event)
                     var index_in_bias_map= Color_Matrix[d.source.index][d.target.index];
-                    let related_words=[];
-                    // read the words related to this bias
-                    var tmp_count=0;
-                    for (let [key, value] of onclick_bias_map) {
-                        if(tmp_count==index_in_bias_map){
-                            value.forEach((w)=>{
-                                related_words.push(w);
-                            })
-                            break;
+
+                    // find the bias by using this index from bias_id_map
+                    var bias_key
+                    for (let [key, value] of bias_id_map) {
+                        if(value==index_in_bias_map){
+                            bias_key=key
                         }
-                        else
-                            tmp_count++;
                     }
+
+                    let related_words=onclick_bias_map.get(bias_key)
               
                     // Unhighlight those words
                     related_words.forEach((w)=>{
