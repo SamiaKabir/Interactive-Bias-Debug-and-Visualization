@@ -61,22 +61,22 @@ function RenderTopicCard(props) {
        }
    
         else if((!keyWords[indx].includes(keyWord) && keyWord!="")){
-          console.log("here")
+          // console.log("here")
           keyWords[indx].push(keyWord);
           setKeyWords(keyWords);
           forceUpdate();
         }
 
         else if((!actualKeyWords[indx].includes(keyWord) && keyWord!="")){
-          console.log("here2")
+          // console.log("here2")
           actualKeyWords[indx].push(keyWord);
           setActualKeyWords(actualKeyWords);
           forceUpdate();
         }
 
       }
-      console.log(keyWords)
-      console.log(actualKeyWords)
+      // console.log(keyWords)
+      // console.log(actualKeyWords)
     };
 
     //delete keywords onclick
