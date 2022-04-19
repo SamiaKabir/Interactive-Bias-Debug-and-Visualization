@@ -80,8 +80,12 @@ function RenderTopicCard(props) {
         send_data_copy=actualKeyWords
       }
       else if(actualKeyWords.length==indx){
+        // var new_topics_num=indx-actualKeyWords.length;
         send_data_copy=actualKeyWords;
+        // for(let i=0;i<new_topics_num+1;i++){
+          //  send_data_copy.push(keyWords[new_topics_num+i]);
         send_data_copy.push(KeyWords[indx]);
+        // }
         
       }
       else{
@@ -128,8 +132,51 @@ function RenderTopicCard(props) {
         getSuggestions();
       }
 
+      // set the keywords to current version if suggestion is not asked
+      const handlePostKeyWordTransfer=(e,indx)=>{
+        console.log(actualKeyWords)
+        var send_data_copy;
+        if(actualKeyWords.length>indx && actualKeyWords[indx].length>0){
+          send_data_copy=actualKeyWords
+        }
+        else if(actualKeyWords.length==indx){
+          // var new_topics_num=indx-actualKeyWords.length;
+          send_data_copy=actualKeyWords;
+          // for(let i=0;i<new_topics_num+1;i++){
+            //  send_data_copy.push(keyWords[new_topics_num+i]);
+             send_data_copy.push(keyWords[indx]);
+          // }
+          
+        }
+        else{
+          send_data_copy=keyWords
+        }
+
+        fetch('/posttopics', {
+          // Declare what type of data we're sending
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          // Specify the method
+          method: 'POST',
+          // A JSON payload
+          body: JSON.stringify({
+              "keyWords": send_data_copy
+          })
+          }).then(function (response) {
+          return response.text();
+          }).then(function (text) {
+          });
+          // actualKeyWords=send_data_copy;
+          setActualKeyWords(send_data_copy);
+
+      };
+
+
+
       // handle new chart render
       const handleChartRender=(e,index) =>{
+        // handlePostKeyWordTransfer(e,index);
         const updatedChart={
           'index':index,
           'data': actualKeyWords[index]

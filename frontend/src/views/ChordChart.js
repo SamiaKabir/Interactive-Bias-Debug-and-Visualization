@@ -548,6 +548,8 @@ const ChordChart= React.memo((props) => {
                     var classname="."+d3.select(this).attr('class');
                     d3.selectAll(classname).style("opacity",1.0); 
                     var index_in_bias_map= Color_Matrix[d.source.index][d.target.index];
+                    console.log(d)
+                    console.log(index_in_bias_map)
 
                     // find the bias by using this index from bias_id_map
                     var bias_key
@@ -558,6 +560,8 @@ const ChordChart= React.memo((props) => {
                     }
 
                     let related_words=onclick_bias_map.get(bias_key)
+                    console.log(bias_key)
+                    console.log(related_words)
                     // Highlight those words
                     related_words.forEach((w)=>{
                         var str = w.split(".")[0];

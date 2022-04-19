@@ -122,6 +122,14 @@ def generate_suggestions(All_Topics, All_Keywords):
 
     return
 
+# reassign posted value if suggestion is not asked for
+
+
+def reassign_suggestions(All_Keywords):
+    global Suggested_words
+    Suggested_words = All_Keywords
+    return
+
 
 # Search for matching Instances
 # global All_Instances
@@ -349,22 +357,24 @@ def calculate_bias():
                     if(k == length-1):
                         abs_dist = (max-min)
                         if((abs_dist) >= 0.05):
+                            if(max > 0):
+                                max_obj_current_type = {
+                                    "type": current_type,
+                                    "subgroup": max_subgroup,
+                                    "bias_score": max
+                                }
+                                max_array.append(max_obj_current_type)
+
+                else:
+                    abs_dist = (max-min)
+                    if((abs_dist) >= 0.05):
+                        if(max > 0):
                             max_obj_current_type = {
                                 "type": current_type,
                                 "subgroup": max_subgroup,
                                 "bias_score": max
                             }
                             max_array.append(max_obj_current_type)
-
-                else:
-                    abs_dist = (max-min)
-                    if((abs_dist) >= 0.05):
-                        max_obj_current_type = {
-                            "type": current_type,
-                            "subgroup": max_subgroup,
-                            "bias_score": max
-                        }
-                        max_array.append(max_obj_current_type)
                         current_type = Bias_Scores_Dict[word][k]["type"]
                         max = -2
                         max_subgroup = ""
@@ -483,8 +493,17 @@ def topicRdfn():
         request_data = request.get_json()
         All_Topics = request_data["topics"]
         All_Keywords = request_data["keyWords"]
-        # print(request.get_json())  # parse as JSON
         generate_suggestions(All_Topics, All_Keywords)
+        return 'Sucesss', 200
+
+
+@app.route('/posttopics', methods=['POST'])
+def posttopicRdfn():
+    # POST request
+    if request.method == 'POST':
+        request_data = request.get_json()
+        All_Keywords = request_data["keyWords"]
+        reassign_suggestions(All_Keywords)
         return 'Sucesss', 200
 
 
