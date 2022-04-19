@@ -46,51 +46,54 @@ function RenderTopicCard(props) {
     // console.log(keyWords);
 
     const handleKeySubmit = (e,indx) => {
+      e.stopPropagation();
       if(e.key == 'Enter'){
-       console.log(indx);
 
        if(keyWords.length<indx+1){
         let newArray=[];
         newArray.push(keyWord);
         keyWords.push(newArray);
+        e.stopPropagation();
+        actualKeyWords.push(newArray);
+        setActualKeyWords(actualKeyWords);
         setKeyWords(keyWords);
         forceUpdate();
-
        }
    
         else if((!keyWords[indx].includes(keyWord) && keyWord!="")){
+          console.log("here")
           keyWords[indx].push(keyWord);
           setKeyWords(keyWords);
           forceUpdate();
         }
+
+        else if((!actualKeyWords[indx].includes(keyWord) && keyWord!="")){
+          console.log("here2")
+          actualKeyWords[indx].push(keyWord);
+          setActualKeyWords(actualKeyWords);
+          forceUpdate();
+        }
+
       }
+      console.log(keyWords)
+      console.log(actualKeyWords)
     };
 
     //delete keywords onclick
     const handleDelete = (e,indx,indx2) => {
+      e.stopPropagation();
       keyWords[indx2].splice(indx,1);
       setKeyWords(keyWords);
+      actualKeyWords[indx2].splice(indx,1);
+      setActualKeyWords(actualKeyWords);
       forceUpdate();
     };
 
     // send seedwords to server and read suggested words from server
     const handleKeyWordTransfer=(e,all_topics,KeyWords,indx)=>{
       var send_data_copy;
-      if(actualKeyWords.length>indx && actualKeyWords[indx].length>0){
-        send_data_copy=actualKeyWords
-      }
-      else if(actualKeyWords.length==indx){
-        // var new_topics_num=indx-actualKeyWords.length;
-        send_data_copy=actualKeyWords;
-        // for(let i=0;i<new_topics_num+1;i++){
-          //  send_data_copy.push(keyWords[new_topics_num+i]);
-        send_data_copy.push(KeyWords[indx]);
-        // }
-        
-      }
-      else{
-        send_data_copy=KeyWords
-      }
+      send_data_copy=actualKeyWords
+
 
       // console.log(actualKeyWords);
       fetch('/topics', {
@@ -134,23 +137,7 @@ function RenderTopicCard(props) {
 
       // set the keywords to current version if suggestion is not asked
       const handlePostKeyWordTransfer=(e,indx)=>{
-        console.log(actualKeyWords)
-        var send_data_copy;
-        if(actualKeyWords.length>indx && actualKeyWords[indx].length>0){
-          send_data_copy=actualKeyWords
-        }
-        else if(actualKeyWords.length==indx){
-          // var new_topics_num=indx-actualKeyWords.length;
-          send_data_copy=actualKeyWords;
-          // for(let i=0;i<new_topics_num+1;i++){
-            //  send_data_copy.push(keyWords[new_topics_num+i]);
-             send_data_copy.push(keyWords[indx]);
-          // }
-          
-        }
-        else{
-          send_data_copy=keyWords
-        }
+        var send_data_copy=actualKeyWords
 
         fetch('/posttopics', {
           // Declare what type of data we're sending
@@ -167,8 +154,6 @@ function RenderTopicCard(props) {
           return response.text();
           }).then(function (text) {
           });
-          // actualKeyWords=send_data_copy;
-          setActualKeyWords(send_data_copy);
 
       };
 
@@ -176,7 +161,7 @@ function RenderTopicCard(props) {
 
       // handle new chart render
       const handleChartRender=(e,index) =>{
-        // handlePostKeyWordTransfer(e,index);
+        handlePostKeyWordTransfer(e,index);
         const updatedChart={
           'index':index,
           'data': actualKeyWords[index]
