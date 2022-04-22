@@ -30,9 +30,9 @@ const customStyles= makeStyles((theme) => ({
     overflow: 'auto!important',
 },
   biasEditorTitle:{
-    transform: 'rotate(-90deg)',
+    // transform: 'rotate(-90deg)',
     color: '#black!important',
-    marginTop: '75vh!important',
+    marginTop: '80vh!important',
   },
   biasEditorTitleTop:{
     color: '#white!important',
@@ -62,7 +62,6 @@ const customStyles= makeStyles((theme) => ({
     height:'96.5%',
     backgroundColor:'#f5f7f8eb!important',
     borderColor:'#00000061'
-
   },
   barPanel:{
     height:'3%',
@@ -78,7 +77,6 @@ const customStyles= makeStyles((theme) => ({
     borderColor:'darkgrey'
   },
   topicFooter:{
-
     backgroundColor:'#cfeeff!important',
     color:'#1976d2!important',
     fontSize:'0.8rem!important',

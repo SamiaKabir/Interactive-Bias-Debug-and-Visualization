@@ -24,12 +24,13 @@ news = pd.read_csv('static/assets/data/articles1.csv',
                    skipinitialspace=True, usecols=fields)
 
 docs = []
+contents = []
 
 for row in news['title']:
     docs.append(row)
 
 for row in news['content']:
-    docs.append(row)
+    contents.append(row)
 
 
 # Opening the preproceesed JSON file
@@ -140,23 +141,27 @@ def reassign_suggestions(All_Keywords):
 def search_Instance():
     global Suggested_words
     All_Instances = []
+    All_Instance_contents = []
 
     for per_topics in Suggested_words:
         per_topic_arr = []
+        content_arr = []
         sentence_count = 0
-        for doc_sentences in sentences:
+        for doc_sentences in docs:
             for per_words in per_topics:
-                if per_words in doc_sentences:
+                if (" "+per_words+" ") in (" "+doc_sentences+" "):
                     # ''.join(doc_sentences.split()):
                     # per_topic_arr.append(doc_sentences)
                     per_topic_arr.append(docs[sentence_count])
+                    content_arr.append(contents[sentence_count])
                     # print("true")
                     break
             sentence_count += 1
 
         All_Instances.append(per_topic_arr)
-        # print(All_Instances)
-    return All_Instances
+        All_Instance_contents.append(content_arr)
+
+    return All_Instances, All_Instance_contents
 
 
 # Load Pretrained Glove model
@@ -524,7 +529,7 @@ def get_topic():
 @app.route('/getinstances', methods=['GET'])
 def get_instances():
     all_Instances = search_Instance()
-    return {'instances': all_Instances}
+    return {'instances': all_Instances[0], 'contents': all_Instances[1]}
 
 
 @app.route('/getbiases', methods=['GET'])

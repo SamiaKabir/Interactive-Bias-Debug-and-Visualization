@@ -11,6 +11,10 @@ function RenderInstanceTable(props) {
     const keyWords=props.keyWords;
     const index= props.index;
     const All_instances=props.All_instances;
+    const All_contents=props.All_contents;
+    const H_color=props.H_color;
+
+
 
 
     function createData(id, instance) {
@@ -22,7 +26,7 @@ function RenderInstanceTable(props) {
 
     const columns=[
         { field: 'id', headerName: 'id', width: '90' },
-        { field: 'instance', headerName: 'Instance', width: '400',
+        { field: 'instance', headerName: 'Instance', width: '450',
           renderCell: renderCellExpand },
     ]; 
       
@@ -135,7 +139,7 @@ function RenderInstanceTable(props) {
                 searchWords={keyWords}
                 autoEscape={true}
                 textToHighlight={value}
-                highlightStyle={{backgroundColor:'#A0D4EE'}}
+                highlightStyle={{backgroundColor: H_color}}
               />
             </Box>
             {showPopper && (
@@ -158,7 +162,7 @@ function RenderInstanceTable(props) {
                       searchWords={keyWords}
                       autoEscape={true}
                       textToHighlight={value}
-                      highlightStyle={{backgroundColor:'#A0D4EE'}}
+                      highlightStyle={{backgroundColor:H_color}}
                     />
                   </Typography>
                 </Paper>

@@ -29,7 +29,7 @@ function App() {
 
 
   // for expanding the bias editor
-  const [size, setClicked] = useState([2.5,3.5,5.5,0.5]);
+  const [size, setClicked] = useState([2.0,4.0,5.5,0.5]);
   const [expandFlag, setExpand]= useState(true);
   const handleExpand = () => {
     let newSize=[2.0,2.5,5.0,2.5];
@@ -40,7 +40,7 @@ function App() {
 
   // for collapsing the bias editor
   const handleCollapse = () => {
-    let newSize=[2.5,3.5,5.5,0.5];
+    let newSize=[2.0,4.0,5.5,0.5];
     console.log("clicked");
     setClicked(newSize);
     setExpand(true);
@@ -109,13 +109,16 @@ function App() {
 
   };
 
-  // get the matching isnatnces from backend
+  // get the matching news title isnatnces from backend
   const [All_instances, setAll_instances]=useState([]);
+   // get the matching news contents from backend
+  const [All_instance_contents, setAll_instance_contents]=useState([]);
 
   const getInstances = async () => {
       await fetch('/getinstances').then(res => res.json()).then(data => {
           // console.log(data.instances);
           setAll_instances(data.instances)
+          setAll_instance_contents(data.contents)
       }); 
   }
 
@@ -157,11 +160,13 @@ function App() {
   const [chartData,setChartData]=useState(null);
   const [instanceData,setInstanceData]=useState(null);
   const [instanceIndex,setInstanceIndex]=useState(0);
+  const [hightlighColor,setHightlighColor]=useState("#000");
   
   const handleChartChange = (updatedChart) => {
     setChartData(updatedChart);
     setInstanceData(updatedChart.data);
     setInstanceIndex(updatedChart.index)
+    setHightlighColor(updatedChart.color)
     getInstances();
     getBiasDicts();
   };
@@ -232,7 +237,7 @@ const handleBiasUpdate= (updatedBiasData)=>{
           {/*  intsance panel */}
           <Grid item  md={size[1]}>
             <Paper variant="outlined" square  className={cssStyles.middlePanels}>
-              <RenderInstanceTable keyWords={instanceData} index={instanceIndex} All_instances={All_instances}/>
+              <RenderInstanceTable keyWords={instanceData} index={instanceIndex} All_instances={All_instances} All_contents={All_instance_contents} H_color={hightlighColor}/>
             </Paper>
           </Grid>
 
