@@ -13,8 +13,11 @@ function RenderInstanceTable(props) {
     const All_instances=props.All_instances;
     const All_contents=props.All_contents;
     const H_color=props.H_color;
+    const init_content=props.init_content;
 
 
+    const [currentContent,setCurrentContent]=useState(init_content);
+    
 
 
     function createData(id, instance) {
@@ -44,6 +47,12 @@ function RenderInstanceTable(props) {
                 count++;     
             })
         }
+    }
+
+    // change the current onclick content
+    const showTableContent= (e)=>{
+      var content_indx=e.id-1
+      setCurrentContent(All_contents.at(index).at(content_indx))
     }
 
     // generate custom toolbar for the data grid
@@ -201,27 +210,40 @@ function RenderInstanceTable(props) {
     // Final rendering of the table
     if(keyWords){
         return (
+          <>
             <DataGrid
             rows={rows}
             columns={columns}
-            pageSize={15}
-            rowsPerPageOptions={[15]}
+            pageSize={12}
+            rowsPerPageOptions={[12]}
             components={{ Toolbar: CustomToolbar }}
-            sx={{
+            sx={{height:'75%',
                 // borderColor:'black',
-               '& .MuiDataGrid-virtualScroller':
-               {
-                 backgroundColor:'white',
-               },
-               '& .MuiDataGrid-footerContainer':{
-                   borderColor:'#a1969670'
-               },
-               '& .MuiDataGrid-columnHeaders':{
+                '& .MuiDataGrid-virtualScroller':
+                {
+                  backgroundColor:'white',
+                },
+                '& .MuiDataGrid-footerContainer':{
+                    borderColor:'#a1969670'
+                },
+                '& .MuiDataGrid-columnHeaders':{
                 borderColor:'#a1969670'
-               },
+                },
             
             }}
-          />
+            onCellClick={(e) => {showTableContent(e)}}
+            />
+            <Paper variant="outlined" square style={{height:'25%',borderColor: 'darkgrey', borderWidth: '1px',overflow:'auto' }}>
+               {/* {currentContent} */}
+                <Highlighter
+                  searchWords={keyWords}
+                  autoEscape={true}
+                  textToHighlight= {currentContent}
+                  highlightStyle={{backgroundColor:H_color}}
+                />
+            </Paper>
+          </>
+
         );
     }
     else 

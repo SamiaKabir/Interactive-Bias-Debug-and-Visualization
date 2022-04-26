@@ -237,7 +237,8 @@ const handleBiasUpdate= (updatedBiasData)=>{
           {/*  intsance panel */}
           <Grid item  md={size[1]}>
             <Paper variant="outlined" square  className={cssStyles.middlePanels}>
-              <RenderInstanceTable keyWords={instanceData} index={instanceIndex} All_instances={All_instances} All_contents={All_instance_contents} H_color={hightlighColor}/>
+              <RenderInstanceTable keyWords={instanceData} index={instanceIndex} All_instances={All_instances} 
+              All_contents={All_instance_contents} H_color={hightlighColor} init_content={null}/>
             </Paper>
           </Grid>
 

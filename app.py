@@ -51,7 +51,7 @@ sentences = news['title'].astype('str').tolist()
 sentences_2 = news['content'].astype('str').tolist()
 
 # create the list of lists of all vocab
-sentences = sentences+sentences_2
+# sentences = sentences+sentences_2
 
 # # toeknize
 # tokenizer = RegexpTokenizer(r'\w+')
