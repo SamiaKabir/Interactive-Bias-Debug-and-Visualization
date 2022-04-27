@@ -59,7 +59,7 @@ const customStyles= makeStyles((theme) => ({
     width:'0.8em!important',
   },
   chartPanel:{
-    height:'96.5%',
+    height:'100%',
     backgroundColor:'#f5f7f8eb!important',
     borderColor:'#00000061'
   },

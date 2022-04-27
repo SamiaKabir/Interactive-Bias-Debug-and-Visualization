@@ -19,3 +19,15 @@ div.tooltip {
   border-radius: 8px;
   pointer-events: none;
 }
+
+tr {
+  background-color: #070300;
+  color: #ffffff;
+}
+tbody {
+  border-color: #070300;
+}
+td {
+  background-color: #e7f0f7;
+  color: #130101;
+}

@@ -250,7 +250,7 @@ const handleBiasUpdate= (updatedBiasData)=>{
                       <ChordChart data={chartData} bias_types={bias_types} bias_dictionary={All_biases.biases} max_bias_scores={All_biases.max_biases}/>
                  </div>
               </Paper> 
-              <Paper variant="outlined" className={cssStyles.barPanel}/>
+              {/* <Paper variant="outlined" className={cssStyles.barPanel}/> */}
             </Paper>
           </Grid>
           {/* Bias Editor panel */}

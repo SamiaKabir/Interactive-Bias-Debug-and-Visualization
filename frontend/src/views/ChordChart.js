@@ -144,7 +144,8 @@ const ChordChart= React.memo((props) => {
                Bias_map= both_maps[0];
                Max_Bias_map= both_maps[1];
             }
-
+            
+            // console.log(Bias_map)
 
             // Clear the svg to get rid off any previous chart
             svg.selectAll(".node").remove(); 
@@ -152,7 +153,7 @@ const ChordChart= React.memo((props) => {
 
 
             // Declare new nodes for chord diagram
-            var svg_new = svg.append("g").attr("transform", "translate(" + (radius_2+145) + "," + (radius_2+135)+ ")")
+            var svg_new = svg.append("g").attr("transform", "translate(" + (radius_2+140) + "," + (radius_2+110)+ ")")
             var node=svg_new.selectAll(".node");
 
             if(data!==null){
@@ -224,7 +225,7 @@ const ChordChart= React.memo((props) => {
 
                 // console.log(onclick_types)
                 // console.log(onclick_subgroups)
-                console.log(onclick_bias_map)
+                // console.log(onclick_bias_map)
 
                 // Reorder the types and subgroups for visualization so that same subgroups of same type stay next to each other
                 var re_onclick_types=[];
@@ -385,6 +386,7 @@ const ChordChart= React.memo((props) => {
                 });
                 // console.log(position_map)
         
+
                 // Create the nodes/Texts for svg  for Chord diagram
                 node = node
                 .data(data.data)
@@ -400,7 +402,17 @@ const ChordChart= React.memo((props) => {
                 .attr("id", function(d) {var str = d.split(".")[0]; return "id"+str;})
                 .attr("title",function(d){return d;})
                 .text(function(d) { return d; })
-                .on("click",function(d){
+                .on("click",function(e,d){
+                    var table_data=[['Bias Scores']]
+                    var table_type=["Subgroup"]
+                    console.log(Bias_map.get(d));
+    
+                    Bias_map.get(d).map((obj)=>{
+                        table_data[0].push(obj.bias_score.toFixed(3));
+                        table_type.push(obj.subgroup);
+            
+                    });
+                    draw_table(table_data,table_type);
                 })
                 .on("mouseover",function(event,d){
                     d3.select(this).style('fill','#60a3d9');
@@ -629,6 +641,52 @@ const ChordChart= React.memo((props) => {
                 .style("font-size","12px");
 
                 d3.selectAll('.dotme').call(dotme);
+
+                // table visualization
+                // table_data=[[0.11,"Male","Gender"],[0.122,"Female","Gender"]];
+                function draw_table(T_data,T_type){
+                    console.log(T_data)
+                    console.log(T_type)
+
+                    var svg_new_2 = svg.append("g").attr("transform", "translate(" + (0) + "," + (radius_2+radius_2+180)+ ")")
+
+                    // var table=svg_new_2.append("table");
+                    var table= svg_new_2.append("svg:foreignObject")
+                    .attr("x", 80)
+                    .attr("y", 4)
+                    .attr("width", 700)
+                    .attr("height", 150)
+                    .append("xhtml:body")
+                    .append("table")
+                    .attr("class", "table-bordered");
+
+        
+                    var header = table.append("thead").append("tr");
+                    header= header
+                            .selectAll("th")
+                            .data(T_type)
+                            .enter()
+                            .append("th")
+                            .text(function(d) { return d; });
+                    var tablebody = table.append("tbody");
+                    var rows = tablebody
+                            .selectAll("tr")
+                            .data(T_data)
+                            .enter()
+                            .append("tr");
+                    // We built the rows using the nested array - now each row has its own array.
+                    var cells = rows.selectAll("td")
+                        // each row has data associated; we get it and enter it for the cells.
+                            .data(function(d) {
+                                console.log(d);
+                                return d;
+                            })
+                            .enter()
+                            .append("td")
+                            .text(function(d) {
+                                return d;
+                            });
+                        }
             }
 
         },
