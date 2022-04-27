@@ -101,6 +101,19 @@ const customStyles= makeStyles((theme) => ({
     paddingRight:'5px!important',
     fontsize:'0.70rem!important'
   },
+  biasViz_2:{
+    color: '#d32f2f!important',
+    height:'0.8em!important',
+    width:'0.8em!important',
+  },
+  biasFooter_2:{
+    float:'left',
+    margin:'0px',
+    padding:'0px!important',
+    paddingTop:'5px!important',
+    paddingRight:'5px!important',
+    fontsize:'0.70rem!important'
+  },
 
 
 }));

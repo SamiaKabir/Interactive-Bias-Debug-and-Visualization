@@ -7,7 +7,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddBias from './AddBiasCard';
+
 
 
 const RenderBiasCard= React.memo((props) =>{
@@ -219,15 +221,15 @@ const RenderBiasCard= React.memo((props) =>{
                         <div style={{position:'relative',fontSize:'1.0rem'}}>
                             Bias Type: {element.type} 
                             <IconButton edge="start" color="inherit" size="small" 
-                            style={{position: 'absolute',right:'30px'}}  onClick={(e)=>{handleSubgroupRender(e,bias_types.indexOf(element))}}>
+                            style={{position: 'absolute',right:'3px'}}  onClick={(e)=>{handleSubgroupRender(e,bias_types.indexOf(element))}}>
                                 <EditIcon style={{color: 'darkgrey', fontSize:'1.0rem'}} />
                             </IconButton>
-                            <IconButton edge="start" color="inherit" size="small" 
+                            {/* <IconButton edge="start" color="inherit" size="small" 
                             style={{position: 'absolute',right:'0px'}}
                             onClick= {(e) => {handleBiasDelete(e,element.type);}}
                             >
                                 <DeleteIcon style={{color: 'darkgrey', fontSize:'1.0rem'}} />
-                            </IconButton>                        
+                            </IconButton>                         */}
                         </div>} 
                             style={{padding: '5px', paddingLeft:'16px',paddingTop:'8px'}}
                     />
@@ -287,6 +289,11 @@ const RenderBiasCard= React.memo((props) =>{
                                 startIcon={<DoneIcon className={cssStyles_imported.biasViz}/>} color="success">
                                     Update
                             </Button>
+                            <Button varient='contained' className={cssStyles_imported.biasFooter_2} onClick= {(e) => {handleBiasDelete(e,element.type);}}
+                                startIcon={<DeleteIcon className={cssStyles_imported.biasViz_2}/>} color="error">
+                                    Delete
+                            </Button>
+                        
                             </div>
             
                         </CardActions>
