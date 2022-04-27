@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import PropTypes from 'prop-types';
-import { CssBaseline, Paper, Box, Container, Button, IconButton,TextField,Typography,Popper} from '@mui/material';
+import { CssBaseline, Paper, Box, Container, Button, IconButton,TextField,Typography,Popper, Card, CardContent} from '@mui/material';
 import { DataGrid, GridToolbar,  GridToolbarContainer,GridToolbarColumnsButton, GridToolbarFilterButton,GridToolbarExport,GridToolbarDensitySelector } from '@mui/x-data-grid';
 import customStyles from './style';
 import Highlighter from 'react-highlight-words';
@@ -13,12 +13,12 @@ function RenderInstanceTable(props) {
     const All_instances=props.All_instances;
     const All_contents=props.All_contents;
     const H_color=props.H_color;
-    const init_content=props.init_content;
 
+    // Use this to force rendering from child components/functions
+    const forceUpdate = React.useReducer(bool => !bool)[1];
 
-    const [currentContent,setCurrentContent]=useState(init_content);
-    
-
+    // state var to rerender the bottom content
+    const [currentContent,setCurrentContent]=useState(null);
 
     function createData(id, instance) {
         return { id: id,
@@ -51,8 +51,9 @@ function RenderInstanceTable(props) {
 
     // change the current onclick content
     const showTableContent= (e)=>{
-      var content_indx=e.id-1
-      setCurrentContent(All_contents.at(index).at(content_indx))
+      var content_indx=e.id-1;
+      // currentContent=All_contents.at(index).at(content_indx);
+      setCurrentContent(All_contents.at(index).at(content_indx));
     }
 
     // generate custom toolbar for the data grid
@@ -202,9 +203,7 @@ function RenderInstanceTable(props) {
          */
         value: PropTypes.string.isRequired,
     };
-      
-
-      
+    
 
 
     // Final rendering of the table
@@ -212,36 +211,42 @@ function RenderInstanceTable(props) {
         return (
           <>
             <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={12}
-            rowsPerPageOptions={[12]}
-            components={{ Toolbar: CustomToolbar }}
-            sx={{height:'75%',
-                // borderColor:'black',
-                '& .MuiDataGrid-virtualScroller':
-                {
-                  backgroundColor:'white',
-                },
-                '& .MuiDataGrid-footerContainer':{
-                    borderColor:'#a1969670'
-                },
-                '& .MuiDataGrid-columnHeaders':{
-                borderColor:'#a1969670'
-                },
-            
-            }}
-            onCellClick={(e) => {showTableContent(e)}}
+              rows={rows}
+              columns={columns}
+              pageSize={12}
+              rowsPerPageOptions={[12]}
+              components={{ Toolbar: CustomToolbar }}
+              sx={{height:'75%',
+                  // borderColor:'black',
+                  '& .MuiDataGrid-virtualScroller':
+                  {
+                    backgroundColor:'white',
+                  },
+                  '& .MuiDataGrid-footerContainer':{
+                      borderColor:'#a1969670'
+                  },
+                  '& .MuiDataGrid-columnHeaders':{
+                  borderColor:'#a1969670'
+                  },
+              
+              }}
+              onCellClick={(e) => {showTableContent(e)}}
             />
-            <Paper variant="outlined" square style={{height:'25%',borderColor: 'darkgrey', borderWidth: '1px',overflow:'auto' }}>
+            <Card variant="outlined"  style={{height:'25%',borderColor: 'darkgrey', borderWidth: '1px',overflow:'auto' }}>
                {/* {currentContent} */}
-                <Highlighter
-                  searchWords={keyWords}
-                  autoEscape={true}
-                  textToHighlight= {currentContent}
-                  highlightStyle={{backgroundColor:H_color}}
-                />
-            </Paper>
+
+               <CardContent>
+                  <Typography color="textSecondary" gutterBottom>
+                    News Content
+                  </Typography>
+                  <Highlighter
+                    searchWords={keyWords}
+                    autoEscape={true}
+                    textToHighlight= {currentContent}
+                    highlightStyle={{backgroundColor:H_color}}
+                  />
+                </CardContent>
+            </Card>
           </>
 
         );
