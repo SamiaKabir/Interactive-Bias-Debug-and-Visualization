@@ -645,15 +645,14 @@ const ChordChart= React.memo((props) => {
                 // table visualization
                 // table_data=[[0.11,"Male","Gender"],[0.122,"Female","Gender"]];
                 function draw_table(T_data,T_type){
-                    console.log(T_data)
-                    console.log(T_type)
+                    svg.selectAll("table").remove();
 
                     var svg_new_2 = svg.append("g").attr("transform", "translate(" + (0) + "," + (radius_2+radius_2+180)+ ")")
 
                     // var table=svg_new_2.append("table");
                     var table= svg_new_2.append("svg:foreignObject")
-                    .attr("x", 80)
-                    .attr("y", 4)
+                    .attr("x", 100)
+                    .attr("y", 20)
                     .attr("width", 700)
                     .attr("height", 150)
                     .append("xhtml:body")
