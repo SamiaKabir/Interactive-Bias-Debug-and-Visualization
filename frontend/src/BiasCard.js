@@ -8,6 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import AddBias from './AddBiasCard';
 
 
@@ -43,6 +44,9 @@ const RenderBiasCard= React.memo((props) =>{
 
     // Use this to force rendering from child components/functions
     const forceUpdate = React.useReducer(bool => !bool)[1];
+
+    // expand icon toggle
+    const [expandIcon,setExpandIcon]=useState(false);
 
     // set the initial value of the state variable
     let all_subgroups=[]
@@ -220,10 +224,18 @@ const RenderBiasCard= React.memo((props) =>{
                         {
                         <div style={{position:'relative',fontSize:'1.0rem'}}>
                             Bias Type: {element.type} 
-                            <IconButton edge="start" color="inherit" size="small" 
-                            style={{position: 'absolute',right:'3px'}}  onClick={(e)=>{handleSubgroupRender(e,bias_types.indexOf(element))}}>
-                                <EditIcon style={{color: 'darkgrey', fontSize:'1.0rem'}} />
-                            </IconButton>
+                            {showSubGroup[bias_types.indexOf(element)]?
+                                <IconButton edge="start" color="inherit" size="small" 
+                                style={{position: 'relative',float:'right'}}  onClick={(e)=>{hideSubgroupRender(e,bias_types.indexOf(element))}}>                   
+                                    <ExpandLessIcon style={{color: 'darkgrey'}}/>
+                                </IconButton>
+                                :
+                                <IconButton edge="start" color="inherit" size="small" 
+                                style={{position: 'relative',float:'right'}} onClick={(e)=>{handleSubgroupRender(e,bias_types.indexOf(element))}}>      
+                                    <ExpandMoreIcon style={{color: 'darkgrey'}} />
+        
+                                </IconButton>
+                            }
                             {/* <IconButton edge="start" color="inherit" size="small" 
                             style={{position: 'absolute',right:'0px'}}
                             onClick= {(e) => {handleBiasDelete(e,element.type);}}
@@ -231,7 +243,7 @@ const RenderBiasCard= React.memo((props) =>{
                                 <DeleteIcon style={{color: 'darkgrey', fontSize:'1.0rem'}} />
                             </IconButton>                         */}
                         </div>} 
-                            style={{padding: '5px', paddingLeft:'16px',paddingTop:'8px'}}
+                            style={{padding: '5px', paddingLeft:'18px',paddingTop:'8px',paddingBottom:'0px'}}
                     />
                     <Divider variant="middle" />
                     {(showSubGroup[bias_types.indexOf(element)])?
