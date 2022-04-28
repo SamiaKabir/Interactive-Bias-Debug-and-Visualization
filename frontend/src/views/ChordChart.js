@@ -651,7 +651,7 @@ const ChordChart= React.memo((props) => {
 
                     // var table=svg_new_2.append("table");
                     var table= svg_new_2.append("svg:foreignObject")
-                    .attr("x", 100)
+                    .attr("x", 80)
                     .attr("y", 25)
                     .attr("width", 700)
                     .attr("height", 150)
