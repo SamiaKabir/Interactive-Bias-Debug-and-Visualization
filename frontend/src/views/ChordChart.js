@@ -152,8 +152,14 @@ const ChordChart= React.memo((props) => {
             svg.selectAll("g").remove();
 
 
+            svg=svg.attr("preserveAspectRatio", "xMinYMin meet")
+                .attr("viewBox", "0 0 910 910")
+                .classed("svg-content", true);
+
             // Declare new nodes for chord diagram
-            var svg_new = svg.append("g").attr("transform", "translate(" + (radius_2+140) + "," + (radius_2+110)+ ")")
+            var svg_new = svg.append("g").attr("transform", "translate(" + (radius_2+140) + "," + (radius_2+110)+ ")");
+                             
+
             var node=svg_new.selectAll(".node");
 
             if(data!==null){
@@ -647,12 +653,12 @@ const ChordChart= React.memo((props) => {
                 function draw_table(T_data,T_type){
                     svg.selectAll("table").remove();
 
-                    var svg_new_2 = svg.append("g").attr("transform", "translate(" + (0) + "," + (radius_2+radius_2+180)+ ")")
+                    var svg_new_2 = svg.append("g").attr("transform", "translate(" + (0) + "," + (radius_2+radius_2+180)+ ")");
 
                     // var table=svg_new_2.append("table");
                     var table= svg_new_2.append("svg:foreignObject")
                     .attr("x", 80)
-                    .attr("y", 25)
+                    .attr("y", 20)
                     .attr("width", 700)
                     .attr("height", 150)
                     .append("xhtml:body")
