@@ -32,7 +32,7 @@ function App() {
   const [size, setClicked] = useState([2.0,4.0,5.5,0.5]);
   const [expandFlag, setExpand]= useState(true);
   const handleExpand = () => {
-    let newSize=[1.5,3.0,5.0,2.5];
+    let newSize=[1.5,3.5,4.5,2.5];
     console.log("clicked");
     setClicked(newSize);
     setExpand(false);
