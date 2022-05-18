@@ -4,26 +4,88 @@ import PropTypes from 'prop-types';
 import { CssBaseline, Paper, Box, Container, Button, IconButton,TextField,Typography,Popper, Card, CardContent} from '@mui/material';
 import { DataGrid, GridToolbar,  GridToolbarContainer,GridToolbarColumnsButton, GridToolbarFilterButton,GridToolbarExport,GridToolbarDensitySelector } from '@mui/x-data-grid';
 import customStyles from './style';
-import Highlighter from 'react-highlight-words';
+import Highlighter from 'react-highlight-exact-words';
+import { lightBlue } from '@mui/material/colors';
 
 
 function RenderInstanceTable(props) {
-    const keyWords=props.keyWords;
-    const index= props.index;
-    const All_instances=props.All_instances;
-    const All_contents=props.All_contents;
-    const H_color=props.H_color;
+  const keyWords=props.keyWords;
+  const index= props.index;
+  const All_instances=props.All_instances;
+  const All_contents=props.All_contents;
+  const H_color=props.H_color;
+  const maximum_biases=props.max_biases;
+  const all_glossary= props.glossary;
 
-    // Use this to force rendering from child components/functions
-    const forceUpdate = React.useReducer(bool => !bool)[1];
 
-    // state var to rerender the bottom content
-    const [currentContent,setCurrentContent]=useState(null);
+  // Use this to force rendering from child components/functions
+  const forceUpdate = React.useReducer(bool => !bool)[1];
 
-    function createData(id, instance) {
-        return { id: id,
-                instance: instance };
+  // state var to rerender the bottom content
+  const [currentContent,setCurrentContent]=useState(null);
+
+  function createData(id, instance) {
+      return { id: id,
+              instance: instance };
+  }
+
+  // generate different arrays for diffrent bias types
+
+  var glossary_map= new Map();
+
+  all_glossary.forEach((obj)=>{
+    if(glossary_map.has(obj.type)){
+      var new_arr= glossary_map.get(obj.type).concat(obj.group);
+      glossary_map.set(obj.type,new_arr);
     }
+    else{
+      glossary_map.set(obj.type,obj.group)
+    }
+  });
+
+  var glossar_array=[]
+  var all_glossary_word=[]
+  var all_words= keyWords
+
+  if(glossary_map){
+    for (let [key, value] of glossary_map) {
+      glossar_array.push(value)
+      if(all_glossary_word.length==0){
+          all_glossary_word=value;
+      }
+      else{
+        all_glossary_word=all_glossary_word.concat(value);
+      }
+    }
+    if(all_glossary_word && all_words)
+      all_words= all_words.concat(all_glossary_word)
+
+  }
+
+
+  const getHighlightTag = () => ({ children, highlightIndex }) => {
+    const backgroundColors = ["green", "red", "blue","#7D3C98","#E74C3C","#B7950B"];
+
+    for(var i=0;i<glossar_array.length;i++){
+      if (glossar_array[i].includes(children))
+        return (
+          <mark
+            style={{
+              backgroundColor: "transparent",
+              color: backgroundColors[i],
+              fontWeight: "bold"
+            }}
+          >
+            {children}
+          </mark>
+        );
+
+    }
+    return (
+      <mark style={{ backgroundColor: "#AED6F1" }}>{children}</mark>
+    );
+  };
+
 
     // Generate data to be entered in the instance table
 
@@ -149,7 +211,8 @@ function RenderInstanceTable(props) {
                 searchWords={keyWords}
                 autoEscape={true}
                 textToHighlight={value}
-                highlightStyle={{backgroundColor: H_color}}
+                // highlightStyle={{backgroundColor: H_color}}
+                highlightStyle={{backgroundColor: "#AED6F1"}}
               />
             </Box>
             {showPopper && (
@@ -172,7 +235,8 @@ function RenderInstanceTable(props) {
                       searchWords={keyWords}
                       autoEscape={true}
                       textToHighlight={value}
-                      highlightStyle={{backgroundColor:H_color}}
+                      // highlightStyle={{backgroundColor:H_color}}
+                      highlightStyle={{backgroundColor: "#AED6F1"}}
                     />
                   </Typography>
                 </Paper>
@@ -240,10 +304,11 @@ function RenderInstanceTable(props) {
                     News Content
                   </Typography>
                   <Highlighter
-                    searchWords={keyWords}
+                    highlightTag={getHighlightTag()}
+                    searchWords={all_words}
                     autoEscape={true}
                     textToHighlight= {currentContent}
-                    highlightStyle={{backgroundColor:H_color}}
+                    caseSensitive={true}
                   />
                 </CardContent>
             </Card>

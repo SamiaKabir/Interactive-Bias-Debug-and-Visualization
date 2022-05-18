@@ -128,10 +128,11 @@ function App() {
   const getBiasDicts = async() => {
     await fetch('/getbiases').then(res => res.json()).then(data => {
       set_allBiases(data);
-      // console.log(All_biases)
+      // console.log(data.max_biases)
       // set_maxBiases(data.max_biases)
     }); 
   }
+  
 
   // Read in Bias types
   const [bias_types,setBias_types]=useState([]);
@@ -142,7 +143,7 @@ function App() {
     });
     return () => undefined;
   }, []);
-  console.log(bias_types)
+  // console.log(bias_types)
 
   // Read in Bias Glossary
   const [bias_glossary,setBias_glossary]=useState([]);
@@ -153,6 +154,8 @@ function App() {
     });
     return () => undefined;
   }, []);
+
+  // console.log(bias_glossary)
 
 
 
@@ -238,7 +241,8 @@ const handleBiasUpdate= (updatedBiasData)=>{
           <Grid item  md={size[1]}>
             <Paper variant="outlined" square  className={cssStyles.middlePanels}>
               <RenderInstanceTable keyWords={instanceData} index={instanceIndex} All_instances={All_instances} 
-              All_contents={All_instance_contents} H_color={hightlighColor} init_content={null}/>
+              All_contents={All_instance_contents} H_color={hightlighColor} 
+              max_biases={All_biases.max_biases} glossary={bias_glossary}/>
             </Paper>
           </Grid>
 

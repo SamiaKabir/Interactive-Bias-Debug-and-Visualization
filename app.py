@@ -260,21 +260,21 @@ def bias_init():
     subgroup_dict = {
         "word": "South Asian",
         "type": "Race",
-        "group": ["indian", "indians", "deshi", "modi", "pakistani", "sri_lankan", "tamil", "India", "Nepal", "Bangladesh"]
+        "group": ["indian", "indians", "deshi", "pakistani", "sri_lankan", "India", "Nepal", "Bangladesh"]
     }
     subgroup_glossary.append(subgroup_dict)
 
     subgroup_dict = {
         "word": "High",
         "type": "Income",
-        "group": ["rich", "wealthy", "affluent", "prosperous", "richer", "richest", "affluence", "advantaged", "extravagant", "lavish", "luxuriant", "luxury", "classy", "privileged", "millionaire", "billionaire", "million", "billion"]
+        "group": ["rich", "wealthy", "affluent", "richest", "affluence", "advantaged", "extravagant", "luxuriant", "privileged", "millionaire", "billionaire"]
     }
     subgroup_glossary.append(subgroup_dict)
 
     subgroup_dict = {
         "word": "Low",
         "type": "Income",
-        "group": ["poor", "poors", "poorer", "poorest", "impoverished", "poverty", "needy", "penniless", "moneyless", "insolvent", "underprivileged", "bankrupt", "bankrupcy", "homeless"]
+        "group": ["poor", "poors", "poorer", "poorest", "poverty", "needy", "penniless", "moneyless", "underprivileged", "homeless"]
     }
     subgroup_glossary.append(subgroup_dict)
 

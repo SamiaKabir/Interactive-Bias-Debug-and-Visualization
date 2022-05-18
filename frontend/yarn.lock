@@ -7651,6 +7651,15 @@ react-error-overlay@^6.0.10:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.10.tgz#0fe26db4fa85d9dbb8624729580e90e7159a59a6"
   integrity sha512-mKR90fX7Pm5seCOfz8q9F+66VCc1PGsWSBxKbITjfKVQHMNF2zudxHnMdJiB1fRCb+XsbQV9sO9DCkgsMQgBIA==
 
+react-highlight-exact-words@^0.1.7:
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/react-highlight-exact-words/-/react-highlight-exact-words-0.1.7.tgz#330d0fbd17d7850cbed30036a74f0f09a61473ba"
+  integrity sha512-07cT0Bm1yiOP8Dpfyvbb/v3ajRpMHvN1NlJ4feHwDE+TCh8r8/TnVjqP5TdYLm5xyWikzn5NEyE9ZDW1oA0e2Q==
+  dependencies:
+    highlight-words-core "^1.2.0"
+    memoize-one "^4.0.0"
+    prop-types "^15.5.8"
+
 react-highlight-words@^0.18.0:
   version "0.18.0"
   resolved "https://registry.yarnpkg.com/react-highlight-words/-/react-highlight-words-0.18.0.tgz#ff3b3ef7cb497fa2e8fa4d54c1a1a98ac6390d0e"
