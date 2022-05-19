@@ -19,6 +19,8 @@ const RenderBiasCard= React.memo((props) =>{
     const cssStyles_imported= customStyles();
     const onBiasUpdate=props.biasUpdate;
 
+    const backgroundColors = ["green", "red", "blue","#7D3C98","#E74C3C","#B7950B"];
+
     
     const [reRender,setRerender]= useState(props.reRender);
 
@@ -223,6 +225,7 @@ const RenderBiasCard= React.memo((props) =>{
                         title=
                         {
                         <div style={{position:'relative',fontSize:'1.0rem'}}>
+                            <span class="dot" style={{backgroundColor: backgroundColors[bias_types.indexOf(element)]}}></span>
                             Bias Type: {element.type} 
                             {showSubGroup[bias_types.indexOf(element)]?
                                 <IconButton edge="start" color="inherit" size="small" 

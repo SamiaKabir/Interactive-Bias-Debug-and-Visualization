@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+/* custom css */
+.dot {
+  height: 2vh;
+  width: 2vh;
+  margin-right: 2vh;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}

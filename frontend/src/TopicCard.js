@@ -187,10 +187,10 @@ function RenderTopicCard(props) {
               {/* <IconButton edge="start" color="inherit" size="small">
                   <EditIcon style={{color: 'darkgrey', fontSize:'1.0rem'}} />
               </IconButton> */}
-              <input className={cssStyles_imported.colorPicker} type="color"  value={color[topics.indexOf(element)]}
+              {/* <input className={cssStyles_imported.colorPicker} type="color"  value={color[topics.indexOf(element)]}
               onChange={(e) => {
                  handleColorChange(e,topics.indexOf(element));
-              }}/>
+              }}/> */}
             </div>} 
              style={{padding: '5px', paddingLeft:'16px',paddingTop:'8px'}}/>
             <Divider variant="middle" />
