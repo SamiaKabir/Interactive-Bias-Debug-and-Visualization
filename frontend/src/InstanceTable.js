@@ -71,9 +71,12 @@ function RenderInstanceTable(props) {
         return (
           <mark
             style={{
-              backgroundColor: "transparent",
-              color: backgroundColors[i],
-              fontWeight: "bold"
+              // backgroundColor: "transparent",
+              // color: backgroundColors[i],
+              // fontWeight: "bold"
+              backgroundColor:backgroundColors[i],
+              color: 'white'
+              
             }}
           >
             {children}

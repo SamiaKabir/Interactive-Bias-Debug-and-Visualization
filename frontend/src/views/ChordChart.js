@@ -10,9 +10,9 @@ const ChordChart= React.memo((props) => {
     const bias_types=props.bias_types;
     const bias_dictionary=props.bias_dictionary;
     const max_bias_scores=props.max_bias_scores;
-    console.log(bias_types)
-    console.log(bias_dictionary)
-    console.log(max_bias_scores)
+    // console.log(bias_types)
+    // console.log(bias_dictionary)
+    // console.log(max_bias_scores)
 
 
     // Read in Bias types
@@ -411,14 +411,13 @@ const ChordChart= React.memo((props) => {
                 .on("click",function(e,d){
                     var table_data=[['Bias Scores']]
                     var table_type=["Subgroup"]
-                    console.log(Bias_map.get(d));
     
                     Bias_map.get(d).map((obj)=>{
                         table_data[0].push(obj.bias_score.toFixed(3));
                         table_type.push(obj.subgroup);
             
                     });
-                    draw_table(table_data,table_type);
+                    draw_hist(d,table_data,table_type);
                 })
                 .on("mouseover",function(event,d){
                     d3.select(this).style('fill','#60a3d9');
@@ -649,12 +648,17 @@ const ChordChart= React.memo((props) => {
                 d3.selectAll('.dotme').call(dotme);
 
                 // table visualization
-                // table_data=[[0.11,"Male","Gender"],[0.122,"Female","Gender"]];
-                function draw_table(T_data,T_type){
+                
+                function draw_table(word,T_data,T_type){
                     svg.selectAll("table").remove();
+                    svg.selectAll("#legend").remove();
+
+                    console.log(word)
 
                     var svg_new_2 = svg.append("g").attr("transform", "translate(" + (0) + "," + (radius_2+radius_2+180)+ ")");
-
+                    
+                    svg_new_2.append("g").attr("id","legend").append("text").text(word)
+                    
                     // var table=svg_new_2.append("table");
                     var table= svg_new_2.append("svg:foreignObject")
                     .attr("x", 60)
@@ -683,7 +687,7 @@ const ChordChart= React.memo((props) => {
                     var cells = rows.selectAll("td")
                         // each row has data associated; we get it and enter it for the cells.
                             .data(function(d) {
-                                console.log(d);
+                                // console.log(d);
                                 return d;
                             })
                             .enter()
@@ -691,7 +695,59 @@ const ChordChart= React.memo((props) => {
                             .text(function(d) {
                                 return d;
                             });
-                        }
+                }
+
+                // histogram visualization
+                function draw_hist(word,T_data,T_type){
+                    svg.selectAll("table").remove();
+                    svg.selectAll("#legend").remove();
+
+
+                    var svg_new_2 = svg.append("g").attr("transform", "translate(" + (0) + "," + (radius_2+radius_2+180)+ ")");
+                    
+                    svg_new_2.append("g").attr("id","legend").append("text")
+                            .attr("x", 2)
+                            .attr("y", 40)
+                            // .attr("font-size", 12)
+                            .text(word)
+                            
+                    // var table=svg_new_2.append("table");
+                    var table= svg_new_2.append("svg:foreignObject")
+                    .attr("x", 60)
+                    .attr("y", 20)
+                    .attr("width", 800)
+                    .attr("height", 250)
+                    .append("xhtml:body")
+                    .append("table")
+                    .attr("class", "table-bordered");
+
+        
+                    var header = table.append("thead").append("tr");
+                    header= header
+                            .selectAll("th")
+                            .data(T_type)
+                            .enter()
+                            .append("th")
+                            .text(function(d) { return d; });
+                    var tablebody = table.append("tbody");
+                    var rows = tablebody
+                            .selectAll("tr")
+                            .data(T_data)
+                            .enter()
+                            .append("tr");
+                    // We built the rows using the nested array - now each row has its own array.
+                    var cells = rows.selectAll("td")
+                        // each row has data associated; we get it and enter it for the cells.
+                            .data(function(d) {
+                                // console.log(d);
+                                return d;
+                            })
+                            .enter()
+                            .append("td")
+                            .text(function(d) {
+                                return d;
+                            });
+                }
             }
 
         },
