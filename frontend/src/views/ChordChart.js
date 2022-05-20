@@ -153,7 +153,7 @@ const ChordChart= React.memo((props) => {
 
 
             svg=svg.attr("preserveAspectRatio", "xMinYMin meet")
-                .attr("viewBox", "0 0 880 920")
+                .attr("viewBox", "0 0 800 920")
                 .classed("svg-content", true);
 
             // Declare new nodes for chord diagram
@@ -813,8 +813,10 @@ const ChordChart= React.memo((props) => {
 
                     // create a new svg for the strip plot and append with main svg
 
-                    var svg_new_2 = svg.append("g").attr("id","strip")
-                    .attr("transform", "translate(" + (marginleft) + "," + (radius_2+radius_2+180)+ ")");
+                    var svg_new_2 = svg.append('g').attr("id","strip")
+                    .attr("transform", "translate(" + (marginleft) + "," + (radius_2+radius_2+180)+ ")")
+                    
+                    
                     
 
                    
@@ -875,7 +877,8 @@ const ChordChart= React.memo((props) => {
                     .attr("x2", function(d) { return xScale(d.BiasScore); })  
                     .attr("y1", 50)
                     .attr("y2", 100)
-                    .style("stroke", "#424649")
+                    // .style("stroke", "#424649")
+                    .style("stroke", "#1565c0")
                     .style("stroke-width", 2)
                     .style("opacity", 0.4)
                     .on("mouseover", function(event,d) {
