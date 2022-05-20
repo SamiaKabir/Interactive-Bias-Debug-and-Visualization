@@ -10,7 +10,7 @@ const ChordChart= React.memo((props) => {
     const bias_types=props.bias_types;
     const bias_dictionary=props.bias_dictionary;
     const max_bias_scores=props.max_bias_scores;
-    console.log(bias_types)
+    // console.log(bias_types)
     // console.log(bias_dictionary)
     // console.log(max_bias_scores)
 
@@ -153,7 +153,7 @@ const ChordChart= React.memo((props) => {
 
 
             svg=svg.attr("preserveAspectRatio", "xMinYMin meet")
-                .attr("viewBox", "0 0 880 900")
+                .attr("viewBox", "0 0 880 920")
                 .classed("svg-content", true);
 
             // Declare new nodes for chord diagram
@@ -409,15 +409,16 @@ const ChordChart= React.memo((props) => {
                 .attr("title",function(d){return d;})
                 .text(function(d) { return d; })
                 .on("click",function(e,d){
-                    var table_data=[['Bias Scores']]
-                    var table_type=["Subgroup"]
+                    var table_data=[[]]
+                    var table_type=[]
     
                     Bias_map.get(d).map((obj)=>{
                         table_data[0].push(obj.bias_score.toFixed(3));
                         table_type.push(obj.subgroup);
             
                     });
-                    draw_hist(d,table_data,table_type);
+                    // draw_hist(d,table_data[0],table_type);
+                    draw_strip(d,table_data[0],table_type);
                 })
                 .on("mouseover",function(event,d){
                     d3.select(this).style('fill','#60a3d9');
@@ -465,9 +466,13 @@ const ChordChart= React.memo((props) => {
                 .sortSubgroups(d3.descending)
                 (Type_Matrix);
 
-                // Define the div for the tooltip
+                // Define the divs for the tooltips
                 var div = d3.select("body").append("div")	
                 .attr("class", "tooltip")				
+                .style("opacity", 0);
+
+                var div2=d3.select("body").append("div")	
+                .attr("class", "tooltip2")				
                 .style("opacity", 0);
 
                 // Generate percentage of each bias w.r.t all bias
@@ -565,6 +570,7 @@ const ChordChart= React.memo((props) => {
                     var classname="."+d3.select(this).attr('class');
                     d3.selectAll(classname).style("opacity",1.0); 
                     var index_in_bias_map= Color_Matrix[d.source.index][d.target.index];
+                    var c=d;
                     console.log(d)
                     console.log(index_in_bias_map)
 
@@ -577,8 +583,8 @@ const ChordChart= React.memo((props) => {
                     }
 
                     let related_words=onclick_bias_map.get(bias_key)
-                    console.log(bias_key)
-                    console.log(related_words)
+                    // console.log(bias_key)
+                    // console.log(related_words)
                     // Highlight those words
                     related_words.forEach((w)=>{
                         var str = w.split(".")[0];
@@ -699,57 +705,205 @@ const ChordChart= React.memo((props) => {
 
                 // histogram visualization
                 function draw_hist(word,T_data,T_type){
-                    svg.selectAll("table").remove();
-                    svg.selectAll("#legend").remove();
-
+                    svg.selectAll("#hist").remove();
 
                     const groups = bias_types.map(d => d.type)
+                    const subgroups=T_type
+                    const height=50
+                    const width=700
+                    const marginleft=100
 
 
-                    var svg_new_2 = svg.append("g").attr("transform", "translate(" + (0) + "," + (radius_2+radius_2+180)+ ")");
+                    var svg_new_2 = svg.append("g").attr("id","hist")
+                    .attr("transform", "translate(" + (0) + "," + (radius_2+radius_2+180)+ ")");
                     
                     svg_new_2.append("g").attr("id","legend").append("text")
-                            .attr("x", 2)
+                            .attr("x", 3)
                             .attr("y", 40)
-                            // .attr("font-size", 12)
+                            .attr("font-size", 15)
                             .text(word)
-                            
-                    // var table=svg_new_2.append("table");
-                    var table= svg_new_2.append("svg:foreignObject")
-                    .attr("x", 60)
-                    .attr("y", 20)
-                    .attr("width", 800)
-                    .attr("height", 250)
-                    .append("xhtml:body")
-                    .append("table")
-                    .attr("class", "table-bordered");
 
-        
-                    var header = table.append("thead").append("tr");
-                    header= header
-                            .selectAll("th")
-                            .data(T_type)
-                            .enter()
-                            .append("th")
-                            .text(function(d) { return d; });
-                    var tablebody = table.append("tbody");
-                    var rows = tablebody
-                            .selectAll("tr")
-                            .data(T_data)
-                            .enter()
-                            .append("tr");
-                    // We built the rows using the nested array - now each row has its own array.
-                    var cells = rows.selectAll("td")
-                        // each row has data associated; we get it and enter it for the cells.
-                            .data(function(d) {
-                                // console.log(d);
-                                return d;
-                            })
-                            .enter()
-                            .append("td")
-                            .text(function(d) {
-                                return d;
-                            });
+                     // Add X axis
+                    const x = d3.scaleBand()
+                            .domain(groups)
+                            .range([0, width])
+                            .padding([0.2])
+                    
+                    svg_new_2.append("g")
+                            .attr("transform", `translate(${marginleft}, ${height})`)
+                            .call(d3.axisBottom(x).tickSize(0));
+
+
+                    let score_max=Math.max.apply(Math, T_data)
+                    let score_min=Math.min.apply(Math, T_data)  
+                    if (score_min>=0) {
+                        score_min=0
+                    }   
+                    //  This scale produces negative output for negatve input 
+                    var yScale = d3.scaleLinear()
+                    .domain([0, 1])
+                    .range([0, height]);
+                    // Add Y axis
+                    var y = d3.scaleLinear()
+                    .domain([score_min, score_max])
+                    .range([ height-yScale(-1), 0]);
+
+                    svg_new_2.append("g")
+                    .attr("transform", `translate(${marginleft}, 0)`)
+                    .call(d3.axisLeft(y));
+
+                      // Another scale for subgroup position?
+                    const xSubgroup = d3.scaleBand()
+                    .domain(T_type)
+                    .range([0, x.bandwidth()])
+                    .padding([0.05])
+
+                    // Show the bars
+                    svg_new_2.append("g")
+                    .selectAll("g")
+                    // Enter in data = loop group per group
+                    .data(T_data)
+                    .join("g")
+                    .attr("transform", d => `translate(${x(d.group)}, 0)`)
+                    .selectAll("rect")
+                    .data(function(d) { 
+                        return subgroups.map(function(key,i) {
+                            // console.log(i);
+                            return {key: key, value: d[i]}; }); })
+                    .join("rect")
+                    .attr("transform", "translate("+ marginleft +",0)")
+                    .attr("x", d => xSubgroup(d.key))
+                    // .attr("y", d => height- y(d.value))
+                    .attr("y", function(d) { return Math.max(0, yScale(d.value)); })
+                    .attr("width", xSubgroup.bandwidth())
+                    // .attr("height", d => height - y(d.value))
+                    .attr("height", function(d) { return height-Math.abs(yScale(d.value)); })
+                    // .attr("fill", d => color(d.key));    
+
+                    // svg_new_2.append("g")
+                    // .selectAll("g")
+                    // .data(T_data)
+                    // .enter()
+                    // .append("rect")
+                    // .attr("transform", "translate("+ marginleft +",0)")
+                    // .attr("x", function(d,i) { var temp=d; return x(T_type[i]); })
+                    // .attr("y", function(d) { return height - Math.max(0, yScale(d)); })
+                    // .attr("width", x.bandwidth())
+                    // .attr("height", function(d) { return Math.abs(yScale(d)); })
+                    
+
+                }
+
+                //strip visualization
+                function draw_strip(word,T_data,T_type){
+                    svg.selectAll("#strip").remove();
+
+                    const height=50
+                    const width=700
+                    const marginleft=50
+                    const marginbottom=100
+
+                    var strip_data=[]
+
+                    for(var i=0;i<T_data.length;i++){
+                        strip_data.push({'Type':T_type[i],'BiasScore':T_data[i]})
+                    }
+
+                    console.log(strip_data)
+
+                    // create a new svg for the strip plot and append with main svg
+
+                    var svg_new_2 = svg.append("g").attr("id","strip")
+                    .attr("transform", "translate(" + (marginleft) + "," + (radius_2+radius_2+180)+ ")");
+                    
+
+                   
+                    svg_new_2.append("g").attr("id","legend").append("text")
+                            .attr("x", 3)
+                            .attr("y", 20)
+                            .attr("font-size", 15)
+                            .text('Bias Scores for word:  "'+word+'"')
+
+                    //Creates the xScale 
+                    var xScale = d3.scaleLinear()
+                    .range([0, width]);
+
+                    //Creates the yScale
+                    var yScale = d3.scaleLinear()
+                    .range([height, 0]);  
+
+                    //Defines the y axis styles`
+                    var xAxis = d3.axisBottom()
+                    .scale(xScale)
+                    .tickPadding(8)
+                    .ticks(14)
+                    .tickFormat(function(d) { return d * 1})
+
+                    // format data
+                    strip_data.forEach(function(d) {
+                        d.BiasScore = +d.BiasScore;
+                      });
+
+                    //Organizes the data  
+                    var maxX = d3.max(strip_data, function(d) { return d.BiasScore; });
+                    console.log(maxX)
+
+                    var minX = d3.min(strip_data, function(d) { return d.BiasScore; });
+                    console.log(minX)
+
+                    //Defines the xScale max
+                    xScale.domain(d3.extent(strip_data, function(d) { return d.BiasScore; }));
+                    
+
+                    //Defines the yScale max
+                    yScale.domain([0, 100]);  
+
+                    //Appends the x axis    
+                    var xAxisGroup = svg_new_2.append("g")
+                    .attr("class", "x axis")
+                    .attr("transform", "translate("+ 0 +","+marginbottom+")")
+                    // .attr("transform", "translate(0," + height + ")")
+                    .call(xAxis);
+
+                     //Binds data to strips
+                    var drawstrips = svg_new_2.selectAll("line.percent")
+                    .data(strip_data)
+                    .enter()
+                    .append("line")
+                    .attr("class", "percentline")
+                    .attr("x1", function(d,i) { return xScale(d.BiasScore); }) 
+                    .attr("x2", function(d) { return xScale(d.BiasScore); })  
+                    .attr("y1", 50)
+                    .attr("y2", 100)
+                    .style("stroke", "#424649")
+                    .style("stroke-width", 2)
+                    .style("opacity", 0.4)
+                    .on("mouseover", function(event,d) {
+                        d3.select(this).transition().duration(100)
+                          .attr("y1", 30)
+                          .style("stroke-width", 3)
+                          .style("opacity", 1);
+                  
+                        div2.transition(300)
+                          .style("opacity", 1)
+                        
+                        div2.html(d.Type + ":" + d.BiasScore )
+                  
+                        div2
+                          .style("left", (d3.pointer(event,d3.select(event.currentTarget))[0]) + "px")
+                          .style("top", (d3.pointer(event,d3.select(event.currentTarget))[1]) + "px") ;  
+                         
+                      })
+                      .on("mouseout", function(event,d) {
+                        d3.select(this)
+                          .transition().duration(100)
+                          .attr("y1", 50)
+                          .style("stroke-width", 2)
+                          .style("opacity", 0.4);
+                  
+                        div2.transition(300)
+                          .style("opacity", 0)  
+                      })    
                 }
             }
 
