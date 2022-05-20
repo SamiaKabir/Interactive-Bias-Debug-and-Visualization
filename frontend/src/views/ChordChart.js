@@ -10,7 +10,7 @@ const ChordChart= React.memo((props) => {
     const bias_types=props.bias_types;
     const bias_dictionary=props.bias_dictionary;
     const max_bias_scores=props.max_bias_scores;
-    // console.log(bias_types)
+    console.log(bias_types)
     // console.log(bias_dictionary)
     // console.log(max_bias_scores)
 
@@ -701,6 +701,9 @@ const ChordChart= React.memo((props) => {
                 function draw_hist(word,T_data,T_type){
                     svg.selectAll("table").remove();
                     svg.selectAll("#legend").remove();
+
+
+                    const groups = bias_types.map(d => d.type)
 
 
                     var svg_new_2 = svg.append("g").attr("transform", "translate(" + (0) + "," + (radius_2+radius_2+180)+ ")");

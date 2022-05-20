@@ -306,13 +306,18 @@ function RenderInstanceTable(props) {
                   <Typography color="textSecondary" gutterBottom>
                     News Content
                   </Typography>
-                  <Highlighter
-                    highlightTag={getHighlightTag()}
-                    searchWords={all_words}
-                    autoEscape={true}
-                    textToHighlight= {currentContent}
-                    caseSensitive={true}
-                  />
+                  {currentContent?
+                                 <Highlighter
+                                 highlightTag={getHighlightTag()}
+                                 searchWords={all_words}
+                                 autoEscape={true}
+                                 textToHighlight= {currentContent}
+                                 caseSensitive={true}
+                               />
+                               :
+                               <></>
+                  }
+   
                 </CardContent>
             </Card>
           </>
