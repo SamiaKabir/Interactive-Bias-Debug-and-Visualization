@@ -127,9 +127,9 @@ function RenderInstanceTable(props) {
           <GridToolbarContainer 
           style={{borderBottom:'1px solid',borderColor:'#a1969654', backgroundColor:'black'}}
           >
-            <GridToolbarColumnsButton style={{color:'white',fontSize:'0.8em',paddingRight:'10px'}}/>
-            <GridToolbarFilterButton style={{color:'white',fontSize:'0.8em',paddingRight:'10px'}}/>
-            <GridToolbarDensitySelector style={{color:'white',fontSize:'0.8em',paddingRight:'10px'}} />
+            <GridToolbarColumnsButton style={{color:'white',fontSize:'0.9em',paddingRight:'10px'}}/>
+            <GridToolbarFilterButton style={{color:'white',fontSize:'0.9em',paddingRight:'10px'}}/>
+            <GridToolbarDensitySelector style={{color:'white',fontSize:'0.9em',paddingRight:'10px'}} />
           </GridToolbarContainer>
         );
       }
@@ -287,14 +287,21 @@ function RenderInstanceTable(props) {
                   // borderColor:'black',
                   '& .MuiDataGrid-virtualScroller':
                   {
-                    backgroundColor:'white',
+                      backgroundColor:'white',
+                      height:'423px!important',
+                      marginTop:'36px!important',
                   },
                   '& .MuiDataGrid-footerContainer':{
-                      borderColor:'#a1969670'
+                      borderColor:'#a1969670',
+                      minHeight:'40px!important'
                   },
                   '& .MuiDataGrid-columnHeaders':{
-                  borderColor:'#a1969670'
+                      borderColor:'#a1969670',
+                      minHeight:'36px!important',
+                      maxHeight:'36px!important',
+                      lineHeight:'36px!important',
                   },
+
               
               }}
               onCellClick={(e) => {showTableContent(e)}}

@@ -800,7 +800,7 @@ const ChordChart= React.memo((props) => {
 
                     const height=50
                     const width=700
-                    const marginleft=50
+                    const marginleft=70
                     const marginbottom=100
 
                     var strip_data=[]
@@ -817,8 +817,6 @@ const ChordChart= React.memo((props) => {
                     .attr("transform", "translate(" + (marginleft) + "," + (radius_2+radius_2+180)+ ")")
                     
                     
-                    
-
                    
                     svg_new_2.append("g").attr("id","legend").append("text")
                             .attr("x", 3)
