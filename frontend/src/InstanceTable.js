@@ -293,7 +293,8 @@ function RenderInstanceTable(props) {
                   },
                   '& .MuiDataGrid-footerContainer':{
                       borderColor:'#a1969670',
-                      minHeight:'40px!important'
+                      minHeight:'40px!important',
+                      height:'40px'
                   },
                   '& .MuiDataGrid-columnHeaders':{
                       borderColor:'#a1969670',
