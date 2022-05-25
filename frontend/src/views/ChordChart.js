@@ -832,17 +832,11 @@ const ChordChart= React.memo((props) => {
                     var yScale = d3.scaleLinear()
                     .range([height, 0]);  
 
-                    //Defines the y axis styles`
-                    var xAxis = d3.axisBottom()
-                    .scale(xScale)
-                    .tickPadding(8)
-                    .ticks(14)
-                    .tickFormat(function(d) { return d * 1})
-
                     // format data
                     strip_data.forEach(function(d) {
                         d.BiasScore = +d.BiasScore;
-                      });
+                    });
+
 
                     //Organizes the data  
                     var maxX = d3.max(strip_data, function(d) { return d.BiasScore; });
@@ -858,11 +852,18 @@ const ChordChart= React.memo((props) => {
                     //Defines the yScale max
                     yScale.domain([0, 100]);  
 
+                    //Defines the y axis styles`
+                    var xAxis = d3.axisBottom()
+                    .scale(xScale)
+                    .tickPadding(8)
+                    .ticks(14)
+                    .tickFormat(function(d) { return d * 1})
+
+   
                     //Appends the x axis    
-                    var xAxisGroup = svg_new_2.append("g")
+                    svg_new_2.append("g")
                     .attr("class", "x axis")
                     .attr("transform", "translate("+ 0 +","+marginbottom+")")
-                    // .attr("transform", "translate(0," + height + ")")
                     .call(xAxis);
 
                      //Binds data to strips

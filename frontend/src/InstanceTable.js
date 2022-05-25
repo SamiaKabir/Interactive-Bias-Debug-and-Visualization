@@ -280,27 +280,28 @@ function RenderInstanceTable(props) {
             <DataGrid
               rows={rows}
               columns={columns}
-              pageSize={12}
-              rowsPerPageOptions={[12]}
+              pageSize={14}
+              rowsPerPageOptions={[14]}
+              headerHeight={40}
               components={{ Toolbar: CustomToolbar }}
               sx={{height:'75%',
                   // borderColor:'black',
                   '& .MuiDataGrid-virtualScroller':
                   {
                       backgroundColor:'white',
-                      height:'423px!important',
-                      marginTop:'36px!important',
+                      whiteSpace: 'nowrap',
+                      overflowX:'hidden!important'
                   },
                   '& .MuiDataGrid-footerContainer':{
                       borderColor:'#a1969670',
                       minHeight:'40px!important',
-                      height:'40px'
+                      height:'40px!important'
                   },
                   '& .MuiDataGrid-columnHeaders':{
                       borderColor:'#a1969670',
-                      minHeight:'36px!important',
-                      maxHeight:'36px!important',
-                      lineHeight:'36px!important',
+                      minHeight:'40px!important',
+                      maxHeight:'40px!important',
+                      lineHeight:'40px!important',
                   },
 
               

@@ -70,7 +70,8 @@ td {
 }
 
 .domain {
-  display: none;
+  /* display: none; */
+  stroke: #131212;
 }
 
 .line {
