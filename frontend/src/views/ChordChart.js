@@ -153,11 +153,11 @@ const ChordChart= React.memo((props) => {
 
 
             svg=svg.attr("preserveAspectRatio", "xMinYMin meet")
-                .attr("viewBox", "0 0 800 920")
+                .attr("viewBox", "0 0 850 920")
                 .classed("svg-content", true);
 
             // Declare new nodes for chord diagram
-            var svg_new = svg.append("g").attr("transform", "translate(" + (radius_2+140) + "," + (radius_2+110)+ ")");
+            var svg_new = svg.append("g").attr("transform", "translate(" + (radius_2+180) + "," + (radius_2+110)+ ")");
                              
 
             var node=svg_new.selectAll(".node");
@@ -799,8 +799,8 @@ const ChordChart= React.memo((props) => {
                     svg.selectAll("#strip").remove();
 
                     const height=50
-                    const width=700
-                    const marginleft=70
+                    const width=705
+                    const marginleft=110
                     const marginbottom=100
 
                     var strip_data=[]
