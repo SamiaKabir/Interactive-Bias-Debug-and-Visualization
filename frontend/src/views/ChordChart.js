@@ -155,10 +155,19 @@ const ChordChart= React.memo((props) => {
             svg=svg.attr("preserveAspectRatio", "xMinYMin meet")
                 .attr("viewBox", "0 0 850 920")
                 .classed("svg-content", true);
+            
+            svg.call(d3.zoom()
+            .extent([[0, 0], [850,920]])
+            .scaleExtent([1, 8])
+            .on("zoom", zoomed));
 
             // Declare new nodes for chord diagram
             var svg_new = svg.append("g").attr("transform", "translate(" + (radius_2+180) + "," + (radius_2+110)+ ")");
-                             
+                        
+
+            function zoomed({transform}) {
+                svg_new.attr("transform", transform);
+            }
 
             var node=svg_new.selectAll(".node");
 
@@ -908,6 +917,8 @@ const ChordChart= React.memo((props) => {
                       })    
                 }
             }
+
+
 
         },
         [data,bias_types,bias_dictionary,max_bias_scores]
