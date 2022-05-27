@@ -155,6 +155,8 @@ const ChordChart= React.memo((props) => {
             svg=svg.attr("preserveAspectRatio", "xMinYMin meet")
                 .attr("viewBox", "0 0 850 920")
                 .classed("svg-content", true);
+
+            // for zoom and pan
             
             svg.call(d3.zoom()
             .extent([[0, 0], [850,920]])
@@ -164,6 +166,7 @@ const ChordChart= React.memo((props) => {
             // Declare new nodes for chord diagram
             var svg_new = svg.append("g").attr("transform", "translate(" + (radius_2+180) + "," + (radius_2+110)+ ")");
                         
+            // zoom and pan on the chord chart svg only
 
             function zoomed({transform}) {
                 svg_new.attr("transform", transform);
