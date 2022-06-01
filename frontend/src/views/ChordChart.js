@@ -442,21 +442,42 @@ const ChordChart= React.memo((props) => {
                 .attr("title",function(d){return d;})
                 .text(function(d) { return d; })
                 .on("click",function(e,d){
-                    // var table_data=[[]]
-                    // var table_type=[]
-                    // var table_words=[]
-    
-                    // for (let [key,value] of Bias_map){
-                    //     Bias_map.get(key).map((obj)=>{
-                    //         table_data[0].push(obj.bias_score.toFixed(3));
-                    //         table_type.push(obj.subgroup);
-                    //         table_words.push(key)
-                    //     });
-
-                    // }
-           
+                 
                     // draw_hist(d,table_data[0],table_type);
-                    draw_strip(d,table_data[0],table_type,table_words);
+
+
+                    
+                    if (!d3.select(this).classed("selected")) {
+
+                        d3.selectAll('.selected').style('fill','#0a0b0c').classed("selected",false);
+                        d3.select(this)
+                            .style('fill','#60a3d9')
+                            .classed("selected",true);
+                        
+                        // var all_bias_this_word=perWord_Bias_map.get(d);
+                        // // Highlight related biases
+                        // all_bias_this_word.forEach((bias)=>{
+                            
+                        //     var id = bias_id_map.get(bias)
+                        //     let id_name= "#id"+id;
+                        //     d3.selectAll(id_name).style("opacity",1.0);
+                        // });
+                     } 
+                     else {
+                       d3.select(this)
+                           .style('fill','#0a0b0c')
+                           .classed("selected",false);
+
+                        //    var all_bias_this_word=perWord_Bias_map.get(d);
+                        //    // Highlight related biases
+                        //    all_bias_this_word.forEach((bias)=>{
+                        //        var id = bias_id_map.get(bias)
+                        //        let id_name= "#id"+id;
+                        //        d3.selectAll(id_name).style("opacity",0.3);
+                        //    });
+                           
+                     }
+                     draw_strip(d,table_data[0],table_type,table_words);
                 })
                 .on("mouseover",function(event,d){
                     d3.select(this).style('fill','#60a3d9');
@@ -470,7 +491,9 @@ const ChordChart= React.memo((props) => {
                     });
                 })
                 .on("mouseout",function(event,d){
-                    d3.select(this).style('fill','#0a0b0c');
+                    if (!d3.select(this).classed("selected")) {
+                       d3.select(this).style('fill','#0a0b0c');
+                    }
                     var all_bias_this_word=perWord_Bias_map.get(d);
                     // Highlight related biases
                     all_bias_this_word.forEach((bias)=>{
@@ -847,7 +870,7 @@ const ChordChart= React.memo((props) => {
                         strip_data.push({'Type':T_type[i],'BiasScore':T_data[i],'Word':T_words[i]})
                     }
 
-                    console.log(strip_data)
+                    // console.log(strip_data)
 
                     // create a new svg for the strip plot and append with main svg
 
