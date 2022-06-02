@@ -444,63 +444,96 @@ const ChordChart= React.memo((props) => {
                 .on("click",function(e,d){
                  
                     // draw_hist(d,table_data[0],table_type);
-
+                    draw_strip(d,table_data[0],table_type,table_words);
 
                     
                     if (!d3.select(this).classed("selected")) {
 
+                        var select_prev_arr=d3.selectAll('.selected').data()
+                        
+                        if(select_prev_arr.length>0){
+                            var select_prev=select_prev_arr[0]
+                            console.log(select_prev)
+                            var all_bias_this_word=perWord_Bias_map.get(select_prev);
+                
+                            // Highlight related biases
+                            all_bias_this_word.forEach((bias)=>{
+                            var id = bias_id_map.get(bias)
+                            let id_name= "#id"+id;
+                            d3.selectAll(id_name).style("opacity",0.3);
+                            });
+
+                        }
+
+                        
+
                         d3.selectAll('.selected').style('fill','#0a0b0c').classed("selected",false);
+                       
+
                         d3.select(this)
                             .style('fill','#60a3d9')
                             .classed("selected",true);
                         
-                        // var all_bias_this_word=perWord_Bias_map.get(d);
-                        // // Highlight related biases
-                        // all_bias_this_word.forEach((bias)=>{
+                        var all_bias_this_word=perWord_Bias_map.get(d);
+                        // Highlight related biases
+                        all_bias_this_word.forEach((bias)=>{
                             
-                        //     var id = bias_id_map.get(bias)
-                        //     let id_name= "#id"+id;
-                        //     d3.selectAll(id_name).style("opacity",1.0);
-                        // });
+                            var id = bias_id_map.get(bias)
+                            let id_name= "#id"+id;
+                            d3.selectAll(id_name).style("opacity",1.0);
+                        });
                      } 
                      else {
                        d3.select(this)
                            .style('fill','#0a0b0c')
                            .classed("selected",false);
 
-                        //    var all_bias_this_word=perWord_Bias_map.get(d);
-                        //    // Highlight related biases
-                        //    all_bias_this_word.forEach((bias)=>{
-                        //        var id = bias_id_map.get(bias)
-                        //        let id_name= "#id"+id;
-                        //        d3.selectAll(id_name).style("opacity",0.3);
-                        //    });
+                           var all_bias_this_word=perWord_Bias_map.get(d);
+                           // Highlight related biases
+                           all_bias_this_word.forEach((bias)=>{
+                               var id = bias_id_map.get(bias)
+                               let id_name= "#id"+id;
+                               d3.selectAll(id_name).style("opacity",0.3);
+                           });
                            
                      }
-                     draw_strip(d,table_data[0],table_type,table_words);
+                     
                 })
                 .on("mouseover",function(event,d){
-                    d3.select(this).style('fill','#60a3d9');
-                    var all_bias_this_word=perWord_Bias_map.get(d);
-                    // Highlight related biases
-                    all_bias_this_word.forEach((bias)=>{
+
+                    var select_prev_arr=d3.selectAll('.selected').data()
                         
-                        var id = bias_id_map.get(bias)
-                        let id_name= "#id"+id;
-                        d3.selectAll(id_name).style("opacity",1.0);
-                    });
+                    if(select_prev_arr.length==0){
+                        d3.select(this).style('fill','#60a3d9');
+                        var all_bias_this_word=perWord_Bias_map.get(d);
+                        // Highlight related biases
+                        all_bias_this_word.forEach((bias)=>{
+                            
+                            var id = bias_id_map.get(bias)
+                            let id_name= "#id"+id;
+                            d3.selectAll(id_name).style("opacity",1.0);
+                        });
+                        
+                    }
+                    
                 })
                 .on("mouseout",function(event,d){
-                    if (!d3.select(this).classed("selected")) {
-                       d3.select(this).style('fill','#0a0b0c');
+                    var select_prev_arr=d3.selectAll('.selected').data()
+                        
+                    if(select_prev_arr.length==0){
+                        if (!d3.select(this).classed("selected")) {
+                        d3.select(this).style('fill','#0a0b0c');
+                        
+                            var all_bias_this_word=perWord_Bias_map.get(d);
+                            // Highlight related biases
+                            all_bias_this_word.forEach((bias)=>{
+                                var id = bias_id_map.get(bias)
+                                let id_name= "#id"+id;
+                                d3.selectAll(id_name).style("opacity",0.3);
+                            });
+                            
                     }
-                    var all_bias_this_word=perWord_Bias_map.get(d);
-                    // Highlight related biases
-                    all_bias_this_word.forEach((bias)=>{
-                        var id = bias_id_map.get(bias)
-                        let id_name= "#id"+id;
-                        d3.selectAll(id_name).style("opacity",0.3);
-                    });
+                   }
                 });
                 
                 // uncomment this parto to create more colors
