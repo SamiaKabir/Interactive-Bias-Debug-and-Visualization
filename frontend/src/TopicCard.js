@@ -207,7 +207,7 @@ function RenderTopicCard(props) {
                      border: "black",
                      },
                   }}
-                  label="Add seed word"
+                  label="Press Enter(⏎)to add seed word"
                   onChange={handleKeyWordInput}
                   onKeyDown={(e)=>{handleKeySubmit(e,topics.indexOf(element))}}
                 />
