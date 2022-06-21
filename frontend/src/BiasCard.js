@@ -326,12 +326,12 @@ const RenderBiasCard= React.memo((props) =>{
                 <></>
             }
             <div style={{position:'relative',margin:'5px'}}>
-                <Button variant="contained" style={{backgroundColor:'#cfeeff',color: '#1976d2', fontSize:'0.9rem',paddingLeft:'20px'}} startIcon={<AddIcon />}
+                <Button variant="contained" style={{backgroundColor:'#e6e6e6',color: 'black', fontSize:'0.9rem',paddingLeft:'20px'}} startIcon={<AddIcon />}
                 onClick={(e)=>{showAddBiasCard(e)}} 
                 >
                 ADD NEW BIAS
                 </Button>
-                <Button variant="contained"  style={{backgroundColor:'#cfeeff',color: '#1976d2', fontSize:'0.9rem',paddingLeft:'20px',float:'right'}} startIcon={<RestartAltIcon />}
+                <Button variant="contained"  style={{backgroundColor:'#e6e6e6',color: 'black', fontSize:'0.9rem',paddingLeft:'20px',float:'right'}} startIcon={<RestartAltIcon />}
                 onClick={(e)=>{onChartRerender(e)}}>
                 RE-RENDER
                 </Button>
@@ -350,12 +350,12 @@ const RenderBiasCard= React.memo((props) =>{
                 <></>
             }
             <div style={{position:'relative',margin:'5px'}}>
-                <Button  variant="contained"  style={{backgroundColor:'#cfeeff',color: '#1976d2', fontSize:'0.9rem',paddingLeft:'10px'}} startIcon={<AddIcon />}
+                <Button  variant="contained"  style={{backgroundColor:'#e6e6e6',color: 'black', fontSize:'0.9rem',paddingLeft:'10px'}} startIcon={<AddIcon />}
                  onClick={(e)=>{showAddBiasCard(e)}} 
                 >
                 ADD NEW BIAS
                 </Button>
-                <Button variant="contained"  style={{backgroundColor:'#cfeeff',color: '#1976d2', fontSize:'0.9rem',paddingLeft:'10px',float:'right'}} startIcon={<RestartAltIcon />}
+                <Button variant="contained"  style={{backgroundColor:'#e6e6e6',color: 'black', fontSize:'0.9rem',paddingLeft:'10px',float:'right'}} startIcon={<RestartAltIcon />}
                 onClick={(e)=>{onChartRerender(e)}}>
                 RE-RENDER
                 </Button>

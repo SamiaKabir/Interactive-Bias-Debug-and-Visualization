@@ -54,7 +54,7 @@ const customStyles= makeStyles((theme) => ({
     backgroundColor: '#e9f6fb!important'
   },
   chartViz:{
-    color: '#1976d2!important',
+    color: 'black!important',
     height:'0.8em!important',
     width:'0.8em!important',
   },
@@ -77,8 +77,8 @@ const customStyles= makeStyles((theme) => ({
     borderColor:'darkgrey'
   },
   topicFooter:{
-    backgroundColor:'#cfeeff!important',
-    color:'#1976d2!important',
+    backgroundColor:'#e6e6e6!important',
+    color:'black!important',
     fontSize:'0.8rem!important',
   },
   biasCardStyle:{
@@ -86,7 +86,7 @@ const customStyles= makeStyles((theme) => ({
     borderRadius:'2px',
     padding:'10px',
     borderLeft:'solid 4px',
-    borderLeftColor:'#b6dce7'
+    borderLeftColor:'#cccccc'
   },
   biasViz:{
     color: '#3c9934!important',
