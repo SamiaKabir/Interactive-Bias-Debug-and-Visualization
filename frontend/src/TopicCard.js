@@ -204,6 +204,7 @@ function RenderTopicCard(props) {
                   style={{
                      width:'100%',  
                     '&:active': {
+                     backgroundColor:"#e6e6e6",
                      border: "black",
                      },
                   }}
