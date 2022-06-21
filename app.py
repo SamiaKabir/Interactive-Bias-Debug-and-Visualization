@@ -67,8 +67,15 @@ sentences_2 = news['content'].astype('str').tolist()
 # model.save("Tuned_Model.model")
 # model.wv.save("Tuned_model_wv.wordvectors")
 
+# # load the word2vec model's vector trained on the data
 model = models.KeyedVectors.load("Tuned_model_wv.wordvectors", mmap='r')
 
+# # Load Pretrained Glove model
+# print(list(gensim.downloader.info()['models'].keys()))
+# model = gensim.downloader.load('glove-twitter-25')
+
+# load pre-trained fasttext model
+# model = gensim.downloader.load('fasttext-wiki-news-subwords-300')
 
 # Opening the preproceesed JSON file for clusters
 f_2 = open('./static/assets/jsons/word_group_2.json',)
@@ -163,15 +170,6 @@ def search_Instance():
 
     return All_Instances, All_Instance_contents
 
-
-# Load Pretrained Glove model
-# print(list(gensim.downloader.info()['models'].keys()))
-# glove_vectors = gensim.downloader.load('glove-twitter-25')
-# print(glove_vectors.most_similar('twitter'))
-
-# # print(len(model.vocab))
-# UniversitySimilarities = model.most_similar(positive=['university'], topn=5)
-# print(model.most_similar(positive=['university'], topn=5))
 
 global bias_array
 global subgroup_glossary

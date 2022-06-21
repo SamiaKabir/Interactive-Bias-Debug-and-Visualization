@@ -85,7 +85,7 @@ function RenderInstanceTable(props) {
 
     }
     return (
-      <mark style={{ backgroundColor: "#AED6F1" }}>{children}</mark>
+      <mark style={{ backgroundColor: "#fffd8f" }}>{children}</mark>
     );
   };
 
@@ -125,7 +125,7 @@ function RenderInstanceTable(props) {
     function CustomToolbar() {
         return (
           <GridToolbarContainer 
-          style={{borderBottom:'1px solid',borderColor:'#a1969654', backgroundColor:'black'}}
+          style={{borderBottom:'1px solid',borderColor:'#a1969654', backgroundColor:'#7a7d7d'}}
           >
             <GridToolbarColumnsButton style={{color:'white',fontSize:'0.9em',paddingRight:'10px'}}/>
             <GridToolbarFilterButton style={{color:'white',fontSize:'0.9em',paddingRight:'10px'}}/>
@@ -215,7 +215,7 @@ function RenderInstanceTable(props) {
                 autoEscape={true}
                 textToHighlight={value}
                 // highlightStyle={{backgroundColor: H_color}}
-                highlightStyle={{backgroundColor: "#AED6F1"}}
+                highlightStyle={{backgroundColor: "#fffd8f"}}
               />
             </Box>
             {showPopper && (
@@ -239,7 +239,7 @@ function RenderInstanceTable(props) {
                       autoEscape={true}
                       textToHighlight={value}
                       // highlightStyle={{backgroundColor:H_color}}
-                      highlightStyle={{backgroundColor: "#AED6F1"}}
+                      highlightStyle={{backgroundColor: "#fffd8f"}}
                     />
                   </Typography>
                 </Paper>

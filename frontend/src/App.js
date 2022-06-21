@@ -54,7 +54,7 @@ function App() {
     if (isExpand) {
       return (
       <>
-         <Button variant="text" onClick={handleExpand} style={{backgroundColor:'black',width:'100%'}}>
+         <Button variant="text" onClick={handleExpand} style={{backgroundColor:'#7a7d7d',width:'100%'}}>
              <ArrowBackIosNewIcon style={{ marginTop: '0.5vh', marginLeft: '0.6vw',marginBottom: '0.5vh', color: 'white' }} />
          </Button>
          <div className={cssStyles.biasEditorTitle}>
@@ -69,7 +69,7 @@ function App() {
       return (
         <>
            <Box sx={{ flexGrow: 1 }}>
-              <AppBar position="static" style={{backgroundColor: 'black'}}>
+              <AppBar position="static" style={{backgroundColor: '#7a7d7d'}}>
                 <Toolbar variant="dense">
                   <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={handleCollapse}>
                     <ArrowForwardIosIcon style={{ marginTop: '1vh', marginLeft: '0.6vw', color: 'white' }} />
@@ -207,7 +207,7 @@ const handleBiasUpdate= (updatedBiasData)=>{
     <>
     <CssBaseline />
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" style={{backgroundColor: '#348199'}}>
+      <AppBar position="static" style={{backgroundColor: '#6c6f70'}}>
         <Toolbar>
           <Typography
             variant="h6"
