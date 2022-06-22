@@ -90,7 +90,7 @@ function App() {
   // Add new topic card
   const [topicTitle, setTopicTitle]= useState("");
   const handleTopicInput = e => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setTopicTitle(e.target.value);
   };
 
@@ -166,6 +166,7 @@ function App() {
   const [hightlighColor,setHightlighColor]=useState("#000");
   
   const handleChartChange = (updatedChart) => {
+    console.log(updatedChart)
     setChartData(updatedChart);
     setInstanceData(updatedChart.data);
     setInstanceIndex(updatedChart.index)

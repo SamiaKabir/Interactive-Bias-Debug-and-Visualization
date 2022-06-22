@@ -10,6 +10,7 @@ const ChordChart= React.memo((props) => {
     const bias_types=props.bias_types;
     const bias_dictionary=props.bias_dictionary;
     const max_bias_scores=props.max_bias_scores;
+    console.log(data)
     // console.log(bias_types)
     // console.log(bias_dictionary)
     // console.log(max_bias_scores)
@@ -301,7 +302,7 @@ const ChordChart= React.memo((props) => {
                             });
             
                         });
-                        console.log(mat_indx);
+                        // console.log(mat_indx);
                         Bias_Matrix[mat_indx][mat_indx]=(agg_bias_score*1000);
                         Color_Matrix[mat_indx][mat_indx]=indx;
                         // put into bias id map
@@ -409,21 +410,21 @@ const ChordChart= React.memo((props) => {
                 var table_type=[]
                 var table_words=[]
 
-                if(Bias_map){
+                // if(Bias_map){
 
-                    for (let [key,value] of Bias_map){
-                        Bias_map.get(key).map((obj)=>{
-                            table_data[0].push(obj.bias_score.toFixed(3));
-                            table_type.push(obj.subgroup);
-                            table_words.push(key)
-                        });
+                //     for (let [key,value] of Bias_map){
+                //         Bias_map.get(key).map((obj)=>{
+                //             table_data[0].push(obj.bias_score.toFixed(3));
+                //             table_type.push(obj.subgroup);
+                //             table_words.push(key)
+                //         });
 
-                    }
+                //     }
         
-                    // draw_hist(d,table_data[0],table_type);
-                    draw_strip(" ",table_data[0],table_type,table_words);
+                //     // draw_hist(d,table_data[0],table_type);
+                //     draw_strip(" ",table_data[0],table_type,table_words);
 
-                }
+                // }
 
 
                 // Create the nodes/Texts for svg  for Chord diagram
@@ -444,7 +445,7 @@ const ChordChart= React.memo((props) => {
                 .on("click",function(e,d){
                  
                     // draw_hist(d,table_data[0],table_type);
-                    draw_strip(d,table_data[0],table_type,table_words);
+                    // draw_strip(d,table_data[0],table_type,table_words);
 
                     
                     if (!d3.select(this).classed("selected")) {
@@ -584,6 +585,39 @@ const ChordChart= React.memo((props) => {
                     percentage_bias[i]=new_val.toFixed(2)
                 }
 
+                // create the data for strip plots
+                var strip_plot_data=[]
+                for(var i=0;i<Bias_Matrix.length;i++){
+                    for(var j=0;j<Bias_Matrix[i].length;j++){
+                        
+                        if(Bias_Matrix[i][j]>0){
+                            var index_in_bias_map= Color_Matrix[i][j];
+                            // find the bias by using this index from bias_id_map
+                            var bias_key
+                            for (let [key, value] of bias_id_map) {
+                                if(value==index_in_bias_map){
+                                    bias_key=key
+                                }
+                            }
+                            let related_words=onclick_bias_map.get(bias_key)
+                            var word_lengths=related_words.length
+                            var agg_val=(Bias_Matrix[i][j]/1000)/word_lengths
+                            var strip_obj={
+                                "source":re_onclick_subgroups[i],
+                                "target":re_onclick_subgroups[j],
+                                "color":colors[index_in_bias_map],
+                                "score":agg_val
+                            }
+                            strip_plot_data.push(strip_obj)                 
+                        }
+                        
+
+                    }
+                }
+
+                if(strip_plot_data){
+                    draw_strip(" ",strip_plot_data);
+                }
 
 
                 // add the groups on the inner part of the circle
@@ -644,6 +678,7 @@ const ChordChart= React.memo((props) => {
                         .style("opacity", 0);	
                 });
 
+                
                 // Add the links between groups
                 svg_new
                 .datum(res)
@@ -657,6 +692,8 @@ const ChordChart= React.memo((props) => {
                 .attr("id", function(d) {var index_in_bias_map= Color_Matrix[d.source.index][d.target.index]; return "id"+index_in_bias_map;})
                 .attr("fill", function(d,i){ 
                     // console.log(d);
+                    
+                    
                     return colors[Color_Matrix[d.source.index][d.target.index]]})
                 .style("stroke", "black")
                 .style("opacity",0.3)
@@ -666,8 +703,8 @@ const ChordChart= React.memo((props) => {
                     d3.selectAll(classname).style("opacity",1.0); 
                     var index_in_bias_map= Color_Matrix[d.source.index][d.target.index];
                     var c=d;
-                    console.log(d)
-                    console.log(index_in_bias_map)
+                    // console.log(d)
+                    // console.log(index_in_bias_map)
 
                     // find the bias by using this index from bias_id_map
                     var bias_key
@@ -890,7 +927,125 @@ const ChordChart= React.memo((props) => {
                 }
 
                 //strip visualization
-                function draw_strip(word,T_data,T_type, T_words){
+                // function draw_strip(word,T_data,T_type, T_words){
+                //     svg.selectAll("#strip").remove();
+
+                //     const height=50
+                //     const width=705
+                //     const marginleft=110
+                //     const marginbottom=100
+
+                //     var strip_data=[]
+
+                //     for(var i=0;i<T_data.length;i++){
+                //         strip_data.push({'Type':T_type[i],'BiasScore':T_data[i],'Word':T_words[i]})
+                //     }
+
+                //     // console.log(strip_data)
+
+                //     // create a new svg for the strip plot and append with main svg
+
+                //     var svg_new_2 = svg.append('g').attr("id","strip")
+                //     .attr("transform", "translate(" + (marginleft) + "," + (radius_2+radius_2+160)+ ")")
+                    
+                    
+                   
+                //     // svg_new_2.append("g").attr("id","legend").append("text")
+                //     //         .attr("x", 3)
+                //     //         .attr("y", 20)
+                //     //         .attr("font-size", 15)
+                //     //         .text('Bias Scores for word:  "'+word+'"')
+
+                //     //Creates the xScale 
+                //     var xScale = d3.scaleLinear()
+                //     .range([0, width]);
+
+                //     //Creates the yScale
+                //     var yScale = d3.scaleLinear()
+                //     .range([height, 0]);  
+
+                //     // format data
+                //     strip_data.forEach(function(d) {
+                //         d.BiasScore = +d.BiasScore;
+                //     });
+
+
+                //     //Organizes the data  
+                //     var maxX = d3.max(strip_data, function(d) { return d.BiasScore; });
+                //     console.log(maxX)
+
+                //     var minX = d3.min(strip_data, function(d) { return d.BiasScore; });
+                //     console.log(minX)
+
+                //     //Defines the xScale max
+                //     xScale.domain(d3.extent(strip_data, function(d) { return d.BiasScore; }));
+                    
+
+                //     //Defines the yScale max
+                //     yScale.domain([0, 100]);  
+
+                //     //Defines the y axis styles`
+                //     var xAxis = d3.axisBottom()
+                //     .scale(xScale)
+                //     .tickPadding(8)
+                //     .ticks(14)
+                //     .tickFormat(function(d) { return d * 1})
+
+   
+                //     //Appends the x axis    
+                //     svg_new_2.append("g")
+                //     .attr("class", "x axis")
+                //     .attr("transform", "translate("+ 0 +","+marginbottom+")")
+                //     .call(xAxis);
+
+                //     // append a label for x axis
+                //     svg_new_2.append("text")
+                //     .attr("transform", "translate(" + (width/2) + " ," + (height+100) + ")")
+                //     .style("text-anchor", "middle")
+                //     .text("Bias Score");
+
+                //      //Binds data to strips
+                //     var drawstrips = svg_new_2.selectAll("line.percent")
+                //     .data(strip_data)
+                //     .enter()
+                //     .append("line")
+                //     .attr("class", "percentline")
+                //     .attr("x1", function(d,i) { return xScale(d.BiasScore); }) 
+                //     .attr("x2", function(d) { return xScale(d.BiasScore); })  
+                //     .attr("y1", function(d){ if(d.Word==word) return  30; return 50;})
+                //     .attr("y2", 100)
+                //     // .style("stroke", "#424649")
+                //     .style("stroke", "#1565c0")
+                //     .style("stroke-width", 2)
+                //     .style("opacity", 0.4)
+                //     .on("mouseover", function(event,d) {
+                //         d3.select(this).transition().duration(100)
+                //           .attr("y1", 20)
+                //           .style("stroke-width", 3)
+                //           .style("opacity", 1);
+                  
+                //         div2.transition(300)
+                //           .style("opacity", 1)
+                        
+                //         div2.html("Word: "+d.Word+"<br>"+ d.Type + ":" + d.BiasScore )
+                  
+                //         div2
+                //           .style("left", (d3.pointer(event,d3.select(event.currentTarget))[0]) + "px")
+                //           .style("top", (d3.pointer(event,d3.select(event.currentTarget))[1]) + "px") ;  
+                         
+                //       })
+                //       .on("mouseout", function(event,d) {
+                //         d3.select(this)
+                //           .transition().duration(100)
+                //           .attr("y1", function(d){ if(d.Word==word) return  30; return 50;})
+                //           .style("stroke-width", 2)
+                //           .style("opacity", 0.4);
+                  
+                //         div2.transition(300)
+                //           .style("opacity", 0)  
+                //       })    
+                // }
+                function draw_strip(word,strip_data){
                     svg.selectAll("#strip").remove();
 
                     const height=50
@@ -898,11 +1053,11 @@ const ChordChart= React.memo((props) => {
                     const marginleft=110
                     const marginbottom=100
 
-                    var strip_data=[]
+                    // var strip_data=[]
 
-                    for(var i=0;i<T_data.length;i++){
-                        strip_data.push({'Type':T_type[i],'BiasScore':T_data[i],'Word':T_words[i]})
-                    }
+                    // for(var i=0;i<T_data.length;i++){
+                    //     strip_data.push({'Type':T_type[i],'BiasScore':T_data[i],'Word':T_words[i]})
+                    // }
 
                     // console.log(strip_data)
 
@@ -929,19 +1084,19 @@ const ChordChart= React.memo((props) => {
 
                     // format data
                     strip_data.forEach(function(d) {
-                        d.BiasScore = +d.BiasScore;
+                        d.score = +d.score;
                     });
 
 
                     //Organizes the data  
-                    var maxX = d3.max(strip_data, function(d) { return d.BiasScore; });
+                    var maxX = d3.max(strip_data, function(d) { return d.score; });
                     console.log(maxX)
 
-                    var minX = d3.min(strip_data, function(d) { return d.BiasScore; });
+                    var minX = d3.min(strip_data, function(d) { return d.score; });
                     console.log(minX)
 
                     //Defines the xScale max
-                    xScale.domain(d3.extent(strip_data, function(d) { return d.BiasScore; }));
+                    xScale.domain(d3.extent(strip_data, function(d) { return d.score; }));
                     
 
                     //Defines the yScale max
@@ -973,24 +1128,27 @@ const ChordChart= React.memo((props) => {
                     .enter()
                     .append("line")
                     .attr("class", "percentline")
-                    .attr("x1", function(d,i) { return xScale(d.BiasScore); }) 
-                    .attr("x2", function(d) { return xScale(d.BiasScore); })  
+                    .attr("x1", function(d,i) { return xScale(d.score); }) 
+                    .attr("x2", function(d) { return xScale(d.score); })  
                     .attr("y1", function(d){ if(d.Word==word) return  30; return 50;})
                     .attr("y2", 100)
                     // .style("stroke", "#424649")
-                    .style("stroke", "#1565c0")
-                    .style("stroke-width", 2)
+                    .style("stroke", function(d,i){return d.color;})
+                    .style("stroke-width", 4)
                     .style("opacity", 0.4)
                     .on("mouseover", function(event,d) {
                         d3.select(this).transition().duration(100)
                           .attr("y1", 20)
-                          .style("stroke-width", 3)
+                          .style("stroke-width", 4)
                           .style("opacity", 1);
                   
                         div2.transition(300)
                           .style("opacity", 1)
-                        
-                        div2.html("Word: "+d.Word+"<br>"+ d.Type + ":" + d.BiasScore )
+
+                        if(d.source==d.target)
+                            div2.html("Bias: "+d.source+"<br>"+"Avg. Bias Score :" + d.score.toFixed(3));
+                        else
+                            div2.html("Bias: "+d.source+"-"+ d.target + "<br>"+"Avg. Bias Score :" + d.score.toFixed(3) )
                   
                         div2
                           .style("left", (d3.pointer(event,d3.select(event.currentTarget))[0]) + "px")
@@ -1001,7 +1159,7 @@ const ChordChart= React.memo((props) => {
                         d3.select(this)
                           .transition().duration(100)
                           .attr("y1", function(d){ if(d.Word==word) return  30; return 50;})
-                          .style("stroke-width", 2)
+                          .style("stroke-width", 4)
                           .style("opacity", 0.4);
                   
                         div2.transition(300)
