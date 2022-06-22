@@ -601,7 +601,8 @@ const ChordChart= React.memo((props) => {
                             }
                             let related_words=onclick_bias_map.get(bias_key)
                             var word_lengths=related_words.length
-                            var agg_val=(Bias_Matrix[i][j]/1000)/word_lengths
+                            // avg of both side for intersectional
+                            var agg_val=((Bias_Matrix[i][j]+Bias_Matrix[j][i])/(2*1000))/word_lengths
                             var strip_obj={
                                 "source":re_onclick_subgroups[i],
                                 "target":re_onclick_subgroups[j],
