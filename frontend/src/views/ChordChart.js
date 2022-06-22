@@ -1053,27 +1053,11 @@ const ChordChart= React.memo((props) => {
                     const marginleft=110
                     const marginbottom=100
 
-                    // var strip_data=[]
-
-                    // for(var i=0;i<T_data.length;i++){
-                    //     strip_data.push({'Type':T_type[i],'BiasScore':T_data[i],'Word':T_words[i]})
-                    // }
-
-                    // console.log(strip_data)
-
                     // create a new svg for the strip plot and append with main svg
 
                     var svg_new_2 = svg.append('g').attr("id","strip")
                     .attr("transform", "translate(" + (marginleft) + "," + (radius_2+radius_2+160)+ ")")
-                    
-                    
-                   
-                    // svg_new_2.append("g").attr("id","legend").append("text")
-                    //         .attr("x", 3)
-                    //         .attr("y", 20)
-                    //         .attr("font-size", 15)
-                    //         .text('Bias Scores for word:  "'+word+'"')
-
+                  
                     //Creates the xScale 
                     var xScale = d3.scaleLinear()
                     .range([0, width]);
