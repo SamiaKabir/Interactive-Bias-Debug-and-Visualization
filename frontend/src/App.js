@@ -207,15 +207,15 @@ const handleBiasUpdate= (updatedBiasData)=>{
     <>
     <CssBaseline />
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" style={{backgroundColor: '#6c6f70'}}>
+      <AppBar position="static" style={{backgroundColor: '#e6e6e6',borderBottom:'10px',borderBottomColor:'black'}}>
         <Toolbar>
           <Typography
-            variant="h6"
+            variant="h5"
             noWrap
             component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+            sx={{ flexGrow: 1, color:'black',display: { xs: 'none', sm: 'block' } }}
           >
-            Interactive Bias Debugging of Language Model and Text Corpora 
+            Interactive Bias Debugging of Word Embeddings and Text Corpora 
           </Typography>
         </Toolbar>
       </AppBar>
