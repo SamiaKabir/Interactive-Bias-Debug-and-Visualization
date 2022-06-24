@@ -51,28 +51,29 @@ function RenderTopicCard(props) {
 
        if(keyWords.length<indx+1){
         let newArray=[];
-        newArray.push(keyWord);
+        // newArray.push(keyWord);
         keyWords.push(newArray);
         e.stopPropagation();
         actualKeyWords.push(newArray);
-        setActualKeyWords(actualKeyWords);
-        setKeyWords(keyWords);
-        forceUpdate();
+        // setActualKeyWords(actualKeyWords);
+        // setKeyWords(keyWords);
+        // forceUpdate();
        }
    
-        else if((!keyWords[indx].includes(keyWord) && keyWord!="")){
+        if((!keyWords[indx].includes(keyWord) && keyWord!="")){
           // console.log("here")
           keyWords[indx].push(keyWord);
           setKeyWords(keyWords);
-          forceUpdate();
+          // forceUpdate();
         }
 
-        else if((!actualKeyWords[indx].includes(keyWord) && keyWord!="")){
+        if((!actualKeyWords[indx].includes(keyWord) && keyWord!="")){
           // console.log("here2")
           actualKeyWords[indx].push(keyWord);
           setActualKeyWords(actualKeyWords);
-          forceUpdate();
+          // forceUpdate();
         }
+        forceUpdate();
 
       }
       // console.log(keyWords)
@@ -119,18 +120,27 @@ function RenderTopicCard(props) {
           const getSuggestions = async () => {
           await fetch('/gettopics').then(res => res.json()).then(data => {
             console.log(data.words);
-            // for (let i = 0; i < keyWords.length; i++) {
-              for (let j = 0; j < data.repWords[0].length; j++) {
-                if(!keyWords[indx].includes(data.repWords[indx][j])){
-                  keyWords[indx].push(data.repWords[indx][j]);
-                }
-              }
-              setActualKeyWords(data.words);
+            console.log(data.repWords);
 
-            // }
+            for (let j = 0; j < data.repWords[indx].length; j++) {
+              if(!keyWords[indx].includes(data.repWords[indx][j])){
+                keyWords[indx].push(data.repWords[indx][j]);
+              }
+            }
             setKeyWords(keyWords);
             forceUpdate();
-          }); }
+            for (let j = 0; j < data.words[indx].length; j++) {
+              if(!actualKeyWords[indx].includes(data.words[indx][j])){
+                actualKeyWords[indx].push(data.words[indx][j]);
+              }
+            }
+            
+            setActualKeyWords(actualKeyWords);
+            forceUpdate();
+            console.log(actualKeyWords)
+            console.log(keyWords)
+          }
+          ); }
         // }, delayInMilliseconds);
         getSuggestions();
       }
@@ -161,6 +171,8 @@ function RenderTopicCard(props) {
 
       // handle new chart render
       const handleChartRender=(e,index) =>{
+        console.log(actualKeyWords)
+        console.log(keyWords)
         handlePostKeyWordTransfer(e,index);
         const updatedChart={
           'index':index,
