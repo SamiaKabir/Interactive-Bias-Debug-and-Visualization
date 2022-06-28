@@ -227,9 +227,9 @@ function RenderTopicCard(props) {
               
               </div>
 
-              <CardActions style={{width:"100%", paddingLeft:'0px'}}>
+              <CardActions style={{width:"100%", paddingLeft:'0px',paddingRight:'0px'}}>
               <div style={{position:'relative',width:'100%'}}>
-                <Button size="small" style={{float:'left',fontSize:'0.7em'}} onClick={(e)=>{handleKeyWordTransfer(e,topics,keyWords,topics.indexOf(element))}}>
+                <Button variant="contained" size="small" style={{float:'right',fontSize:'0.7em'}} onClick={(e)=>{handleKeyWordTransfer(e,topics,keyWords,topics.indexOf(element))}}>
                   Suggest similar words
                 </Button>
               </div>
@@ -255,9 +255,10 @@ function RenderTopicCard(props) {
 
             </CardContent>
             <Divider variant="middle" />
-            <CardActions sx={{justifyContent:'center'}}>
-              <div>
-                <Button variant="contained" className={cssStyles_imported.topicFooter} startIcon={<AddchartIcon className={cssStyles_imported.chartViz}/> }
+            <CardActions style={{width:"100%", paddingLeft:'0px',paddingRight:'16px'}}>
+              <div style={{position:'relative',width:'100%'}}>
+                <Button variant="contained" color="primary" className={cssStyles_imported.topicFooter} 
+                // startIcon={<AddchartIcon className={cssStyles_imported.chartViz}/> }
                 onClick={(e)=>{handleChartRender(e,topics.indexOf(element))}}
                 >
                       CHECK FOR BIAS

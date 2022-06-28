@@ -51,7 +51,8 @@ const customStyles= makeStyles((theme) => ({
     right:'0px'
   },
   chipStyle:{
-    backgroundColor: '#e9f6fb!important'
+    backgroundColor: '#f2f2f2!important',
+    margin:'2px!important'
   },
   chartViz:{
     color: 'black!important',
@@ -77,8 +78,9 @@ const customStyles= makeStyles((theme) => ({
     borderColor:'darkgrey'
   },
   topicFooter:{
-    backgroundColor:'#e6e6e6!important',
-    color:'black!important',
+    // backgroundColor:'#e6e6e6!important',
+    // color:'black!important',
+    float:'right!important',
     fontSize:'0.8rem!important',
   },
   biasCardStyle:{

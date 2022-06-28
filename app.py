@@ -183,9 +183,13 @@ def bias_init():
     global bias_array
     global subgroup_glossary
     bias_array = []
+    # bias_dict = {
+    #     "type": "Gender",
+    #     "subgroup": ["Male", "Transgender", "Female"]
+    # }
     bias_dict = {
         "type": "Gender",
-        "subgroup": ["Male", "Transgender", "Female"]
+        "subgroup": ["Male", "Female"]
     }
     bias_array.append(bias_dict)
     bias_dict = {
@@ -213,12 +217,12 @@ def bias_init():
     }
     subgroup_glossary.append(subgroup_dict)
 
-    subgroup_dict = {
-        "word": "Transgender",
-        "type": "Gender",
-        "group": ["trans", "transsexual", "bisexual", "Transgender"]
-    }
-    subgroup_glossary.append(subgroup_dict)
+    # subgroup_dict = {
+    #     "word": "Transgender",
+    #     "type": "Gender",
+    #     "group": ["trans", "transsexual", "bisexual", "Transgender"]
+    # }
+    # subgroup_glossary.append(subgroup_dict)
 
     subgroup_dict = {
         "word": "Female",
@@ -230,21 +234,21 @@ def bias_init():
     subgroup_dict = {
         "word": "Black",
         "type": "Race",
-        "group": ["black", "colored", "blacks", "colorism", "african_american", "dark_skinned", "Black", "Blacks", "Afro", "african"]
+        "group": ["black", "colored", "blacks", "african_american", "dark_skinned", "Black", "Blacks", "Afro", "african"]
     }
     subgroup_glossary.append(subgroup_dict)
 
     subgroup_dict = {
         "word": "White",
         "type": "Race",
-        "group": ["white", "whites", "caucasian", "caucasians", "Caucasoid", "light_skinned", "European", "european", "anglo", "Caucasian"]
+        "group": ["white", "whites", "caucasian", "caucasians", "Caucasoid", "light_skinned", "European", "european", "Caucasian"]
     }
     subgroup_glossary.append(subgroup_dict)
 
     subgroup_dict = {
         "word": "Asian",
         "type": "Race",
-        "group": ["asian", "asians", "chinese", "japanese", "korean", "eastern", "Asian", "Asians", "China", "Chinese", "Japan", "Korea"]
+        "group": ["asian", "asians", "chinese", "japanese", "korean", "Asian", "Asians", "China", "Chinese", "Japan", "Korea"]
     }
     subgroup_glossary.append(subgroup_dict)
 
@@ -258,14 +262,14 @@ def bias_init():
     subgroup_dict = {
         "word": "South Asian",
         "type": "Race",
-        "group": ["indian", "indians", "deshi", "pakistani", "sri_lankan", "India", "Nepal", "Bangladesh"]
+        "group": ["indian", "indians", "pakistani", "sri_lankan", "India", "Nepal", "Bangladesh"]
     }
     subgroup_glossary.append(subgroup_dict)
 
     subgroup_dict = {
         "word": "High",
         "type": "Income",
-        "group": ["rich", "wealthy", "affluent", "richest", "affluence", "advantaged", "extravagant", "luxuriant", "privileged", "millionaire", "billionaire"]
+        "group": ["rich", "wealthy", "affluent", "richest", "affluence", "advantaged", "privileged", "millionaire", "billionaire"]
     }
     subgroup_glossary.append(subgroup_dict)
 
@@ -279,7 +283,7 @@ def bias_init():
     subgroup_dict = {
         "word": "Mid",
         "type": "Income",
-        "group": ["middleclass", "workingclass", "bourgeois", "bourgeoisie", "common", "ordinary"]
+        "group": ["middleclass", "workingclass", "bourgeois", "bourgeoisie", "Middleclass", "Workingclass", ]
     }
     subgroup_glossary.append(subgroup_dict)
 
