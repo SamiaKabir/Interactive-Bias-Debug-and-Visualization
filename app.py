@@ -204,7 +204,7 @@ def bias_init():
     # bias_array.append(bias_dict)
     bias_dict = {
         "type": "Income",
-        "subgroup": ["High", "Low", "Mid"]
+        "subgroup": ["High Income", "Low Income", "Mid Income"]
     }
     bias_array.append(bias_dict)
 
@@ -267,21 +267,21 @@ def bias_init():
     subgroup_glossary.append(subgroup_dict)
 
     subgroup_dict = {
-        "word": "High",
+        "word": "High Income",
         "type": "Income",
         "group": ["rich", "wealthy", "affluent", "richest", "affluence", "advantaged", "privileged", "millionaire", "billionaire"]
     }
     subgroup_glossary.append(subgroup_dict)
 
     subgroup_dict = {
-        "word": "Low",
+        "word": "Low Income",
         "type": "Income",
         "group": ["poor", "poors", "poorer", "poorest", "poverty", "needy", "penniless", "moneyless", "underprivileged", "homeless"]
     }
     subgroup_glossary.append(subgroup_dict)
 
     subgroup_dict = {
-        "word": "Mid",
+        "word": "Mid Income",
         "type": "Income",
         "group": ["middleclass", "workingclass", "bourgeois", "bourgeoisie", "Middleclass", "Workingclass", ]
     }
