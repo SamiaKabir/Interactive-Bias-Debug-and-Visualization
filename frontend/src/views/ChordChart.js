@@ -10,7 +10,7 @@ const ChordChart= React.memo((props) => {
     const bias_types=props.bias_types;
     const bias_dictionary=props.bias_dictionary;
     const max_bias_scores=props.max_bias_scores;
-    console.log(data)
+    // console.log(data)
     // console.log(bias_types)
     // console.log(bias_dictionary)
     // console.log(max_bias_scores)
@@ -131,7 +131,7 @@ const ChordChart= React.memo((props) => {
     const ref = useD3(
         (svg) => {
             // measurement for chord diagram svg
-            const diameter_2 = 600;
+            const diameter_2 = 510;
             const radius_2 = diameter_2 / 2;
             const innerRadius_2 = radius_2 - 80;
 
@@ -154,18 +154,18 @@ const ChordChart= React.memo((props) => {
 
 
             svg=svg.attr("preserveAspectRatio", "xMinYMin meet")
-                .attr("viewBox", "0 0 850 920")
+                .attr("viewBox", "0 0 800 900")
                 .classed("svg-content", true);
 
             // for zoom and pan
             
             svg.call(d3.zoom()
-            .extent([[0, 0], [850,920]])
+            .extent([[0, 0], [800,900]])
             .scaleExtent([1, 4])
             .on("zoom", zoomed));
 
             // Declare new nodes for chord diagram
-            var svg_new = svg.append("g").attr("transform", "translate(" + (radius_2+180) + "," + (radius_2+110)+ ")");
+            var svg_new = svg.append("g").attr("transform", "translate(" + (radius_2+165) + "," + (radius_2+90)+ ")");
                         
             // zoom and pan on the chord chart svg only
 
@@ -633,8 +633,8 @@ const ChordChart= React.memo((props) => {
                 .style("stroke", "black")
                 .style("opacity",0.5)
                 .attr("d", d3.arc()
-                .innerRadius(210)
-                .outerRadius(245))
+                .innerRadius(170)
+                .outerRadius(205))
                 .attr("id",function(d,i){ arc_width_in.push(d3.select(this).node().getBBox().width);return "group"+i;})
                 .on("mouseover",function(event,d){
                     div.transition()		
@@ -662,8 +662,8 @@ const ChordChart= React.memo((props) => {
                 .style("stroke", "black")
                 .style("opacity",0.7)
                 .attr("d", d3.arc()
-                .innerRadius(245)
-                .outerRadius(270))
+                .innerRadius(205)
+                .outerRadius(230))
                 .attr("id",function(d,i){arc_width_out.push(d3.select(this).node().getBBox().width);return "group_2"+i;})
                 .on("mouseover",function(event,d){
                     div.transition()		
@@ -688,7 +688,7 @@ const ChordChart= React.memo((props) => {
                 .data(function(d) {return d; })
                 .enter()
                 .append("path")
-                .attr("d", d3.ribbon().radius(210))
+                .attr("d", d3.ribbon().radius(170))
                 .attr("class", function(d){return "class"+Color_Matrix[d.source.index][d.target.index];})
                 .attr("id", function(d) {var index_in_bias_map= Color_Matrix[d.source.index][d.target.index]; return "id"+index_in_bias_map;})
                 .attr("fill", function(d,i){ 
@@ -1049,10 +1049,10 @@ const ChordChart= React.memo((props) => {
                 function draw_strip(word,strip_data){
                     svg.selectAll("#strip").remove();
 
-                    const height=50
+                    const height=130
                     const width=705
-                    const marginleft=110
-                    const marginbottom=100
+                    const marginleft=70
+                    const marginbottom=180
 
                     // create a new svg for the strip plot and append with main svg
 
@@ -1085,7 +1085,7 @@ const ChordChart= React.memo((props) => {
                     
 
                     //Defines the yScale max
-                    yScale.domain([0, 100]);  
+                    yScale.domain([0, 150]);  
 
                     //Defines the y axis styles`
                     var xAxis = d3.axisBottom()
@@ -1105,7 +1105,7 @@ const ChordChart= React.memo((props) => {
                     svg_new_2.append("text")
                     .attr("transform", "translate(" + (width/2) + " ," + (height+100) + ")")
                     .style("text-anchor", "middle")
-                    .text("Bias Score");
+                    .text("Bias score for each detected bias");
 
                      //Binds data to strips
                     var drawstrips = svg_new_2.selectAll("line.percent")
@@ -1115,25 +1115,39 @@ const ChordChart= React.memo((props) => {
                     .attr("class", "percentline")
                     .attr("x1", function(d,i) { return xScale(d.score); }) 
                     .attr("x2", function(d) { return xScale(d.score); })  
-                    .attr("y1", function(d){ if(d.Word==word) return  30; return 50;})
-                    .attr("y2", 100)
+                    .attr("y1", function(d){ if(d.Word==word) return  30; return 70;})
+                    .attr("y2", 180)
                     // .style("stroke", "#424649")
                     .style("stroke", function(d,i){return d.color;})
-                    .style("stroke-width", 4)
-                    .style("opacity", 0.4)
+                    .style("stroke-width", 6)
+                    .style("opacity", 0.3)
                     .on("mouseover", function(event,d) {
                         d3.select(this).transition().duration(100)
-                          .attr("y1", 20)
-                          .style("stroke-width", 4)
+                          .attr("y1", 50)
+                          .style("stroke-width", 6)
                           .style("opacity", 1);
                   
                         div2.transition(300)
                           .style("opacity", 1)
 
                         if(d.source==d.target)
+                        {
+                            if(d.source=="Low" || d.source=="Mid" ||d.source=="High"){
+                              d.source= d.source+" Income";
+                              d.target= d.target+" Income";
+                            }
                             div2.html("Bias: "+d.source+"<br>"+"Avg. Bias Score :" + d.score.toFixed(3));
+                        }
                         else
+                        {
+                            if(d.source=="Low" || d.source=="Mid" ||d.source=="High"){
+                                d.source= d.source+" Income";
+                            }
+                            if(d.target=="Low" || d.target=="Mid" ||d.target=="High"){
+                                d.target= d.target+" Income";
+                            }
                             div2.html("Bias: "+d.source+"-"+ d.target + "<br>"+"Avg. Bias Score :" + d.score.toFixed(3) )
+                        }
                   
                         div2
                           .style("left", (d3.pointer(event,d3.select(event.currentTarget))[0]) + "px")
@@ -1143,9 +1157,9 @@ const ChordChart= React.memo((props) => {
                       .on("mouseout", function(event,d) {
                         d3.select(this)
                           .transition().duration(100)
-                          .attr("y1", function(d){ if(d.Word==word) return  30; return 50;})
-                          .style("stroke-width", 4)
-                          .style("opacity", 0.4);
+                          .attr("y1", function(d){ if(d.Word==word) return  30; return 70;})
+                          .style("stroke-width", 6)
+                          .style("opacity", 0.3);
                   
                         div2.transition(300)
                           .style("opacity", 0)  
