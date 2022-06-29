@@ -93,9 +93,11 @@ function RenderInstanceTable(props) {
     // Generate data to be entered in the instance table
 
     const columns=[
-        { field: 'id', headerName: 'id', width: '90' },
+        { field: 'id', headerName: 'id', width: '90', headerAlign: 'center',
+        align: 'center' },
         { field: 'instance', headerName: 'Instance', width: '450',
-          renderCell: renderCellExpand },
+          renderCell: renderCellExpand,headerAlign: 'center',
+          align: 'center' },
     ]; 
       
     const rows = [];
