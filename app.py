@@ -462,13 +462,6 @@ def homepage():
 def topicData():
     return topic_data
 
-# send cluster data to script
-
-
-@ app.route('/cluster_data')
-def clusterData():
-    return cluster_data
-
 # Send bias array to script
 
 
