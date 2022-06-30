@@ -67,8 +67,27 @@ sentences_2 = news['content'].astype('str').tolist()
 # model.save("Tuned_Model.model")
 # model.wv.save("Tuned_model_wv.wordvectors")
 
-# # load the word2vec model's vector trained on the data
+
+global model
 model = models.KeyedVectors.load("Tuned_model_wv.wordvectors", mmap='r')
+
+
+def changeModel(selectedModel):
+    global model
+    if selectedModel == 1:
+        # # load the word2vec model's vector trained on the data
+
+        model = models.KeyedVectors.load(
+            "Tuned_model_wv.wordvectors", mmap='r')
+
+    elif selectedModel == 2:
+        # # Load Pretrained Glove model
+        # print(list(gensim.downloader.info()['models'].keys()))
+        model = gensim.downloader.load('glove-twitter-25')
+
+# elif selectedModel==3:
+    # load bert data
+
 
 # # Load Pretrained Glove model
 # print(list(gensim.downloader.info()['models'].keys()))
@@ -76,15 +95,6 @@ model = models.KeyedVectors.load("Tuned_model_wv.wordvectors", mmap='r')
 
 # load pre-trained fasttext model
 # model = gensim.downloader.load('fasttext-wiki-news-subwords-300')
-
-# Opening the preproceesed JSON file for clusters
-f_2 = open('./static/assets/jsons/word_group_2.json',)
-
-# returns JSON object as a dictionary
-cluster_data = json.load(f_2)
-
-# Closing file
-f_2.close()
 
 
 # Topics and keywords
@@ -550,6 +560,16 @@ def biasUpdateRdfn():
         new_subgroup_glossary = request_data["biasGlossary"]
         if(new_bias_array and new_subgroup_glossary):
             updateBias(new_bias_array, new_subgroup_glossary)
+        return 'Sucesss', 200
+
+
+@app.route('/selectmodel', methods=['POST'])
+def selectModelfn():
+    # POST request
+    if request.method == 'POST':
+        request_data = request.get_json()
+        print(request_data)
+        changeModel(request_data)
         return 'Sucesss', 200
 
 

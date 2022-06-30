@@ -3,6 +3,10 @@ import './App.css';
 import { CssBaseline, Grid, AppBar, Box, Typography, Toolbar, Paper, Container, Button, IconButton, InputBase, Divider, Card } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
 import AddIcon from '@mui/icons-material/Add';
 import customStyles from './style';
 import RenderTopicCard from './TopicCard';
@@ -86,6 +90,28 @@ function App() {
     }
   // }
   });
+
+  // select model
+  const [model, setModel]= useState(1);
+  const handleModelSelection = e => {
+    // send selected model to backend
+    fetch('/selectmodel', {
+      // Declare what type of data we're sending
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      // Specify the method
+      method: 'POST',
+      // A JSON payload
+      body: JSON.stringify(e.target.value)
+      }).then(function (response) {
+      return response.text();
+      }).then(function (text) {
+   });
+
+    setModel(e.target.value);
+  };
+
 
   // Add new topic card
   const [topicTitle, setTopicTitle]= useState("");
@@ -218,7 +244,26 @@ const handleBiasUpdate= (updatedBiasData)=>{
           >
             Interactive Bias Debugging of Word Embeddings and Text Corpora 
           </Typography>
+
+          <Box sx={{ minWidth: 200}}>
+          <FormControl fullWidth >
+            <InputLabel id="demo-simple-select-label" style={{}} >Select Model</InputLabel>
+            <Select 
+              sx={{height: 40}}
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={model}
+              label="Select Model"
+              onChange={handleModelSelection}
+            >
+              <MenuItem value={1}>Word2Vec</MenuItem>
+              <MenuItem value={2}>GloVe</MenuItem>
+              <MenuItem value={3}>BERT</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
         </Toolbar>
+ 
       </AppBar>
     </Box>
 
