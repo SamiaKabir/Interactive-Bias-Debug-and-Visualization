@@ -304,14 +304,14 @@ const RenderBiasCard= React.memo((props) =>{
                             )}
                         
                         </CardContent>
-                        <Divider variant="middle" />
+                        <Divider variant="middle"  sx={{marginBottom:'5px'}}/>
                         <CardActions style={{padding:"0px"}}>
                             <div style={{position:'relative',width:'100%'}}>
-                            <Button varient='contained' className={cssStyles_imported.biasFooter} onClick={(e)=>{hideSubgroupRender(e,bias_types.indexOf(element))}}
+                            <Button variant="outlined" className={cssStyles_imported.biasFooter} onClick={(e)=>{hideSubgroupRender(e,bias_types.indexOf(element))}}
                                 startIcon={<DoneIcon className={cssStyles_imported.biasViz}/>} color="success">
                                     Update
                             </Button>
-                            <Button varient='contained' className={cssStyles_imported.biasFooter_2} onClick= {(e) => {handleBiasDelete(e,element.type);}}
+                            <Button variant="outlined" className={cssStyles_imported.biasFooter_2} onClick= {(e) => {handleBiasDelete(e,element.type);}}
                                 startIcon={<DeleteIcon className={cssStyles_imported.biasViz_2}/>} color="error">
                                     Delete
                             </Button>

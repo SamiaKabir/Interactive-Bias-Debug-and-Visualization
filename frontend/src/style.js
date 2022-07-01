@@ -97,10 +97,10 @@ const customStyles= makeStyles((theme) => ({
   },
   biasFooter:{
     float:'right',
-    margin:'0px',
-    padding:'0px!important',
-    paddingTop:'5px!important',
-    paddingRight:'5px!important',
+    // margin:'0px',
+    // padding:'0px!important',
+    // paddingTop:'5px!important',
+    // paddingRight:'5px!important',
     fontsize:'0.70rem!important'
   },
   biasViz_2:{
@@ -110,10 +110,10 @@ const customStyles= makeStyles((theme) => ({
   },
   biasFooter_2:{
     float:'left',
-    margin:'0px',
-    padding:'0px!important',
-    paddingTop:'5px!important',
-    paddingRight:'5px!important',
+    // margin:'0px',
+    // padding:'0px!important',
+    // paddingTop:'5px!important',
+    // paddingRight:'5px!important',
     fontsize:'0.70rem!important'
   },
 
