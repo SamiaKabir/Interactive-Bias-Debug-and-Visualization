@@ -52,7 +52,7 @@ const customStyles= makeStyles((theme) => ({
   },
   chipStyle:{
     backgroundColor: '#f2f2f2!important',
-    margin:'2px!important'
+    margin:'2px!important',
   },
   chartViz:{
     color: 'black!important',

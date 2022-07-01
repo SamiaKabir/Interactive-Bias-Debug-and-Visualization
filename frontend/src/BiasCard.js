@@ -224,7 +224,7 @@ const RenderBiasCard= React.memo((props) =>{
                     <CardHeader 
                         title=
                         {
-                        <div style={{position:'relative',fontSize:'1.0rem'}}>
+                        <div style={{position:'relative',fontSize:'1.1rem'}}>
                             <span class="dot" style={{backgroundColor: backgroundColors[bias_types.indexOf(element)]}}></span>
                             Bias Type: {element.type} 
                             {showSubGroup[bias_types.indexOf(element)]?
@@ -270,7 +270,14 @@ const RenderBiasCard= React.memo((props) =>{
                                             <>
                                             {
                                                 bias_glossary_map.get(subgroup).map((keys)=> (
-                                                <Chip label={keys} variant="outlined" className={cssStyles_imported.chipStyle}
+                                                <Chip label={keys} 
+                                                sx={{
+                                                    "& .MuiChip-label": {
+                                                      fontSize:'1.1em'
+                                                    }
+                                                  }}
+                                                variant="outlined" 
+                                                className={cssStyles_imported.chipStyle}
                                                 onDelete= {(e) => {handleDelete(e,subgroup,bias_glossary_map.get(subgroup).indexOf(keys));}}
                                                 />
                                                 ))

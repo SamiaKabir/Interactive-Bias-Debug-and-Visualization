@@ -433,6 +433,7 @@ const ChordChart= React.memo((props) => {
                 .enter().append("text")
                 .attr("class", "node")
                 .attr("dy", "0.21em")
+                .style("font-size", "16px")
                 .attr("transform", function(d) { 
                     var str = d.split(".")[0];
                     var [pos_x,pos_y]=position_map.get(str);
@@ -748,7 +749,7 @@ const ChordChart= React.memo((props) => {
                     related_words.forEach((w)=>{
                         var str = w.split(".")[0];
                         let id_name= "#id"+str;
-                        d3.selectAll(id_name).style("fill","#0a0b0c").style("font-size","15px");
+                        d3.selectAll(id_name).style("fill","#0a0b0c").style("font-size","16px");
                     });
                 });
             
@@ -766,7 +767,7 @@ const ChordChart= React.memo((props) => {
                 .attr("width",function(d,i){return arc_width_in[i];})
                 .style("fill", "black")
                 .style("opacity",0.9)
-                .style("font-size","12px");
+                .style("font-size","14px");
             
 
                 // add labels for super groups
@@ -782,7 +783,7 @@ const ChordChart= React.memo((props) => {
                 .attr("width",function(d,i){return arc_width_out[i];})
                 .style("fill", "black")
                 .style("opacity",0.9)
-                .style("font-size","12px");
+                .style("font-size","14px");
 
                 d3.selectAll('.dotme').call(dotme);
 
@@ -1099,13 +1100,16 @@ const ChordChart= React.memo((props) => {
                     svg_new_2.append("g")
                     .attr("class", "x axis")
                     .attr("transform", "translate("+ 0 +","+marginbottom+")")
+                    .style("font-size","20px")
                     .call(xAxis);
+                    
 
                     // append a label for x axis
                     svg_new_2.append("text")
                     .attr("transform", "translate(" + (width/2) + " ," + (height+100) + ")")
                     .style("text-anchor", "middle")
-                    .text("Bias score for each detected bias");
+                    .text("Bias score for each detected bias")
+                    .style("font-size","18px");
 
                      //Binds data to strips
                     var drawstrips = svg_new_2.selectAll("line.percent")

@@ -62,7 +62,7 @@ function App() {
              <ArrowBackIosNewIcon style={{ marginTop: '0.5vh', marginLeft: '0.6vw',marginBottom: '0.5vh', color: 'white' }} />
          </Button>
          <div className={cssStyles.biasEditorTitle}>
-            <Typography variant="body1" align="center">
+            <Typography variant="subtitle1" align="right">
               Bias Editor
             </Typography>
          </div>

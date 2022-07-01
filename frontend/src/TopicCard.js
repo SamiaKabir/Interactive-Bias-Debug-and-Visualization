@@ -229,7 +229,7 @@ function RenderTopicCard(props) {
 
               <CardActions style={{width:"100%", paddingLeft:'0px',paddingRight:'0px'}}>
               <div style={{position:'relative',width:'100%'}}>
-                <Button variant="contained" size="small" style={{float:'right',fontSize:'0.7em'}} onClick={(e)=>{handleKeyWordTransfer(e,topics,keyWords,topics.indexOf(element))}}>
+                <Button variant="contained" size="small" style={{float:'right',fontSize:'0.8em'}} onClick={(e)=>{handleKeyWordTransfer(e,topics,keyWords,topics.indexOf(element))}}>
                   Suggest similar words
                 </Button>
               </div>
@@ -243,7 +243,14 @@ function RenderTopicCard(props) {
                       <>
                       {
                         (keyWords[topics.indexOf(element)].length>0)? 
-                        keyWords[topics.indexOf(element)].map((keys)=> <Chip label={keys} variant="outlined" className={cssStyles_imported.chipStyle}
+                        keyWords[topics.indexOf(element)].map((keys)=> <Chip label={keys} 
+                        sx={{
+                          "& .MuiChip-label": {
+                            fontSize:'1.1em'
+                          }
+                        }}
+                        variant="outlined" 
+                        className={cssStyles_imported.chipStyle}
                           onDelete= {(e) => {handleDelete(e,keyWords[topics.indexOf(element)].indexOf(keys),topics.indexOf(element));}}/>)
                         :<></>
                       }

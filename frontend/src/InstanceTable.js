@@ -95,7 +95,7 @@ function RenderInstanceTable(props) {
     const columns=[
         { field: 'id', headerName: 'id', width: '90', headerAlign: 'center',
         align: 'center' },
-        { field: 'instance', headerName: 'Instance', width: '450',
+        { field: 'instance', headerName: 'Instance', width: '500',
           renderCell: renderCellExpand,headerAlign: 'center',
           align: 'center' },
     ]; 
@@ -286,7 +286,8 @@ function RenderInstanceTable(props) {
               rowsPerPageOptions={[14]}
               headerHeight={40}
               components={{ Toolbar: CustomToolbar }}
-              sx={{height:'75%',
+              sx={{fontSize:'16px',
+                   height:'75%',
                   // borderColor:'black',
                   '& .MuiDataGrid-virtualScroller':
                   {
@@ -310,7 +311,7 @@ function RenderInstanceTable(props) {
               }}
               onCellClick={(e) => {showTableContent(e)}}
             />
-            <Card variant="outlined"  style={{height:'25%',borderColor: 'darkgrey', borderWidth: '1px',overflow:'auto' }}>
+            <Card variant="outlined"  style={{height:'25%',borderColor: 'darkgrey', borderWidth: '1px',overflow:'auto',fontSize:'16px' }}>
                {/* {currentContent} */}
 
                <CardContent>
