@@ -91,7 +91,7 @@ const customStyles= makeStyles((theme) => ({
     borderLeftColor:'#cccccc'
   },
   biasViz:{
-    color: '#3c9934!important',
+    color: '#2196f3!important',
     height:'0.8em!important',
     width:'0.8em!important',
   },

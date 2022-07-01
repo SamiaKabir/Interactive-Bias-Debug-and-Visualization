@@ -4,17 +4,19 @@ import { CssBaseline, Grid, AppBar, Box, Typography, Toolbar, Paper, Container, 
 import customStyles from './style';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
+import { styled } from '@mui/material/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoneIcon from '@mui/icons-material/Done';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import Switch from '@mui/material/Switch';
 import AddBias from './AddBiasCard';
 
 
 
 const RenderBiasCard= React.memo((props) =>{
-    // const bias_types= props.bias_types;
+    const origin_bias_types= props.bias_types;
     const bias_glossary=props.bias_glossary;
     const cssStyles_imported= customStyles();
     const onBiasUpdate=props.biasUpdate;
@@ -211,6 +213,50 @@ const RenderBiasCard= React.memo((props) =>{
         onBiasUpdate(updatedBiasData);
     };
 
+    // enable disable switch
+    const AntSwitch = styled(Switch)(({ theme }) => ({
+        width: 28,
+        height: 16,
+        marginLeft:'3px',
+        marginRight:'3px',
+        padding: 0,
+        display: 'flex',
+        '&:active': {
+          '& .MuiSwitch-thumb': {
+            width: 15,
+          },
+          '& .MuiSwitch-switchBase.Mui-checked': {
+            transform: 'translateX(9px)',
+          },
+        },
+        '& .MuiSwitch-switchBase': {
+          padding: 2,
+          '&.Mui-checked': {
+            transform: 'translateX(12px)',
+            color: '#fff',
+            '& + .MuiSwitch-track': {
+              opacity: 1,
+              backgroundColor: theme.palette.mode === 'dark' ? '#177ddc' : '#1890ff',
+            },
+          },
+        },
+        '& .MuiSwitch-thumb': {
+          boxShadow: '0 2px 4px 0 rgb(0 35 11 / 20%)',
+          width: 12,
+          height: 12,
+          borderRadius: 6,
+          transition: theme.transitions.create(['width'], {
+            duration: 200,
+          }),
+        },
+        '& .MuiSwitch-track': {
+          borderRadius: 16 / 2,
+          opacity: 1,
+          backgroundColor:
+            theme.palette.mode === 'dark' ? 'rgba(255,255,255,.35)' : 'rgba(0,0,0,.25)',
+          boxSizing: 'border-box',
+        },
+      }));
 
     // Final Rendering of the cards
     if(bias_types.length>0)
@@ -308,12 +354,20 @@ const RenderBiasCard= React.memo((props) =>{
                         <CardActions style={{padding:"0px"}}>
                             <div style={{position:'relative',width:'100%'}}>
                             <Button variant="outlined" className={cssStyles_imported.biasFooter} onClick={(e)=>{hideSubgroupRender(e,bias_types.indexOf(element))}}
-                                startIcon={<DoneIcon className={cssStyles_imported.biasViz}/>} color="success">
+                                startIcon={<DoneIcon className={cssStyles_imported.biasViz}/>} color="primary">
                                     Update
                             </Button>
-                            <Button variant="outlined" className={cssStyles_imported.biasFooter_2} onClick= {(e) => {handleBiasDelete(e,element.type);}}
-                                startIcon={<DeleteIcon className={cssStyles_imported.biasViz_2}/>} color="error">
-                                    Delete
+                            <Button variant="outlined" className={cssStyles_imported.biasFooter_2} 
+                            // onClick= {(e) => {handleBiasDelete(e,element.type);}}
+                                // startIcon={<DeleteIcon className={cssStyles_imported.biasViz_2}/>} 
+                                color="primary"
+                                >
+                                     {/* Delete */}
+                                     <Stack direction="row" spacing={1}  alignItems="center">
+                                        Disable
+                                        <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
+                                        Enable
+                                    </Stack>
                             </Button>
                         
                             </div>
