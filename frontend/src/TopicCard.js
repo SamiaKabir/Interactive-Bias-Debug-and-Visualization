@@ -33,6 +33,27 @@ function RenderTopicCard(props) {
     };
 
 
+    let allSelected=[];
+    topics.map((element) => {
+      allSelected.push(0);
+    });
+
+    console.log(allSelected);
+
+    const [isSelected, setisSelected] = useState(allSelected);
+    const handleSelection = (indx) => {
+      console.log(indx)
+      for(let i=0;i<isSelected.length;i++){
+       isSelected[i]=0
+      }
+      isSelected[indx]=1
+      
+      setisSelected(isSelected);
+      console.log(isSelected);
+      forceUpdate();
+    };
+
+
     // handle reading input for seedwords
     const [keyWord, setkeyWord]= useState("");
     const handleKeyWordInput = e => {
@@ -179,8 +200,10 @@ function RenderTopicCard(props) {
           'data': actualKeyWords[index],
           'color':color[index]
         }
+        handleSelection(index);
         setisChart(updatedChart);
         onisChartChange(updatedChart);
+        
       }
 
     
@@ -189,7 +212,10 @@ function RenderTopicCard(props) {
     if(topics.length>0){
         return topics.map((element) => 
             <>
-            <Card className={cssStyles_imported.topicCardStyle}>
+            <Card 
+            className={(isSelected[topics.indexOf(element)])?cssStyles_imported.topicCardStyle2: cssStyles_imported.topicCardStyle}
+            
+            >
             
             <CardHeader 
             title=

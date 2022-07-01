@@ -37,13 +37,23 @@ const RenderBiasCard= React.memo((props) =>{
     var render_prompts=[];
 
 
-    
     if(bias_glossary){
         Object.keys(bias_glossary).map(function(key) {
             bias_glossary_map_init.set(bias_glossary[key].word,bias_glossary[key].group)
             render_prompts.push(bias_glossary[key].word);
         });
     }
+
+     // helper array for enable disable
+    var enab_disab=[]
+    if(origin_bias_types){
+        origin_bias_types.forEach((elem)=>{
+            enab_disab.push(1);
+        })
+    }
+
+    // create state variables for enable disable array
+    const [enable_card,setEnableCard]=useState(enab_disab);
 
 
     // Use this to force rendering from child components/functions

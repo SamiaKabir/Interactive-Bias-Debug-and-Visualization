@@ -77,6 +77,13 @@ const customStyles= makeStyles((theme) => ({
     border:'solid 1.5px',
     borderColor:'darkgrey'
   },
+  topicCardStyle2:{
+    margin:'10px',
+    marginBottom:'15px',
+    borderRadius:'10px',
+    border:'solid 2.5px',
+    borderColor:'#1976d2'
+  },
   topicFooter:{
     // backgroundColor:'#e6e6e6!important',
     // color:'black!important',
