@@ -125,9 +125,12 @@ def generate_suggestions(All_Topics, All_Keywords):
     for topicWords in All_Keywords_cache:
         avg_vector = model.wv[topicWords[0]]*0
         # create average word vector from the seed words
+        topic_length = 0
         for words in topicWords:
-            avg_vector += model.wv[words]
-        avg_vector = avg_vector/len(topicWords)
+            if(words in model.vocab):
+                avg_vector += model.wv[words]
+                topic_length += 1
+        avg_vector = avg_vector/topic_length
         # Find top 15 words close to those seed words
         model_word_vector = np.array(avg_vector, dtype='f')
         related_words = (model.most_similar(
@@ -137,6 +140,11 @@ def generate_suggestions(All_Topics, All_Keywords):
             related_words_2.append(w[0])
         Suggested_words.append(related_words_2)
     # print(Suggested_words)
+
+    # # write in text file to send to lixiang
+    # with open('topics.txt', 'w') as f:
+    #     for item in Suggested_words:
+    #         f.write("%s\n" % item)
 
     return
 
@@ -223,7 +231,7 @@ def bias_init():
     subgroup_dict = {
         "word": "Male",
         "type": "Gender",
-        "group": ["he", "his", "him", "male", "man", "men", "boy", "boys"]
+        "group": ["he", "his", "him", "male", "man", "men", "boy", "boys", "Man", "guy", "guys", "Men"]
     }
     subgroup_glossary.append(subgroup_dict)
 
@@ -237,7 +245,7 @@ def bias_init():
     subgroup_dict = {
         "word": "Female",
         "type": "Gender",
-        "group": ["she", "her", "female", "woman", "women", "girl", "girls"]
+        "group": ["she", "her", "female", "woman", "women", "girl", "girls", "Woman", "Women", "girly", "feminine"]
     }
     subgroup_glossary.append(subgroup_dict)
 
@@ -300,6 +308,7 @@ def bias_init():
 
 bias_init()
 
+
 # print(model.most_similar("indian", topn=35))
 # print(model.similarity("white", "light_skinned"))
 
@@ -321,29 +330,39 @@ def calculate_bias():
             len_glossary = len(subgroup_glossary)
             Bias_Score_Array = []
             for x in range(0, len_glossary):
-                len_sb = len(subgroup_glossary[x]["group"])
-                sum = 0
-                bias_score = 0
-                for y in range(0, len_sb):
-                    if not (subgroup_glossary[x]["group"][y] in model.vocab):
-                        len_sb -= 1
-                    else:
-                        sum += model.similarity(word,
-                                                subgroup_glossary[x]["group"][y])
-                # print("word " + word + ","+" Bias Subgroup " +
-                    #   subgroup_glossary[x]["word"]+",Bias Score "+":")
-                if len_sb > 0:
-                    # print(sum/len_sb)
-                    bias_score = sum/len_sb
-                else:
-                    # print(0)
+                if(word in model.vocab):
+                    len_sb = len(subgroup_glossary[x]["group"])
+                    sum = 0
                     bias_score = 0
-                bias_score_obj = {
-                    "subgroup": subgroup_glossary[x]["word"],
-                    "type": subgroup_glossary[x]["type"],
-                    "bias_score": bias_score
-                }
-                Bias_Score_Array.append(bias_score_obj)
+                    for y in range(0, len_sb):
+                        if not (subgroup_glossary[x]["group"][y] in model.vocab):
+                            len_sb -= 1
+                        else:
+                            sum += model.similarity(word,
+                                                    subgroup_glossary[x]["group"][y])
+                    # print("word " + word + ","+" Bias Subgroup " +
+                        #   subgroup_glossary[x]["word"]+",Bias Score "+":")
+                    if len_sb > 0:
+                        # print(sum/len_sb)
+                        bias_score = sum/len_sb
+                    else:
+                        # print(0)
+                        bias_score = 0
+                    bias_score_obj = {
+                        "subgroup": subgroup_glossary[x]["word"],
+                        "type": subgroup_glossary[x]["type"],
+                        "bias_score": bias_score
+                    }
+                    Bias_Score_Array.append(bias_score_obj)
+
+                else:
+                    bias_score_obj = {
+                        "subgroup": subgroup_glossary[x]["word"],
+                        "type": subgroup_glossary[x]["type"],
+                        "bias_score": 0
+                    }
+                    Bias_Score_Array.append(bias_score_obj)
+
                 # Bias_Score_Array[word] = bias_score_obj
             Bias_Scores_Dict[word] = Bias_Score_Array
     # with open('./static/assets/jsons/bias_scores.json', "w") as json_f:
@@ -426,6 +445,9 @@ def updateBias(new_bias_array, new_subgroup_glossary):
     subgroup_glossary = new_subgroup_glossary
 
 
+# with open('glossary.txt', 'w') as f:
+#     for item in subgroup_glossary:
+#         f.write("%s\n" % subgroup_glossary)
 # Declare application
 app = Flask(__name__)
 

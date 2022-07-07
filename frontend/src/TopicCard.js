@@ -139,29 +139,36 @@ function RenderTopicCard(props) {
     
         // setTimeout(function() {
           const getSuggestions = async () => {
-          await fetch('/gettopics').then(res => res.json()).then(data => {
-            console.log(data.words);
-            console.log(data.repWords);
+            var new_words=[]
+            var new_repWords=[]
+            console.log(actualKeyWords)
+            console.log(keyWords)
+            await fetch('/gettopics').then(res => res.json()).then(data => {
+              console.log(data.words);
+              console.log(data.repWords);
 
-            for (let j = 0; j < data.repWords[indx].length; j++) {
-              if(!keyWords[indx].includes(data.repWords[indx][j])){
-                keyWords[indx].push(data.repWords[indx][j]);
-              }
-            }
-            setKeyWords(keyWords);
-            forceUpdate();
-            for (let j = 0; j < data.words[indx].length; j++) {
-              if(!actualKeyWords[indx].includes(data.words[indx][j])){
-                actualKeyWords[indx].push(data.words[indx][j]);
+              new_words=data.words
+              new_repWords=data.repWords
+            }); 
+           
+            for (let j = 0; j < new_repWords[indx].length; j++) {
+              if(!keyWords[indx].includes(new_repWords[indx][j])){
+                keyWords[indx].push(new_repWords[indx][j]);
               }
             }
             
+            // forceUpdate();
+            for (let k = 0; k < new_words[indx].length; k++) {
+              if(!actualKeyWords[indx].includes(new_words[indx][k])){
+                actualKeyWords[indx].push(new_words[indx][k]);
+              }
+            }
+            setKeyWords(keyWords);
             setActualKeyWords(actualKeyWords);
             forceUpdate();
             console.log(actualKeyWords)
             console.log(keyWords)
-          }
-          ); }
+        }
         // }, delayInMilliseconds);
         getSuggestions();
       }

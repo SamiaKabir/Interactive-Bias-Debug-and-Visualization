@@ -363,10 +363,10 @@ const RenderBiasCard= React.memo((props) =>{
                         <Divider variant="middle"  sx={{marginBottom:'5px'}}/>
                         <CardActions style={{padding:"0px"}}>
                             <div style={{position:'relative',width:'100%'}}>
-                            <Button variant="outlined" className={cssStyles_imported.biasFooter} onClick={(e)=>{hideSubgroupRender(e,bias_types.indexOf(element))}}
+                            {/* <Button variant="outlined" className={cssStyles_imported.biasFooter} onClick={(e)=>{hideSubgroupRender(e,bias_types.indexOf(element))}}
                                 startIcon={<DoneIcon className={cssStyles_imported.biasViz}/>} color="primary">
                                     Update
-                            </Button>
+                            </Button> */}
                             <Button variant="outlined" className={cssStyles_imported.biasFooter_2} 
                             // onClick= {(e) => {handleBiasDelete(e,element.type);}}
                                 // startIcon={<DeleteIcon className={cssStyles_imported.biasViz_2}/>} 
@@ -374,7 +374,7 @@ const RenderBiasCard= React.memo((props) =>{
                                 >
                                      {/* Delete */}
                                      <Stack direction="row" spacing={1}  alignItems="center">
-                                        Disable
+                                        {/* Disable */}
                                         <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
                                         Enable
                                     </Stack>

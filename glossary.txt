@@ -1,0 +1,11 @@
+{'word': 'Male', 'type': 'Gender', 'group': ['he', 'his', 'him', 'male', 'man', 'men', 'boy', 'boys', 'Man', 'guy', 'guys', 'Men']}, 
+{'word': 'Female', 'type': 'Gender', 'group': ['she', 'her', 'female', 'woman', 'women', 'girl', 'girls', 'Woman', 'Women', 'girly', 'feminine']}, 
+{'word': 'Black', 'type': 'Race', 'group': ['black', 'colored', 'blacks', 'african_american', 'dark_skinned', 'Black', 'Blacks', 'Afro', 'african']},
+{'word': 'White', 'type': 'Race', 'group': ['white', 'whites', 'caucasian', 'caucasians', 'Caucasoid', 'light_skinned', 'European', 'european', 'Caucasian']},
+{'word': 'Asian', 'type': 'Race', 'group': ['asian', 'asians', 'chinese', 'japanese', 'korean', 'Asian', 'Asians', 'China', 'Chinese', 'Japan', 'Korea']}, 
+{'word': 'Hispanic', 'type': 'Race', 'group': ['hispanic', 'hispanics', 'latino', 'latina', 'spanish', 'mexican', 'Mexico']}, 
+{'word': 'South Asian', 'type': 'Race', 'group': ['indian', 'indians', 'pakistani', 'sri_lankan', 'India', 'Nepal', 'Bangladesh']}, 
+{'word': 'High Income', 'type': 'Income', 'group': ['rich', 'wealthy', 'affluent', 'richest', 'affluence', 'advantaged', 'privileged', 'millionaire', 'billionaire']}, 
+{'word': 'Low Income', 'type': 'Income', 'group': ['poor', 'poors', 'poorer', 'poorest', 'poverty', 'needy', 'penniless', 'moneyless', 'underprivileged', 'homeless']},
+{'word': 'Mid Income', 'type': 'Income', 'group': ['middleclass', 'workingclass', 'bourgeois', 'bourgeoisie', 'Middleclass', 'Workingclass']}]
+

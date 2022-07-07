@@ -1,0 +1,2 @@
+['crimes', 'offenses', 'murder', 'murders', 'crime', 'kidnapping', 'killings', 'rapes', 'offences', 'extortion', 'homicide', 'felonies', 'arson', 'burglary', 'robbery', 'rape', 'assaults', 'robberies', 'felony', 'gangs']
+['police', 'Police', 'NYPD', 'authorities', 'corrections', 'LAPD', 'cops', 'detectives', 'plainclothes', 'officers', 'patrol', 'suspect', 'gunfire', 'Officers', 'policemen', 'gunman', 'Authorities', 'investigators', 'armed', 'witnesses']
