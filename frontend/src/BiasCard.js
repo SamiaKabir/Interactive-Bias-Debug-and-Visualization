@@ -82,6 +82,20 @@ const RenderBiasCard= React.memo((props) =>{
         forceUpdate();
     }
 
+    // set the initial value of the state variable
+    all_subgroups=[]
+    bias_types.map((element)=>{
+        all_subgroups.push(true);
+    });
+
+    //hide or show card contents based on enable switch
+    const [enableBiasType, setenableBiasType]= useState(all_subgroups);
+
+    const handleEnableDisableRender=(e,index) =>{
+        enableBiasType[index]=e.target.checked;
+        setenableBiasType(enableBiasType);
+        forceUpdate();
+    }
     //delete representative onclick
     const [bias_glossary_map, setBias_glossary_map]= useState(bias_glossary_map_init);
     const handleDelete = (e,word,indx) => {
@@ -307,6 +321,7 @@ const RenderBiasCard= React.memo((props) =>{
                     <Divider variant="middle" />
                     {(showSubGroup[bias_types.indexOf(element)])?
                     <>
+                        {(enableBiasType[bias_types.indexOf(element)])?
                         <CardContent>
                             {element.subgroup.map((subgroup)=>
                                 <div>
@@ -360,6 +375,9 @@ const RenderBiasCard= React.memo((props) =>{
                             )}
                         
                         </CardContent>
+                        :
+                        <></>
+                        }
                         <Divider variant="middle"  sx={{marginBottom:'5px'}}/>
                         <CardActions style={{padding:"0px"}}>
                             <div style={{position:'relative',width:'100%'}}>
@@ -375,7 +393,7 @@ const RenderBiasCard= React.memo((props) =>{
                                      {/* Delete */}
                                      <Stack direction="row" spacing={1}  alignItems="center">
                                         {/* Disable */}
-                                        <AntSwitch defaultChecked inputProps={{ 'aria-label': 'ant design' }} />
+                                        <AntSwitch checked={enableBiasType[bias_types.indexOf(element)]} inputProps={{ 'aria-label': 'ant design' }} onChange={(e)=>{handleEnableDisableRender(e,bias_types.indexOf(element))}} />
                                         Enable
                                     </Stack>
                             </Button>

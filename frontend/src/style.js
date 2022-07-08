@@ -116,7 +116,7 @@ const customStyles= makeStyles((theme) => ({
     width:'0.8em!important',
   },
   biasFooter_2:{
-    float:'left',
+    float:'right',
     // margin:'0px',
     // padding:'0px!important',
     // paddingTop:'5px!important',
