@@ -83,7 +83,13 @@ function App() {
                   </Typography>
                 </Toolbar>
               </AppBar>
-             <RenderBiasCard bias_types={bias_types} bias_glossary={bias_glossary} reRender={isExpand} biasUpdate={handleBiasUpdate}/>
+             <RenderBiasCard 
+             bias_types={bias_types_original} 
+             bias_glossary={bias_glossary_original} 
+             bias_types_send={bias_types} 
+             bias_glossary_send={bias_glossary} 
+             enableDisable= {enableDisable}
+             reRender={isExpand} biasUpdate={handleBiasUpdate}/>
            </Box>
         </>
         );
@@ -162,10 +168,20 @@ function App() {
 
   // Read in Bias types
   const [bias_types,setBias_types]=useState([]);
+  const [bias_types_original, setbiasTypesOriginal]=useState([]);
+
+  const [enableDisable, setEnableDisable]= useState([]);
   useEffect(() => {
     d3.json("/bias_types").then((d) => {
       setBias_types(d);
-
+      let bias_types_deep_copy = JSON.parse(JSON.stringify(d));
+      setbiasTypesOriginal(bias_types_deep_copy)
+          // set the initial value of the state variable
+      let all_subgroups=[]
+      bias_types_deep_copy.map((e)=>{
+          all_subgroups.push(true);
+      });
+      setEnableDisable(all_subgroups);
     });
     return () => undefined;
   }, []);
@@ -173,15 +189,19 @@ function App() {
 
   // Read in Bias Glossary
   const [bias_glossary,setBias_glossary]=useState([]);
+  const [bias_glossary_original,setBias_glossary_original]=useState([]);
   useEffect(() => {
     d3.json("/bias_glossary").then((d) => {
       setBias_glossary(d);
+      let bias_glossary_deep_copy = JSON.parse(JSON.stringify(d));
+      setBias_glossary_original(bias_glossary_deep_copy)
 
     });
     return () => undefined;
   }, []);
 
   // console.log(bias_glossary)
+
 
 
 
@@ -220,9 +240,10 @@ function App() {
   }
 // Receive changed bias data , Rerender chart based on bias update
 const handleBiasUpdate= (updatedBiasData)=>{
-  console.log(updatedBiasData.biasGlossary);
+  console.log(updatedBiasData);
   setBias_types(updatedBiasData.biasTypes);
   setBias_glossary(updatedBiasData.biasGlossary);
+  setEnableDisable(updatedBiasData.enableBias)
   sendNewBiasData(updatedBiasData);
   // setTimeout(() => {  getBiasDicts(); }, 2000);
   getBiasDicts();

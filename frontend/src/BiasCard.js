@@ -12,14 +12,33 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import Switch from '@mui/material/Switch';
 import AddBias from './AddBiasCard';
+import * as d3 from 'd3';
 
 
 
 const RenderBiasCard= React.memo((props) =>{
-    const origin_bias_types= props.bias_types;
     const bias_glossary=props.bias_glossary;
+    const bias_glossary_send=props.bias_glossary_send;
     const cssStyles_imported= customStyles();
     const onBiasUpdate=props.biasUpdate;
+
+    // create a state variable with the bias_types
+    const [bias_types,setBiasTypes]=useState(props.bias_types);
+
+    //hide or show card contents based on enable switch
+    const [enableBiasType, setenableBiasType]= useState(props.enableDisable);
+
+    console.log(props.enableDisable)
+
+    //  // Read in Bias types
+    // useEffect(() => {
+    // d3.json("/bias_types").then((d) => {
+    //     setBiasTypes(d);
+    // });
+    // return () => undefined;
+    // }, []);
+    // console.log(bias_types)
+
 
     const backgroundColors = ["green", "red", "blue","#7D3C98","#E74C3C","#B7950B"];
 
@@ -27,8 +46,7 @@ const RenderBiasCard= React.memo((props) =>{
     const [reRender,setRerender]= useState(props.reRender);
 
 
-    // create a state variable with the bias_types
-    const [bias_types,setBiasTypes]=useState(props.bias_types);
+    
 
     // convert the bias glossary to a javascript map
     var bias_glossary_map_init= new Map();
@@ -40,20 +58,36 @@ const RenderBiasCard= React.memo((props) =>{
     if(bias_glossary){
         Object.keys(bias_glossary).map(function(key) {
             bias_glossary_map_init.set(bias_glossary[key].word,bias_glossary[key].group)
+            
             render_prompts.push(bias_glossary[key].word);
         });
     }
 
-     // helper array for enable disable
-    var enab_disab=[]
-    if(origin_bias_types){
-        origin_bias_types.forEach((elem)=>{
-            enab_disab.push(1);
-        })
+    // convert the bias glossary to a javascript map
+    var bias_glossary_map_init_2= new Map();
+
+    if(bias_glossary_send){
+        Object.keys(bias_glossary_send).map(function(key) {
+            bias_glossary_map_init_2.set(bias_glossary_send[key].word,bias_glossary_send[key].group)
+        });
     }
 
-    // create state variables for enable disable array
-    const [enable_card,setEnableCard]=useState(enab_disab);
+    
+    // let bias_types_new = JSON.parse(JSON.stringify(bias_types));
+    // let bias_glossary_map_init_2= new Map(JSON.parse(JSON.stringify(Array.from(bias_glossary_map_init))));
+
+    // console.log(bias_glossary_map_init_2)
+    
+    // keep two send copys that will be modified on disable
+    // const [bias_types_send_copy, setbiasTypesSendCopy]=useState(bias_types_new)
+    // const [bias_glossary_send_copy,setGlossarySendCopy]=useState(bias_glossary_map_init_2)
+
+    const [bias_types_send_copy, setbiasTypesSendCopy]=useState(props.bias_types_send)
+    const [bias_glossary_send_copy,setGlossarySendCopy]=useState(bias_glossary_map_init_2)
+
+    // console.log(bias_types_send_copy)
+    // console.log(bias_glossary_send_copy)
+
 
 
     // Use this to force rendering from child components/functions
@@ -82,20 +116,7 @@ const RenderBiasCard= React.memo((props) =>{
         forceUpdate();
     }
 
-    // set the initial value of the state variable
-    all_subgroups=[]
-    bias_types.map((element)=>{
-        all_subgroups.push(true);
-    });
-
-    //hide or show card contents based on enable switch
-    const [enableBiasType, setenableBiasType]= useState(all_subgroups);
-
-    const handleEnableDisableRender=(e,index) =>{
-        enableBiasType[index]=e.target.checked;
-        setenableBiasType(enableBiasType);
-        forceUpdate();
-    }
+ 
     //delete representative onclick
     const [bias_glossary_map, setBias_glossary_map]= useState(bias_glossary_map_init);
     const handleDelete = (e,word,indx) => {
@@ -150,16 +171,16 @@ const RenderBiasCard= React.memo((props) =>{
         forceUpdate();
     };
 
-    // Delete a bias onclick
-    const handleBiasDelete = (e,bias) => {
-        e.stopPropagation();
-   
+    // Delete a bias disable from send copy
+    const handleBiasDelete = (bias) => {
+        // e.stopPropagation();
+
         // delete from subgroup glossary
-        bias_types.map((element)=>{
+        bias_types_send_copy.map((element)=>{
             if(element.type==bias){
                 element.subgroup.map((sbgroups)=>{
-                    bias_glossary_map.delete(sbgroups);
-                    setBias_glossary_map(bias_glossary_map);
+                    bias_glossary_send_copy.delete(sbgroups);
+                    setGlossarySendCopy(bias_glossary_send_copy);
                     // delete from render prompts
                     // render_prompts.splice(render_prompts.indexOf(sbgroups),1);
                     });
@@ -168,19 +189,60 @@ const RenderBiasCard= React.memo((props) =>{
 
         // delete from bias types
         var index2= -1;
-        bias_types.map((obj)=>{
+        bias_types_send_copy.map((obj)=>{
             if(obj.type==bias){
-                index2=bias_types.indexOf(obj);
+                index2=bias_types_send_copy.indexOf(obj);
             }
         });
 
         if(index2>-1){
-            bias_types.splice(index2,1);
-            setBiasTypes(bias_types);
+            bias_types_send_copy.splice(index2,1);
+            setbiasTypesSendCopy(bias_types_send_copy);
         }
         // delete from wordinput
         forceUpdate();
     };
+
+    // add bias on enable on send copy
+    const handleBiasAddEnable = (bias) => {
+
+        // add bias types
+        var index2= -1;
+        var object_to_add
+        bias_types.map((obj)=>{
+            if(obj.type==bias){
+                index2=bias_types.indexOf(obj);
+                object_to_add=JSON.parse(JSON.stringify(obj))
+            }
+        });
+
+        if(index2>-1){
+            bias_types_send_copy.splice(index2,0,object_to_add);
+            setbiasTypesSendCopy(bias_types_send_copy);
+        }
+        
+        console.log(bias_types_send_copy)
+        console.log(bias_glossary_send_copy)
+
+        // add subgroup glossary
+        bias_types_send_copy.map((element)=>{
+        if(element.type==bias){
+            element.subgroup.map((sbgroups)=>{
+                console.log(sbgroups)
+                bias_glossary_send_copy.set(sbgroups,bias_glossary_map.get(sbgroups));
+                setGlossarySendCopy(bias_glossary_send_copy);
+               
+                });
+            }
+        });
+
+        console.log(bias_glossary_send_copy)
+
+        
+        forceUpdate();
+
+    };
+
 
     // show the add bias card on click of the add bias button
     const [showAddBiasModule,setshowAddBiasModule]=useState(false);
@@ -212,17 +274,18 @@ const RenderBiasCard= React.memo((props) =>{
     const convert_map_to_list= () =>{
         var new_glossary_map=[]
 
-        bias_types.map((bias)=>{
+        console.log(bias_glossary_send_copy)
+        bias_types_send_copy.map((bias)=>{
             bias.subgroup.map((sbg)=>{
-                var obj={
-                    'word':sbg,
-                    'type':bias.type,
-                    'group': bias_glossary_map.get(sbg)
-                }
-                new_glossary_map.push(obj);
-
-            });
-
+                        var obj={
+                            'word':sbg,
+                            'type':bias.type,
+                            'group': bias_glossary_send_copy.get(sbg)
+                        }
+                        new_glossary_map.push(obj);
+        
+                    });
+            
         });
         return new_glossary_map;
 
@@ -231,11 +294,36 @@ const RenderBiasCard= React.memo((props) =>{
     const onChartRerender= (e)=>{
         const new_map=convert_map_to_list();
         const updatedBiasData={
-            'biasTypes':bias_types,
+            'biasTypes':bias_types_send_copy,
             'biasGlossary':new_map,
+            'enableBias': enableBiasType,
         }
         onBiasUpdate(updatedBiasData);
     };
+
+    // set the initial value of the state variable
+    // all_subgroups=[]
+    // bias_types.map((element)=>{
+    //     all_subgroups.push(true);
+    // });
+
+    // //hide or show card contents based on enable switch
+    // const [enableBiasType, setenableBiasType]= useState(props.enableDisable);
+
+    const handleEnableDisableRender=(e,index,bias) =>{
+        console.log(bias_glossary_send_copy)
+        enableBiasType[index]=e.target.checked;
+        setenableBiasType(enableBiasType);
+        forceUpdate();
+        if(!e.target.checked){
+            handleBiasDelete(bias);
+            forceUpdate();
+        }
+        if(e.target.checked){
+            handleBiasAddEnable(bias);
+            forceUpdate();
+        }
+    }
 
     // enable disable switch
     const AntSwitch = styled(Switch)(({ theme }) => ({
@@ -393,7 +481,7 @@ const RenderBiasCard= React.memo((props) =>{
                                      {/* Delete */}
                                      <Stack direction="row" spacing={1}  alignItems="center">
                                         {/* Disable */}
-                                        <AntSwitch checked={enableBiasType[bias_types.indexOf(element)]} inputProps={{ 'aria-label': 'ant design' }} onChange={(e)=>{handleEnableDisableRender(e,bias_types.indexOf(element))}} />
+                                        <AntSwitch checked={enableBiasType[bias_types.indexOf(element)]} inputProps={{ 'aria-label': 'ant design' }} onChange={(e)=>{handleEnableDisableRender(e,bias_types.indexOf(element),element.type)}} />
                                         Enable
                                     </Stack>
                             </Button>

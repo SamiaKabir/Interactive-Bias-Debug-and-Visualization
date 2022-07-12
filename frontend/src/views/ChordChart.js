@@ -11,9 +11,9 @@ const ChordChart= React.memo((props) => {
     const bias_dictionary=props.bias_dictionary;
     const max_bias_scores=props.max_bias_scores;
     // console.log(data)
-    // console.log(bias_types)
-    // console.log(bias_dictionary)
-    // console.log(max_bias_scores)
+    console.log(bias_types)
+    console.log(bias_dictionary)
+    console.log(max_bias_scores)
 
 
     // Read in Bias types
