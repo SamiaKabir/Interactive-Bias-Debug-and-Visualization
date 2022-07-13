@@ -29,7 +29,8 @@ const RenderBiasCard= React.memo((props) =>{
     //hide or show card contents based on enable switch
     const [enableBiasType, setenableBiasType]= useState(props.enableDisable);
 
-    console.log(props.enableDisable)
+    console.log(props.bias_types)
+    console.log(props.bias_glossary)
 
     //  // Read in Bias types
     // useEffect(() => {
@@ -145,10 +146,11 @@ const RenderBiasCard= React.memo((props) =>{
     function handleKeySubmit(event,word,index){
         if(event.key=="Enter"){
         if(!bias_glossary_map.get(word).includes(wordInputValue[index])){
-            bias_glossary_map.get(word).push(wordInputValue[index]);
             bias_glossary_send_copy.get(word).push(wordInputValue[index]);
-            setBias_glossary_map(bias_glossary_map);
             setGlossarySendCopy(bias_glossary_send_copy)
+            bias_glossary_map.get(word).push(wordInputValue[index]);
+            setBias_glossary_map(bias_glossary_map);
+            
 
         }
         wordInputValue[index]="";
@@ -266,40 +268,55 @@ const RenderBiasCard= React.memo((props) =>{
     // show the add bias card on click of the add bias button
     const [showAddBiasModule,setshowAddBiasModule]=useState(false);
     const showAddBiasCard= (e)=>{
+        
         setshowAddBiasModule(true);
     };
 
     // hide the add bias card and update new bias values upon update on addBias card
     const hideAddBiasCard= (newBias)=>{
         console.log(newBias);
+
+        // add enable disable option for new card
+        enableBiasType.push(true);
+        setenableBiasType(enableBiasType);
+
         // set new bias type
         const newType={
             'subgroup': newBias.subgroups,
             'type': newBias.name,
         }
         bias_types.push(newType);
+        bias_types_send_copy.push(newType)
 
         // set represnetative words
         for(let i=0;i<newBias.repWords.length;i++){
             bias_glossary_map.set(newBias.subgroups[i],newBias.repWords[i]);
+            bias_glossary_send_copy.set(newBias.subgroups[i],newBias.repWords[i]);
         }
+        
+  
         
         setBias_glossary_map(bias_glossary_map);
         setBiasTypes(bias_types);
+        setGlossarySendCopy(bias_glossary_send_copy);
+        setbiasTypesSendCopy(bias_types_send_copy);
         setshowAddBiasModule(false);
+
+        forceUpdate();
+
     };
 
     // convert to array from map
-    const convert_map_to_list= () =>{
+    const convert_map_to_list= (types,glossary) =>{
         var new_glossary_map=[]
 
         // console.log(bias_glossary_send_copy)
-        bias_types_send_copy.map((bias)=>{
+        types.map((bias)=>{
             bias.subgroup.map((sbg)=>{
                         var obj={
                             'word':sbg,
                             'type':bias.type,
-                            'group': bias_glossary_send_copy.get(sbg)
+                            'group':glossary.get(sbg)
                         }
                         new_glossary_map.push(obj);
         
@@ -318,10 +335,13 @@ const RenderBiasCard= React.memo((props) =>{
                 anyTrue=true
         });
         
-        const new_map=convert_map_to_list();
+        const new_map=convert_map_to_list(bias_types_send_copy,bias_glossary_send_copy);
+        const new_map_2=convert_map_to_list(bias_types,bias_glossary_map);
         const updatedBiasData={
             'biasTypes':bias_types_send_copy,
             'biasGlossary':new_map,
+            'biasTypesOriginal':bias_types,
+            'biasGlossaryOriginal':new_map_2,
             'enableBias': enableBiasType,
         }
         if(anyTrue)
@@ -358,7 +378,7 @@ const RenderBiasCard= React.memo((props) =>{
             if(e)
                 anyTrue=true
         });
-        const new_map=convert_map_to_list();
+        const new_map=convert_map_to_list(bias_types_send_copy,bias_glossary_send_copy);
         const updatedBiasData={
             'biasTypes':bias_types_send_copy,
             'biasGlossary':new_map,
@@ -547,12 +567,12 @@ const RenderBiasCard= React.memo((props) =>{
                 <></>
             }
             <div style={{position:'relative',margin:'5px'}}>
-                <Button variant="contained" color="primary" style={{fontSize:'0.9rem',paddingLeft:'20px'}} startIcon={<AddIcon />}
+                <Button variant="contained" color="primary" style={{fontSize:'0.75vw',paddingLeft:'20px'}} startIcon={<AddIcon />}
                 onClick={(e)=>{showAddBiasCard(e)}} 
                 >
                 ADD NEW BIAS
                 </Button>
-                <Button variant="contained" color="primary" style={{fontSize:'0.9rem',paddingLeft:'20px',float:'right'}} startIcon={<RestartAltIcon />}
+                <Button variant="contained" color="primary" style={{fontSize:'0.75vw',paddingLeft:'20px',float:'right'}} startIcon={<RestartAltIcon />}
                 onClick={(e)=>{onChartRerender(e)}}>
                 UPDATE
                 </Button>
@@ -571,12 +591,12 @@ const RenderBiasCard= React.memo((props) =>{
                 <></>
             }
             <div style={{position:'relative',margin:'5px'}}>
-                <Button  variant="contained" color="primary" style={{fontSize:'0.9rem',paddingLeft:'10px'}} startIcon={<AddIcon />}
+                <Button  variant="contained" color="primary" style={{fontSize:'0.75vw',paddingLeft:'10px'}} startIcon={<AddIcon />}
                  onClick={(e)=>{showAddBiasCard(e)}} 
                 >
                 ADD NEW BIAS
                 </Button>
-                <Button variant="contained"  color="primary" style={{fontSize:'0.9rem',paddingLeft:'10px',float:'right'}} startIcon={<RestartAltIcon />}
+                <Button variant="contained"  color="primary" style={{fontSize:'0.75vw',paddingLeft:'10px',float:'right'}} startIcon={<RestartAltIcon />}
                 onClick={(e)=>{onChartRerender(e)}}>
                 UPDATE
                 </Button>
