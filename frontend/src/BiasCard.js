@@ -352,14 +352,20 @@ const RenderBiasCard= React.memo((props) =>{
             handleBiasAddEnable(bias);
             forceUpdate();
         }
+        var anyTrue=false
+
+        enableBiasType.forEach((e)=>{
+            if(e)
+                anyTrue=true
+        });
         const new_map=convert_map_to_list();
         const updatedBiasData={
             'biasTypes':bias_types_send_copy,
             'biasGlossary':new_map,
             'enableBias': enableBiasType,
         }
-        
-        receiveBiasUpdate(updatedBiasData);
+        if(anyTrue)
+            receiveBiasUpdate(updatedBiasData);
         
     }
 
