@@ -21,6 +21,7 @@ const RenderBiasCard= React.memo((props) =>{
     const bias_glossary_send=props.bias_glossary_send;
     const cssStyles_imported= customStyles();
     const onBiasUpdate=props.biasUpdate;
+    const receiveBiasUpdate=props.receiveBiasUpdate;
 
     // create a state variable with the bias_types
     const [bias_types,setBiasTypes]=useState(props.bias_types);
@@ -122,6 +123,8 @@ const RenderBiasCard= React.memo((props) =>{
     const handleDelete = (e,word,indx) => {
         bias_glossary_map.get(word).splice(indx,1);
         setBias_glossary_map(bias_glossary_map);
+        bias_glossary_send_copy.get(word).splice(indx,1);
+        setGlossarySendCopy(bias_glossary_send_copy);
         forceUpdate();
     };
 
@@ -143,6 +146,10 @@ const RenderBiasCard= React.memo((props) =>{
         if(event.key=="Enter"){
         if(!bias_glossary_map.get(word).includes(wordInputValue[index])){
             bias_glossary_map.get(word).push(wordInputValue[index]);
+            bias_glossary_send_copy.get(word).push(wordInputValue[index]);
+            setBias_glossary_map(bias_glossary_map);
+            setGlossarySendCopy(bias_glossary_send_copy)
+
         }
         wordInputValue[index]="";
         setWordInputValue(wordInputValue);
@@ -155,7 +162,9 @@ const RenderBiasCard= React.memo((props) =>{
         e.stopPropagation();
         // delete from subgroup glossary
         bias_glossary_map.delete(word);
+        bias_glossary_send_copy.delete(word);
         setBias_glossary_map(bias_glossary_map);
+        setGlossarySendCopy(bias_glossary_send_copy)
         // delete from bias types
         bias_types.map((obj)=>{
             if(obj.type==bias){
@@ -166,6 +175,16 @@ const RenderBiasCard= React.memo((props) =>{
         });
 
         setBiasTypes(bias_types);
+
+        // delete from bias types_send_copy
+        bias_types_send_copy.map((obj)=>{
+            if(obj.type==bias){
+                var index2=obj.subgroup.indexOf(word);
+                obj.subgroup.splice(index2,1);
+
+            }
+        });
+        setbiasTypesSendCopy(bias_types_send_copy)
         // delete from render prompts
         // render_prompts.splice(indx,1);
         forceUpdate();
@@ -274,7 +293,7 @@ const RenderBiasCard= React.memo((props) =>{
     const convert_map_to_list= () =>{
         var new_glossary_map=[]
 
-        console.log(bias_glossary_send_copy)
+        // console.log(bias_glossary_send_copy)
         bias_types_send_copy.map((bias)=>{
             bias.subgroup.map((sbg)=>{
                         var obj={
@@ -292,13 +311,23 @@ const RenderBiasCard= React.memo((props) =>{
     };
 
     const onChartRerender= (e)=>{
+        var anyTrue=false
+
+        enableBiasType.forEach((e)=>{
+            if(e)
+                anyTrue=true
+        });
+        
         const new_map=convert_map_to_list();
         const updatedBiasData={
             'biasTypes':bias_types_send_copy,
             'biasGlossary':new_map,
             'enableBias': enableBiasType,
         }
-        onBiasUpdate(updatedBiasData);
+        if(anyTrue)
+            onBiasUpdate(updatedBiasData);
+        else
+           ;
     };
 
     // set the initial value of the state variable
@@ -323,6 +352,15 @@ const RenderBiasCard= React.memo((props) =>{
             handleBiasAddEnable(bias);
             forceUpdate();
         }
+        const new_map=convert_map_to_list();
+        const updatedBiasData={
+            'biasTypes':bias_types_send_copy,
+            'biasGlossary':new_map,
+            'enableBias': enableBiasType,
+        }
+        
+        receiveBiasUpdate(updatedBiasData);
+        
     }
 
     // enable disable switch
@@ -510,7 +548,7 @@ const RenderBiasCard= React.memo((props) =>{
                 </Button>
                 <Button variant="contained" color="primary" style={{fontSize:'0.9rem',paddingLeft:'20px',float:'right'}} startIcon={<RestartAltIcon />}
                 onClick={(e)=>{onChartRerender(e)}}>
-                RE-RENDER
+                UPDATE
                 </Button>
             </div>
         </>
@@ -534,7 +572,7 @@ const RenderBiasCard= React.memo((props) =>{
                 </Button>
                 <Button variant="contained"  color="primary" style={{fontSize:'0.9rem',paddingLeft:'10px',float:'right'}} startIcon={<RestartAltIcon />}
                 onClick={(e)=>{onChartRerender(e)}}>
-                RE-RENDER
+                UPDATE
                 </Button>
             </div>
 

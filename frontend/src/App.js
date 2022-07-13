@@ -89,7 +89,9 @@ function App() {
              bias_types_send={bias_types} 
              bias_glossary_send={bias_glossary} 
              enableDisable= {enableDisable}
-             reRender={isExpand} biasUpdate={handleBiasUpdate}/>
+             reRender={isExpand}
+             receiveBiasUpdate={receiveBiasUpdate}
+             biasUpdate={handleBiasUpdate}/>
            </Box>
         </>
         );
@@ -248,6 +250,18 @@ const handleBiasUpdate= (updatedBiasData)=>{
   // setTimeout(() => {  getBiasDicts(); }, 2000);
   getBiasDicts();
 } 
+
+// Receive changed bias data 
+const receiveBiasUpdate= (updatedBiasData)=>{
+  console.log(updatedBiasData);
+  setBias_types(updatedBiasData.biasTypes);
+  setBias_glossary(updatedBiasData.biasGlossary);
+  setEnableDisable(updatedBiasData.enableBias)
+  sendNewBiasData(updatedBiasData);
+  // setTimeout(() => {  getBiasDicts(); }, 2000);
+  getBiasDicts();
+} 
+
 
 
   // Main Body Grid layout
