@@ -14,6 +14,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.tokenize import RegexpTokenizer
 from flask_restful import Api, Resource, reqparse
 from similar_words import remove_similar_words
+import re
 # from flask_cors import CORS  # comment this on deployment
 # from api.ApiHandler import ApiHandler
 
@@ -158,34 +159,51 @@ def reassign_suggestions(All_Keywords):
 
 
 # Search for matching Instances
-# global All_Instances
-
-# All_Instances = []
+global All_Instances
+global All_Instance_contents
+All_Instances = []
+All_Instance_contents = []
 
 
 def search_Instance():
     global Suggested_words
-    All_Instances = []
-    All_Instance_contents = []
+    global All_Instances
+    global All_Instance_contents
+    # All_Instances = []
+    # All_Instance_contents = []
+    topic_length = len(Suggested_words)
+    current_length = len(All_Instances)
 
-    for per_topics in Suggested_words:
+    for xx in range(current_length, topic_length):
+        per_topics = Suggested_words[xx]
         per_topic_arr = []
         content_arr = []
         sentence_count = 0
+        pattern = ""
+        # for per_words in per_topics:
+        for i in range(0, len(per_topics)):
+            if(i < len(per_topics)-1):
+                pattern += str(" "+per_topics[i]+" "+"|")
+            else:
+                pattern += str(" "+per_topics[i]+" ")
+
+        # print(pattern)
         for doc_sentences in docs:
             content_sentence = contents[sentence_count]
-            for per_words in per_topics:
-                if (" "+per_words+" ") in (" "+doc_sentences+" "):
-                    # ''.join(doc_sentences.split()):
-                    # per_topic_arr.append(doc_sentences)
-                    per_topic_arr.append(docs[sentence_count])
-                    content_arr.append(contents[sentence_count])
-                    # print("true")
-                    break
-                elif (" "+per_words+" ") in (" "+str(content_sentence)+" "):
-                    per_topic_arr.append(docs[sentence_count])
-                    content_arr.append(contents[sentence_count])
-                    break
+
+            if re.search(pattern, (" "+doc_sentences+" ")):
+                # if (" "+per_words+" ") in (" "+doc_sentences+" "):
+
+                # ''.join(doc_sentences.split()):
+                # per_topic_arr.append(doc_sentences)
+                per_topic_arr.append(docs[sentence_count])
+                content_arr.append(contents[sentence_count])
+                # print("true")
+                # break
+            elif re.search(pattern, (" "+str(content_sentence)+" ")):
+                per_topic_arr.append(docs[sentence_count])
+                content_arr.append(contents[sentence_count])
+                # break
             sentence_count += 1
 
         All_Instances.append(per_topic_arr)
@@ -516,14 +534,14 @@ def biasGlossaryData():
 #     return jsonify(Max_Bias_Dict)
 
 
-@app.route('/time')
+@ app.route('/time')
 def get_current_time():
     return {'time': time.time()}
 
 # read in keywords from client
 
 
-@app.route('/topics', methods=['POST'])
+@ app.route('/topics', methods=['POST'])
 def topicRdfn():
     # POST request
     if request.method == 'POST':
@@ -534,7 +552,7 @@ def topicRdfn():
         return 'Sucesss', 200
 
 
-@app.route('/posttopics', methods=['POST'])
+@ app.route('/posttopics', methods=['POST'])
 def posttopicRdfn():
     # POST request
     if request.method == 'POST':
@@ -544,7 +562,7 @@ def posttopicRdfn():
         return 'Sucesss', 200
 
 
-@app.route('/gettopics', methods=['GET'])
+@ app.route('/gettopics', methods=['GET'])
 def get_topic():
     time.sleep(1)
     # global Suggested_words
@@ -558,19 +576,19 @@ def get_topic():
     return {'words': Suggested_words, 'repWords': lemmatize_words}
 
 
-@app.route('/getinstances', methods=['GET'])
+@ app.route('/getinstances', methods=['GET'])
 def get_instances():
     all_Instances = search_Instance()
     return {'instances': all_Instances[0], 'contents': all_Instances[1]}
 
 
-@app.route('/getbiases', methods=['GET'])
+@ app.route('/getbiases', methods=['GET'])
 def get_biases():
     all_biases = calculate_bias()
     return {'biases': all_biases[0], 'max_biases': all_biases[1]}
 
 
-@app.route('/biasupdates', methods=['POST'])
+@ app.route('/biasupdates', methods=['POST'])
 def biasUpdateRdfn():
     # POST request
     if request.method == 'POST':
@@ -583,12 +601,12 @@ def biasUpdateRdfn():
         return 'Sucesss', 200
 
 
-@app.route('/selectmodel', methods=['POST'])
+@ app.route('/selectmodel', methods=['POST'])
 def selectModelfn():
     # POST request
     if request.method == 'POST':
         request_data = request.get_json()
-        print(request_data)
+        # print(request_data)
         changeModel(request_data)
         return 'Sucesss', 200
 
