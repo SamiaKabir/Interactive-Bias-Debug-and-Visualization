@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import PropTypes from 'prop-types';
-import { CssBaseline, Paper, Box, Container, Button, IconButton,TextField,Typography,Popper, Card, CardContent} from '@mui/material';
+import { CssBaseline, Paper, Stack, Box, Container, Button, IconButton,TextField,Typography,Popper, Card, CardContent} from '@mui/material';
 import { DataGrid, GridToolbar,  GridToolbarContainer,GridToolbarColumnsButton, GridToolbarFilterButton,GridToolbarExport,GridToolbarDensitySelector } from '@mui/x-data-grid';
 import customStyles from './style';
 import Highlighter from 'react-highlight-exact-words';
@@ -285,7 +285,14 @@ function RenderInstanceTable(props) {
               pageSize={14}
               rowsPerPageOptions={[14]}
               headerHeight={40}
-              components={{ Toolbar: CustomToolbar }}
+              components={{ Toolbar: CustomToolbar, 
+                NoRowsOverlay: () => (
+                  <Stack height="100%" alignItems="center" justifyContent="center">
+                    Loading data from Server ...
+                  </Stack>
+                ),
+              }}
+              
               sx={{fontSize:'16px',
                    height:'75%',
                   // borderColor:'black',
