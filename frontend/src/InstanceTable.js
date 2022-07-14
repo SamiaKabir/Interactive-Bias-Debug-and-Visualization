@@ -64,7 +64,7 @@ function RenderInstanceTable(props) {
 
 
   const getHighlightTag = () => ({ children, highlightIndex }) => {
-    const backgroundColors = ["green", "red", "blue","#7D3C98","#E74C3C","#B7950B"];
+    const backgroundColors = ["green", "red", "blue","#7D3C98","#eb6e60","#B7950B","#ff00ff","#800000","#5c5c8a","#006666","#999966"];
 
     for(var i=0;i<glossar_array.length;i++){
       if (glossar_array[i].includes(children))

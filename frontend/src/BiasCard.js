@@ -42,7 +42,7 @@ const RenderBiasCard= React.memo((props) =>{
     // console.log(bias_types)
 
 
-    const backgroundColors = ["green", "red", "blue","#7D3C98","#E74C3C","#B7950B"];
+    const backgroundColors = ["green", "red", "blue","#7D3C98","#eb6e60","#B7950B","#ff00ff","#800000","#5c5c8a","#006666","#999966"];
 
     
     const [reRender,setRerender]= useState(props.reRender);
