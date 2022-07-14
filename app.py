@@ -173,6 +173,7 @@ def search_Instance():
         content_arr = []
         sentence_count = 0
         for doc_sentences in docs:
+            content_sentence = contents[sentence_count]
             for per_words in per_topics:
                 if (" "+per_words+" ") in (" "+doc_sentences+" "):
                     # ''.join(doc_sentences.split()):
@@ -180,6 +181,10 @@ def search_Instance():
                     per_topic_arr.append(docs[sentence_count])
                     content_arr.append(contents[sentence_count])
                     # print("true")
+                    break
+                elif (" "+per_words+" ") in (" "+str(content_sentence)+" "):
+                    per_topic_arr.append(docs[sentence_count])
+                    content_arr.append(contents[sentence_count])
                     break
             sentence_count += 1
 
