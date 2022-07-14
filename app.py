@@ -187,7 +187,7 @@ def search_Instance():
             else:
                 pattern += str(" "+per_topics[i]+" ")
 
-        # print(pattern)
+        print(pattern)
         for doc_sentences in docs:
             content_sentence = contents[sentence_count]
 
@@ -221,6 +221,10 @@ subgroup_glossary = []
 
 
 def bias_init():
+    global All_Instances
+    global All_Instance_contents
+    All_Instances = []
+    All_Instance_contents = []
     global bias_array
     global subgroup_glossary
     bias_array = []
