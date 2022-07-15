@@ -288,7 +288,7 @@ function RenderInstanceTable(props) {
               components={{ Toolbar: CustomToolbar, 
                 NoRowsOverlay: () => (
                   <Stack height="100%" alignItems="center" justifyContent="center">
-                    Loading data from Server ...
+                    Searching for Matching Instances ...
                   </Stack>
                 ),
               }}
