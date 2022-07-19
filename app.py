@@ -15,6 +15,7 @@ from nltk.tokenize import RegexpTokenizer
 from flask_restful import Api, Resource, reqparse
 from similar_words import remove_similar_words
 import re
+import string
 # from flask_cors import CORS  # comment this on deployment
 # from api.ApiHandler import ApiHandler
 
@@ -82,9 +83,11 @@ def changeModel(selectedModel):
             "Tuned_model_wv.wordvectors", mmap='r')
 
     elif selectedModel == 2:
-        # # Load Pretrained Glove model
+        # # Load Pretrained Glove model vectors
         # print(list(gensim.downloader.info()['models'].keys()))
-        model = gensim.downloader.load('glove-twitter-25')
+        # model = gensim.downloader.load('glove-twitter-25')
+        model = models.KeyedVectors.load(
+            "./glove_vectors/Glove_model_wv.wordvectors", mmap='r')
 
 # elif selectedModel==3:
     # load bert data
@@ -138,7 +141,8 @@ def generate_suggestions(All_Topics, All_Keywords):
             positive=[model_word_vector], topn=20))
         related_words_2 = []
         for w in related_words:
-            related_words_2.append(w[0])
+            new_word = re.sub(r'[^\w\s]', '', w[0])
+            related_words_2.append(new_word)
         Suggested_words.append(related_words_2)
     # print(Suggested_words)
 
