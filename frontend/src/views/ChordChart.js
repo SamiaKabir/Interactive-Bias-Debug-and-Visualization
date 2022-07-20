@@ -10,10 +10,11 @@ const ChordChart= React.memo((props) => {
     const bias_types=props.bias_types;
     const bias_dictionary=props.bias_dictionary;
     const max_bias_scores=props.max_bias_scores;
+    const onFilterUpdate= props.onfilterUpdate;
     // console.log(data)
-    console.log(bias_types)
-    console.log(bias_dictionary)
-    console.log(max_bias_scores)
+    // console.log(bias_types)
+    // console.log(bias_dictionary)
+    // console.log(max_bias_scores)
 
 
     // Read in Bias types
@@ -751,6 +752,37 @@ const ChordChart= React.memo((props) => {
                         let id_name= "#id"+str;
                         d3.selectAll(id_name).style("fill","#0a0b0c").style("font-size","16px");
                     });
+                })
+                .on("click",function(event,d){
+                    d3.select(this).style("opacity",1.0);
+                    var classname="."+d3.select(this).attr('class');
+                    d3.selectAll(classname).style("opacity",1.0); 
+                    var index_in_bias_map= Color_Matrix[d.source.index][d.target.index];
+                    var c=d;
+                    // console.log(d)
+                    // console.log(index_in_bias_map)
+
+                    // find the bias by using this index from bias_id_map
+                    var bias_key
+                    for (let [key, value] of bias_id_map) {
+                        if(value==index_in_bias_map){
+                            bias_key=key
+                        }
+                    }
+
+                    let related_words=onclick_bias_map.get(bias_key)
+                    // console.log(bias_key)
+                
+                    // Highlight those words
+                    related_words.forEach((w)=>{
+                        var str = w.split(".")[0];
+                        let id_name= "#id"+str;
+                        let this_color= d3.select(this).attr('fill');
+                        d3.selectAll(id_name).style("fill",this_color).style("font-size","18px").style("font-weight","400");
+                        // .style("font-weight","400");
+                    });
+
+                    onFilterUpdate(related_words)
                 });
             
                 // add labels
@@ -1174,7 +1206,7 @@ const ChordChart= React.memo((props) => {
 
 
         },
-        [data,bias_types,bias_dictionary,max_bias_scores]
+        [data,bias_types,bias_dictionary,max_bias_scores,onFilterUpdate]
     );
 
     return(

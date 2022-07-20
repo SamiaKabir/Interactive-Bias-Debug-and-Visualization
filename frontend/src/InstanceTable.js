@@ -16,6 +16,9 @@ function RenderInstanceTable(props) {
   const H_color=props.H_color;
   const maximum_biases=props.max_biases;
   const all_glossary= props.glossary;
+  const filter_keywords=props.filter_keywords;
+
+  console.log(filter_keywords)
 
 
   // Use this to force rendering from child components/functions

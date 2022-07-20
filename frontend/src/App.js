@@ -169,6 +169,17 @@ function App() {
   }
   
 
+  // state variable to pass the filter terms for instance table from the chord chart
+  const [Filter_instances, setFilter_instances]=useState([]);
+
+  const handleFilterChange = (updatedFilter) => {
+    console.log(updatedFilter)
+    setFilter_instances(updatedFilter);
+  };
+
+  
+
+
   // Read in Bias types
   const [bias_types,setBias_types]=useState([]);
   const [bias_types_original, setbiasTypesOriginal]=useState([]);
@@ -325,7 +336,8 @@ const receiveBiasUpdate= (updatedBiasData)=>{
             <Paper variant="outlined" square  className={cssStyles.middlePanels}>
               <RenderInstanceTable keyWords={instanceData} index={instanceIndex} All_instances={All_instances} 
               All_contents={All_instance_contents} H_color={hightlighColor} 
-              max_biases={All_biases.max_biases} glossary={bias_glossary}/>
+              max_biases={All_biases.max_biases} glossary={bias_glossary}
+              filter_keywords={Filter_instances}/>
             </Paper>
           </Grid>
 
@@ -334,7 +346,8 @@ const receiveBiasUpdate= (updatedBiasData)=>{
             <Paper variant="outlined" square className={cssStyles.middlePanels2}>
               <Paper variant="outlined" className={cssStyles.chartPanel}>
                  <div id="chordChart" style={{height:'100%'}}>
-                      <ChordChart data={chartData} bias_types={bias_types} bias_dictionary={All_biases.biases} max_bias_scores={All_biases.max_biases}/>
+                      <ChordChart data={chartData} bias_types={bias_types} bias_dictionary={All_biases.biases} max_bias_scores={All_biases.max_biases}
+                      onfilterUpdate={handleFilterChange}/>
                  </div>
               </Paper> 
               {/* <Paper variant="outlined" className={cssStyles.barPanel}/> */}
