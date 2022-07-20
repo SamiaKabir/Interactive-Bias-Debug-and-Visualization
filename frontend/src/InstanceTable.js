@@ -105,14 +105,90 @@ function RenderInstanceTable(props) {
       
     const rows = [];
     var count=1;
+    const filtered_instances=[]
+    const filtered_contents=[]
+
+
+    if(All_instances){
+      All_instances.forEach((e)=>{
+        filtered_instances.push([])
+        filtered_contents.push([])
+      })
+    }
+
+    // console.log(filtered_instances)
+
+    var filter_regex=""
+ 
+
+    if(filter_keywords){
+      if(filter_keywords.length>0){
+      for (var i=0;i<filter_keywords.length-1;i++){
+          filter_regex=filter_regex+filter_keywords[i];
+          filter_regex=filter_regex+"|";
+        }
+      
+      filter_regex=filter_regex+filter_keywords[filter_keywords.length-1];
+      }
+      
+    }
+
+    // filter_regex=filter_regex+"/";
+    const final_filter_regex= new RegExp(filter_regex, 'g')
+    
+    // const [final_filter_regex,setfinal_filter_regex]=useState(final_regex)
+    
+
+    console.log(final_filter_regex)
+    
+    
+    // if(str.match( /word1|word2/g )){
+    //   var matches = str.match(final_filter_regex);
+    //   console.log(matches)
+    // }
 
     
     // console.log(All_instances.at(index))
     // console.log(index)
+  
+
+    if(All_instances && All_contents){
+      if(All_instances.length>index && All_contents.length>index){
+        for(var i=0; i<All_instances.at(index).length;i++){
+          var sentences=All_instances.at(index).at(i)
+          var contents=All_contents.at(index).at(i)
+          if(sentences.match(final_filter_regex)){
+            // console.log(filtered_instances)
+            filtered_instances.at(index).push(sentences);
+            filtered_contents.at(index).push(contents);
+          
+          }
+          else if(contents.match(final_filter_regex)){
+            filtered_instances.at(index).push(sentences);
+            filtered_contents.at(index).push(contents);
+          }
+        }
+        All_instances.at(index).map((sentences)=>{
+          
+              
+        })
+     }
+    }
+
+  // Do the filtering based on the keywords received
+
+  // if(All_instances){
+  //   if(All_instances.length>index){
+  //     All_instances.at(index).map((sentences)=>{
+  //           filtered_instances.at(index).push(sentences)
+  //     })
+  //  }
+  // }  
+  
     
-    if(All_instances){
-        if(All_instances.length>index){
-            All_instances.at(index).map((sentences)=>{
+    if(All_instances && filtered_instances){
+        if(filtered_instances.length>index){
+          filtered_instances.at(index).map((sentences)=>{
                 rows.push(createData(count,sentences));
                 count++;     
             })
@@ -123,7 +199,7 @@ function RenderInstanceTable(props) {
     const showTableContent= (e)=>{
       var content_indx=e.id-1;
       // currentContent=All_contents.at(index).at(content_indx);
-      setCurrentContent(All_contents.at(index).at(content_indx));
+      setCurrentContent(filtered_contents.at(index).at(content_indx));
     }
 
     // generate custom toolbar for the data grid
