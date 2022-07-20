@@ -95,7 +95,7 @@ function RenderInstanceTable(props) {
     const columns=[
         { field: 'id', headerName: 'id', width: '90', headerAlign: 'center',
         align: 'center' },
-        { field: 'instance', headerName: 'Instance', width: '500',
+        { field: 'instance', headerName: 'Article Title', width: '500',
           renderCell: renderCellExpand,headerAlign: 'center',
           align: 'center' },
     ]; 
@@ -323,7 +323,7 @@ function RenderInstanceTable(props) {
 
                <CardContent>
                   <Typography color="textSecondary" gutterBottom>
-                    News Content
+                    Article Content
                   </Typography>
                   {currentContent?
                                  <Highlighter
