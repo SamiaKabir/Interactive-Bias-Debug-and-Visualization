@@ -9,7 +9,7 @@ import { lightBlue } from '@mui/material/colors';
 
 
 function RenderInstanceTable(props) {
-  const keyWords=props.keyWords;
+  const keyWords_highlight=props.keyWords;
   const index= props.index;
   const All_instances=props.All_instances;
   const All_contents=props.All_contents;
@@ -18,7 +18,19 @@ function RenderInstanceTable(props) {
   const all_glossary= props.glossary;
   const filter_keywords=props.filter_keywords;
 
-  console.log(filter_keywords)
+  console.log(keyWords_highlight)
+
+
+  var keyWords
+
+  if(keyWords_highlight){
+    if(filter_keywords && filter_keywords.length>0){
+      keyWords=filter_keywords
+    }
+    else{
+      keyWords=keyWords_highlight
+    }
+  }
 
 
   // Use this to force rendering from child components/functions
