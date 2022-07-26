@@ -17,6 +17,10 @@ function RenderInstanceTable(props) {
   const maximum_biases=props.max_biases;
   const all_glossary= props.glossary;
   const filter_keywords=props.filter_keywords;
+  const glossary_original=props.glossary_original;
+
+  
+
 
   // console.log(keyWords_highlight)
 
@@ -58,6 +62,20 @@ function RenderInstanceTable(props) {
     }
   });
 
+  var glossary_map_original= new Map();
+
+  glossary_original.forEach((obj)=>{
+    if(glossary_map_original.has(obj.type)){
+      var new_arr= glossary_map_original.get(obj.type).concat(obj.group);
+      glossary_map_original.set(obj.type,new_arr);
+    }
+    else{
+      glossary_map_original.set(obj.type,obj.group)
+    }
+  });
+
+  
+
   var glossar_array=[]
   var all_glossary_word=[]
   var all_words= keyWords
@@ -78,11 +96,21 @@ function RenderInstanceTable(props) {
   }
 
 
+  var glossar_array_original=[]
+
+  if(glossary_map_original){
+    for (let [key, value] of glossary_map_original) {
+      glossar_array_original.push(value)
+    }
+  }
+
+
   const getHighlightTag = () => ({ children, highlightIndex }) => {
     const backgroundColors = ["green", "red", "blue","#7D3C98","#eb6e60","#B7950B","#ff00ff","#800000","#5c5c8a","#006666","#999966"];
 
-    for(var i=0;i<glossar_array.length;i++){
-      if (glossar_array[i].includes(children))
+   
+    for(var i=0;i<glossar_array_original.length;i++){
+      if (glossar_array_original[i].includes(children))
         return (
           <mark
             style={{

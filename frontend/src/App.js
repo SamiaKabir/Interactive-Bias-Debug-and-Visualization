@@ -338,7 +338,7 @@ const receiveBiasUpdate= (updatedBiasData)=>{
               <RenderInstanceTable keyWords={instanceData} index={instanceIndex} All_instances={All_instances} 
               All_contents={All_instance_contents} H_color={hightlighColor} 
               max_biases={All_biases.max_biases} glossary={bias_glossary}
-              filter_keywords={Filter_instances}/>
+              filter_keywords={Filter_instances} glossary_original={bias_glossary_original} />
             </Paper>
           </Grid>
 
