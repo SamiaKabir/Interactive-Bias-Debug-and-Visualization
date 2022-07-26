@@ -1206,7 +1206,8 @@ const ChordChart= React.memo((props) => {
 
 
         },
-        [data,bias_types,bias_dictionary,max_bias_scores,onFilterUpdate]
+        [data,bias_types,bias_dictionary,max_bias_scores]
+        // [data,bias_types,bias_dictionary,max_bias_scores,onFilterUpdate]
     );
 
     return(

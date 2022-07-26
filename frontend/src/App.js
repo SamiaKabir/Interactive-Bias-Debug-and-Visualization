@@ -175,6 +175,7 @@ function App() {
   const handleFilterChange = (updatedFilter) => {
     console.log(updatedFilter)
     setFilter_instances(updatedFilter);
+    setInstanceData(updatedFilter)
   };
 
   
