@@ -195,7 +195,7 @@ def search_Instance():
         for doc_sentences in docs:
             content_sentence = contents[sentence_count]
 
-            if re.search(pattern, (" "+doc_sentences+" ")):
+            if re.search(pattern, (" "+str(doc_sentences)+" ")):
                 # if (" "+per_words+" ") in (" "+doc_sentences+" "):
 
                 # ''.join(doc_sentences.split()):

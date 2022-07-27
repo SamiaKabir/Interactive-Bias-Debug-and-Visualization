@@ -6,6 +6,8 @@ __pycache__
 *.csv
 Tuned_model_wv.wordvectors
 Tuned_model_wv.wordvectors.vectors.npy
+Tuned_model_wv_2.wordvectors
+Tuned_model_wv_2.wordvectors.vectors.npy
 vectors.bin
 vectors.txt
 Glove_model_wv.wordvectors
