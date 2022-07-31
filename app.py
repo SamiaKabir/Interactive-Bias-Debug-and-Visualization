@@ -74,6 +74,11 @@ global model
 model = models.KeyedVectors.load("Tuned_model_wv.wordvectors", mmap='r')
 
 
+def setModelInit():
+    global model
+    model = models.KeyedVectors.load("Tuned_model_wv.wordvectors", mmap='r')
+
+
 def changeModel(selectedModel):
     global model
     if selectedModel == 1:
@@ -532,6 +537,7 @@ def biasTypeData():
 @ app.route('/bias_glossary', methods=['GET'])
 def biasGlossaryData():
     bias_init()
+    setModelInit()
     global subgroup_glossary
     return jsonify(subgroup_glossary)
 

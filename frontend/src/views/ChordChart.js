@@ -299,7 +299,8 @@ const ChordChart= React.memo((props) => {
                         value.forEach((word)=>{
                             var tmp_array=Max_Bias_map.get(word);
                             tmp_array.forEach((obj)=>{
-                                agg_bias_score+=obj.bias_score;
+                            	if(obj.subgroup==sub_groups[0])
+                                	agg_bias_score+=obj.bias_score;
                             });
             
                         });
