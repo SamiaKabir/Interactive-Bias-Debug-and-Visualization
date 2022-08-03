@@ -149,8 +149,8 @@ function App() {
    // get the matching news contents from backend
   const [All_instance_contents, setAll_instance_contents]=useState([]);
 
-  const getInstances = async () => {
-      await fetch('/getinstances').then(res => res.json()).then(data => {
+  const getInstances = async (index) => {
+      await fetch('/getinstances?param1='+index).then(res => res.json()).then(data => {
           // console.log(data.instances);
           setAll_instances(data.instances)
           setAll_instance_contents(data.contents)
@@ -232,7 +232,7 @@ function App() {
     setInstanceData(updatedChart.data);
     setInstanceIndex(updatedChart.index)
     setHightlighColor(updatedChart.color)
-    getInstances();
+    getInstances(updatedChart.index);
     getBiasDicts();
   };
 

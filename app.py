@@ -110,10 +110,12 @@ def changeModel(selectedModel):
 global All_Topics_cache
 global All_Keywords_cache
 global Suggested_words
+global Updated_Suggested_words
 
 All_Topics_cache = []
 All_Keywords_cache = []
 Suggested_words = []
+Updated_Suggested_words = []
 
 # generate suggestions based on keywords
 
@@ -174,14 +176,43 @@ All_Instances = []
 All_Instance_contents = []
 
 
-def search_Instance():
+def search_Instance(index_to_search):
     global Suggested_words
     global All_Instances
     global All_Instance_contents
+    global Updated_Suggested_words
     # All_Instances = []
     # All_Instance_contents = []
+
     topic_length = len(Suggested_words)
     current_length = len(All_Instances)
+    search_flag = False
+
+    if(len(Updated_Suggested_words) == 0):
+        search_flag = True
+        Updated_Suggested_words = Suggested_words
+
+    elif(len(Updated_Suggested_words) <= index_to_search):
+        search_flag = True
+        Updated_Suggested_words = Suggested_words
+
+    elif (len(Updated_Suggested_words) > index_to_search):
+        if(len(Updated_Suggested_words[index_to_search]) != len(Suggested_words[index_to_search])):
+            search_flag = True
+            topic_length = index_to_search+1
+            current_length = index_to_search
+            Updated_Suggested_words = Suggested_words
+            # All_Instances[index_to_search] = []
+            # All_Instance_contents[index_to_search] = []
+        else:
+            for i in range(0, len(Updated_Suggested_words[index_to_search])):
+                if Updated_Suggested_words[index_to_search][i] != Suggested_words[index_to_search][i]:
+                    search_flag = True
+                    topic_length = index_to_search+1
+                    current_length = index_to_search
+                    Updated_Suggested_words = Suggested_words
+                    # All_Instances[index_to_search] = []
+                    # All_Instance_contents[index_to_search] = []
 
     for xx in range(current_length, topic_length):
         per_topics = Suggested_words[xx]
@@ -189,6 +220,14 @@ def search_Instance():
         content_arr = []
         sentence_count = 0
         pattern = ""
+
+        if(len(All_Instances) <= xx):
+            All_Instances.append([])
+            All_Instance_contents.append([])
+        else:
+            All_Instances[xx] = []
+            All_Instance_contents[xx] = []
+
         # for per_words in per_topics:
         for i in range(0, len(per_topics)):
             if(i < len(per_topics)-1):
@@ -215,8 +254,8 @@ def search_Instance():
                 # break
             sentence_count += 1
 
-        All_Instances.append(per_topic_arr)
-        All_Instance_contents.append(content_arr)
+        All_Instances[xx] = per_topic_arr
+        All_Instance_contents[xx] = content_arr
 
     return All_Instances, All_Instance_contents
 
@@ -596,7 +635,8 @@ def get_topic():
 
 @ app.route('/getinstances', methods=['GET'])
 def get_instances():
-    all_Instances = search_Instance()
+    search_index = request.args.get("param1")
+    all_Instances = search_Instance(int(search_index))
     return {'instances': all_Instances[0], 'contents': all_Instances[1]}
 
 
