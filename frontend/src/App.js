@@ -321,7 +321,8 @@ const receiveBiasUpdate= (updatedBiasData)=>{
           <Grid item  md={size[0]}>  
             <Paper  className={cssStyles.leftRightPanel} variant="outlined" square >
               <Paper component="form" sx={{ p: '1px 1px', display: 'flex', alignItems: 'center',margin: '2px 2px 4px 1px',backgroundColor:'#EEEEEE'}}>
-                <InputBase sx={{ ml: 1, flex: 1, backgroundColor:'white'}} placeholder="Add New Topic" inputProps={{ 'aria-label': 'add new topic' }} 
+                Topic Name:
+                <InputBase sx={{ ml: 1, flex: 1, backgroundColor:'white'}} placeholder=" Add a New Topic Here" inputProps={{ 'aria-label': 'add new topic' }} 
                 onChange={handleTopicInput} onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}/>
                 <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
                 <IconButton  sx={{ p: '10px' }} aria-label="add" onClick={handleAddTopicCard}>

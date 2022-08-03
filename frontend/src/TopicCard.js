@@ -199,17 +199,24 @@ function RenderTopicCard(props) {
 
       // handle new chart render
       const handleChartRender=(e,index) =>{
-        console.log(actualKeyWords)
-        console.log(keyWords)
-        handlePostKeyWordTransfer(e,index);
-        const updatedChart={
-          'index':index,
-          'data': actualKeyWords[index],
-          'color':color[index]
+        // console.log(actualKeyWords)
+        // console.log(keyWords)
+        if(actualKeyWords.length==0 || actualKeyWords.length<=index){
+          console.log("here")
+          alert("Please enter at least one topic word!");
         }
-        handleSelection(index);
-        setisChart(updatedChart);
-        onisChartChange(updatedChart);
+
+        else {
+          handlePostKeyWordTransfer(e,index);
+          const updatedChart={
+            'index':index,
+            'data': actualKeyWords[index],
+            'color':color[index]
+          }
+          handleSelection(index);
+          setisChart(updatedChart);
+          onisChartChange(updatedChart);
+        }
         
       }
 
@@ -243,17 +250,19 @@ function RenderTopicCard(props) {
             <CardContent>
               {/* Keyword input prompt */}
               <div style={{alignItems:'center'}}>
+              Topic Word:  
                 <TextField
                   size="small"
-                  placeholder='Add seed word'
+                  placeholder='Add a topic word'
                   style={{
                      width:'100%',  
                     '&:active': {
                      backgroundColor:"#e6e6e6",
                      border: "black",
                      },
+                     marginTop:'7px',
                   }}
-                  label="Press Enter(⏎)to add seed word"
+                  label="Click to add a Topic Word, Enter(⏎) to Submit"
                   onChange={handleKeyWordInput}
                   onKeyDown={(e)=>{handleKeySubmit(e,topics.indexOf(element))}}
                 />
