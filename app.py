@@ -669,5 +669,14 @@ def selectModelfn():
         return 'Sucesss', 200
 
 
+@ app.route('/logclick', methods=['POST'])
+def logClickonApp():
+    # POST request
+    if request.method == 'POST':
+        log_data = request.get_json()
+        print("panel:"+str(log_data))
+        return 'Sucesss', 200
+
+
 if __name__ == "__main__":
     app.run(debug=True)

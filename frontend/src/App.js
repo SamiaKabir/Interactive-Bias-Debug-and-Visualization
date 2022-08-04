@@ -277,6 +277,27 @@ const receiveBiasUpdate= (updatedBiasData)=>{
   getBiasDicts();
 } 
 
+// instrumenting the app
+const instrumenting= (e, panel) => {
+  console.log(panel);
+  fetch('/logclick', {
+    // Declare what type of data we're sending
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    // Specify the method
+    method: 'POST',
+    // A JSON payload
+    body: JSON.stringify(panel)
+    }).then(function (response) {
+    return response.text();
+    }).then(function (text) {
+ });
+
+}
+
+
+
 
   // Main Body Grid layout
   return (
@@ -316,7 +337,7 @@ const receiveBiasUpdate= (updatedBiasData)=>{
       </AppBar>
     </Box>
 
-    <Grid container spacing={0.8}>
+    <Grid container spacing={0.8} onClick={(e)=>{instrumenting(e,1)}}>
           {/* topic panel */}
           <Grid item  md={size[0]}>  
             <Paper  className={cssStyles.leftRightPanel} variant="outlined" square >
@@ -334,7 +355,7 @@ const receiveBiasUpdate= (updatedBiasData)=>{
           </Grid>
 
           {/*  intsance panel */}
-          <Grid item  md={size[1]}>
+          <Grid item  md={size[1]} onClick={(e)=>{instrumenting(e,2)}}>
             <Paper variant="outlined" square  className={cssStyles.middlePanels}>
               <RenderInstanceTable keyWords={instanceData} index={instanceIndex} All_instances={All_instances} 
               All_contents={All_instance_contents} H_color={hightlighColor} 
@@ -344,7 +365,7 @@ const receiveBiasUpdate= (updatedBiasData)=>{
           </Grid>
 
          {/* Bias chart panel */}
-          <Grid item  md={size[2]}>
+          <Grid item  md={size[2]} onClick={(e)=>{instrumenting(e,3)}}>
             <Paper variant="outlined" square className={cssStyles.middlePanels2}>
               <Paper variant="outlined" className={cssStyles.chartPanel}>
                  <div id="chordChart" style={{height:'100%'}}>
@@ -356,7 +377,7 @@ const receiveBiasUpdate= (updatedBiasData)=>{
             </Paper>
           </Grid>
           {/* Bias Editor panel */}
-          <Grid item  md={size[3]}>
+          <Grid item  md={size[3]} onClick={(e)=>{instrumenting(e,4)}}>
             <Paper className={cssStyles.leftRightPanel} variant="outlined" square>
               <ExpandBiasEditor isExpand={expandFlag}></ExpandBiasEditor>
             </Paper>
