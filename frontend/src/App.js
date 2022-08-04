@@ -337,9 +337,9 @@ const instrumenting= (e, panel) => {
       </AppBar>
     </Box>
 
-    <Grid container spacing={0.8} onClick={(e)=>{instrumenting(e,1)}}>
+    <Grid container spacing={0.8}>
           {/* topic panel */}
-          <Grid item  md={size[0]}>  
+          <Grid item  md={size[0]} onClick={(e)=>{instrumenting(e,1)}}>  
             <Paper  className={cssStyles.leftRightPanel} variant="outlined" square >
               <Paper component="form" sx={{ p: '1px 1px', display: 'flex', alignItems: 'center',margin: '2px 2px 4px 1px',backgroundColor:'#EEEEEE'}}>
                 Topic Name:
