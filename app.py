@@ -674,7 +674,7 @@ def logClickonApp():
     # POST request
     if request.method == 'POST':
         log_data = request.get_json()
-        print("panel:"+str(log_data))
+        print("panel: "+str(log_data))
         return 'Sucesss', 200
 
 
