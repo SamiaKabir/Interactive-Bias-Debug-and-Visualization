@@ -451,25 +451,37 @@ def calculate_bias():
     for per_topics in Suggested_words:
         for per_words in per_topics:
             word = per_words
-            current_type = Bias_Scores_Dict[word][0]["type"]
-            max = -2
-            max_subgroup = ""
-            min = 2
-            min_subgroup = ""
-            max_array = []
-            length = len(Bias_Scores_Dict[word])
-            # print(Bias_Scores_Dict[word])
+            try:
+                current_type = Bias_Scores_Dict[word][0]["type"]
+                max = -2
+                max_subgroup = ""
+                min = 2
+                min_subgroup = ""
+                max_array = []
+                length = len(Bias_Scores_Dict[word])
+                # print(Bias_Scores_Dict[word])
 
-            for k in range(0, length):
+                for k in range(0, length):
 
-                if(Bias_Scores_Dict[word][k]["type"] == current_type):
-                    if(Bias_Scores_Dict[word][k]["bias_score"] >= max):
-                        max = Bias_Scores_Dict[word][k]["bias_score"]
-                        max_subgroup = Bias_Scores_Dict[word][k]["subgroup"]
-                    if(Bias_Scores_Dict[word][k]["bias_score"] <= min):
-                        min = Bias_Scores_Dict[word][k]["bias_score"]
-                        min_subgroup = Bias_Scores_Dict[word][k]["subgroup"]
-                    if(k == length-1):
+                    if(Bias_Scores_Dict[word][k]["type"] == current_type):
+                        if(Bias_Scores_Dict[word][k]["bias_score"] >= max):
+                            max = Bias_Scores_Dict[word][k]["bias_score"]
+                            max_subgroup = Bias_Scores_Dict[word][k]["subgroup"]
+                        if(Bias_Scores_Dict[word][k]["bias_score"] <= min):
+                            min = Bias_Scores_Dict[word][k]["bias_score"]
+                            min_subgroup = Bias_Scores_Dict[word][k]["subgroup"]
+                        if(k == length-1):
+                            abs_dist = (max-min)
+                            if((abs_dist) >= 0.05):
+                                if(max > 0):
+                                    max_obj_current_type = {
+                                        "type": current_type,
+                                        "subgroup": max_subgroup,
+                                        "bias_score": max
+                                    }
+                                    max_array.append(max_obj_current_type)
+
+                    else:
                         abs_dist = (max-min)
                         if((abs_dist) >= 0.05):
                             if(max > 0):
@@ -479,36 +491,27 @@ def calculate_bias():
                                     "bias_score": max
                                 }
                                 max_array.append(max_obj_current_type)
+                            current_type = Bias_Scores_Dict[word][k]["type"]
+                            max = -2
+                            max_subgroup = ""
+                            min = 2
+                            min_subgroup = ""
+                        else:
+                            current_type = Bias_Scores_Dict[word][k]["type"]
+                            max = -2
+                            max_subgroup = ""
+                            min = 2
+                            min_subgroup = ""
+                        if(Bias_Scores_Dict[word][k]["bias_score"] >= max):
+                            max = Bias_Scores_Dict[word][k]["bias_score"]
+                            max_subgroup = Bias_Scores_Dict[word][k]["subgroup"]
+                        if(Bias_Scores_Dict[word][k]["bias_score"] <= min):
+                            min = Bias_Scores_Dict[word][k]["bias_score"]
+                            min_subgroup = Bias_Scores_Dict[word][k]["subgroup"]
 
-                else:
-                    abs_dist = (max-min)
-                    if((abs_dist) >= 0.05):
-                        if(max > 0):
-                            max_obj_current_type = {
-                                "type": current_type,
-                                "subgroup": max_subgroup,
-                                "bias_score": max
-                            }
-                            max_array.append(max_obj_current_type)
-                        current_type = Bias_Scores_Dict[word][k]["type"]
-                        max = -2
-                        max_subgroup = ""
-                        min = 2
-                        min_subgroup = ""
-                    else:
-                        current_type = Bias_Scores_Dict[word][k]["type"]
-                        max = -2
-                        max_subgroup = ""
-                        min = 2
-                        min_subgroup = ""
-                    if(Bias_Scores_Dict[word][k]["bias_score"] >= max):
-                        max = Bias_Scores_Dict[word][k]["bias_score"]
-                        max_subgroup = Bias_Scores_Dict[word][k]["subgroup"]
-                    if(Bias_Scores_Dict[word][k]["bias_score"] <= min):
-                        min = Bias_Scores_Dict[word][k]["bias_score"]
-                        min_subgroup = Bias_Scores_Dict[word][k]["subgroup"]
-
-            Max_Bias_Dict[word] = max_array
+                Max_Bias_Dict[word] = max_array
+            except KeyError as error:
+                print('The given key does not exist in the dictionary')
 
     # with open('./static/assets/jsons/max_bias_scores.json', "w") as json_f:
     #     json.dump(Max_Bias_Dict, json_f)

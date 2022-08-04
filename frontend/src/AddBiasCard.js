@@ -86,12 +86,35 @@ const AddBias= React.memo((props)=>{
 
     // update and hide the card
     const updateAndHide=(e)=>{
-        const newBias={
-            'name':newBiasName,
-            'subgroups': subgroupsName,
-            'repWords': allWordInputs
-        };
-        doupdateandhide(newBias);
+
+        var empty_list=false
+
+        
+        allWordInputs.forEach((lists)=>{
+            if(lists.length==0)
+                empty_list=true
+
+
+        })
+
+        if(empty_list || subgroupsName.length<2){
+            if(subgroupsName.length<2){
+                alert("Please enter at least two subgroups!")
+            }
+            else if(empty_list){
+                alert("Please enter at least one Bias word for each subgroup!")
+            }
+        }
+        
+        else{
+            const newBias={
+                'name':newBiasName,
+                'subgroups': subgroupsName,
+                'repWords': allWordInputs
+            };
+        
+            doupdateandhide(newBias);
+        }
     }
 
     return (
