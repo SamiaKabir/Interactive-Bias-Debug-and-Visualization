@@ -304,6 +304,11 @@ def bias_init():
         "subgroup": ["High Income", "Low Income", "Mid Income"]
     }
     bias_array.append(bias_dict)
+    bias_dict = {
+        "type": "Age",
+        "subgroup": ["Old", "Young"]
+    }
+    bias_array.append(bias_dict)
 
     # create vocab group for each subgroup
     subgroup_glossary = []
@@ -380,7 +385,21 @@ def bias_init():
     subgroup_dict = {
         "word": "Mid Income",
         "type": "Income",
-        "group": ["middleclass", "workingclass", "bourgeois", "bourgeoisie", "Middleclass", "Workingclass", "middleincome", "whitecollarclass"]
+        "group": ["middleclass", "workingclass", "Middleclass", "Workingclass", "middleincome", "whitecollarclass"]
+    }
+    subgroup_glossary.append(subgroup_dict)
+
+    subgroup_dict = {
+        "word": "Old",
+        "type": "Age",
+        "group": ["Old", "old", "elderly", "aged", "senior", "retiree"]
+    }
+    subgroup_glossary.append(subgroup_dict)
+
+    subgroup_dict = {
+        "word": "Young",
+        "type": "Age",
+        "group": ["young", "Young", "youth", "teenager", "teen", "children"]
     }
     subgroup_glossary.append(subgroup_dict)
 
@@ -472,7 +491,7 @@ def calculate_bias():
                             min_subgroup = Bias_Scores_Dict[word][k]["subgroup"]
                         if(k == length-1):
                             abs_dist = (max-min)
-                            if((abs_dist) >= 0.05):
+                            if((abs_dist) >= 0.03):
                                 if(max > 0):
                                     max_obj_current_type = {
                                         "type": current_type,
@@ -483,7 +502,7 @@ def calculate_bias():
 
                     else:
                         abs_dist = (max-min)
-                        if((abs_dist) >= 0.05):
+                        if((abs_dist) >= 0.03):
                             if(max > 0):
                                 max_obj_current_type = {
                                     "type": current_type,
