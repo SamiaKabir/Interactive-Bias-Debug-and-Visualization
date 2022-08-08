@@ -392,7 +392,7 @@ def bias_init():
     subgroup_dict = {
         "word": "Old",
         "type": "Age",
-        "group": ["Old", "old", "elderly", "aged", "senior", "retiree"]
+        "group": ["Old", "old", "elderly", "aged"]
     }
     subgroup_glossary.append(subgroup_dict)
 
