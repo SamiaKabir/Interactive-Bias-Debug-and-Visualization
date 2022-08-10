@@ -73,6 +73,9 @@ sentences_2 = news['content'].astype('str').tolist()
 global model
 model = models.KeyedVectors.load("Tuned_model_wv.wordvectors", mmap='r')
 
+# model = models.KeyedVectors.load(
+#     "./Models_for_tutorial/Tuned_model_wv_2.wordvectors", mmap='r')
+
 
 def setModelInit():
     global model
