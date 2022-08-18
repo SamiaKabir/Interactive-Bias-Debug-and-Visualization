@@ -6,7 +6,7 @@ from numpy import NaN
 import pandas as pd
 import gensim
 import gensim.downloader
-from gensim import models, corpora
+from gensim import models, corpora, matutils
 import numpy as np
 from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.feature_extraction.text import CountVectorizer
@@ -320,7 +320,7 @@ def bias_init():
     subgroup_dict = {
         "word": "Male",
         "type": "Gender",
-        "group": ["he", "his", "him", "male", "man", "men", "boy", "boys", "guy", "guys", "Men", "Man", "himself"]
+        "group": ["he", "his", "him", "male", "man", "men", "boy", "boys", "guys", "himself", "father", "son"]
     }
     subgroup_glossary.append(subgroup_dict)
 
@@ -334,7 +334,7 @@ def bias_init():
     subgroup_dict = {
         "word": "Female",
         "type": "Gender",
-        "group": ["she", "her", "female", "woman", "women", "girl", "girls", "Woman", "Women", "herself"]
+        "group": ["she", "her", "hers", "female", "woman", "women", "girl", "girls", "herself", "mother", "daughter"]
     }
     subgroup_glossary.append(subgroup_dict)
 
@@ -435,26 +435,36 @@ def calculate_bias():
             for x in range(0, len_glossary):
                 if(word in model.vocab):
                     len_sb = len(subgroup_glossary[x]["group"])
-                    sum = 0
+                    sum = model.wv[word]*0
+                    # sum = 0
                     bias_score = 0
                     for y in range(0, len_sb):
                         if not (subgroup_glossary[x]["group"][y] in model.vocab):
                             len_sb -= 1
                         else:
-                            sum += model.similarity(word,
-                                                    subgroup_glossary[x]["group"][y])
+                            # sum += model.similarity(word,
+                            # subgroup_glossary[x]["group"][y])
+                            sum += model.wv[subgroup_glossary[x]["group"][y]]
                     # print("word " + word + ","+" Bias Subgroup " +
                         #   subgroup_glossary[x]["word"]+",Bias Score "+":")
                     if len_sb > 0:
                         # print(sum/len_sb)
-                        bias_score = sum/len_sb
+                        sum = sum/len_sb
+                        # print(sum)
+                        # bias_score = model.similarity(word, sum)
+                        wordvec = model.wv[word]
+                        bias_score = np.dot(matutils.unitvec(
+                            wordvec), matutils.unitvec(sum))
+                        # bias_score = sum/len_sb
                     else:
                         # print(0)
                         bias_score = 0
+                    # print(bias_score)
+
                     bias_score_obj = {
                         "subgroup": subgroup_glossary[x]["word"],
                         "type": subgroup_glossary[x]["type"],
-                        "bias_score": bias_score
+                        "bias_score": float(bias_score)
                     }
                     Bias_Score_Array.append(bias_score_obj)
 
@@ -462,12 +472,13 @@ def calculate_bias():
                     bias_score_obj = {
                         "subgroup": subgroup_glossary[x]["word"],
                         "type": subgroup_glossary[x]["type"],
-                        "bias_score": 0
+                        "bias_score": float(0)
                     }
                     Bias_Score_Array.append(bias_score_obj)
 
                 # Bias_Score_Array[word] = bias_score_obj
             Bias_Scores_Dict[word] = Bias_Score_Array
+
     # with open('./static/assets/jsons/bias_scores.json', "w") as json_f:
     #     json.dump(Bias_Scores_Dict, json_f)
 
@@ -534,6 +545,7 @@ def calculate_bias():
                             min_subgroup = Bias_Scores_Dict[word][k]["subgroup"]
 
                 Max_Bias_Dict[word] = max_array
+                # print(max_array)
             except KeyError as error:
                 print('The given key does not exist in the dictionary')
 

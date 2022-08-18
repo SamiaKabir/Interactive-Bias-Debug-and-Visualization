@@ -165,7 +165,7 @@ function RenderInstanceTable(props) {
       if(filter_keywords.length>0){
       for (var i=0;i<filter_keywords.length-1;i++){
           filter_regex=filter_regex+filter_keywords[i];
-          filter_regex=filter_regex+"|";
+          filter_regex=filter_regex+" | ";
         }
       
       filter_regex=filter_regex+filter_keywords[filter_keywords.length-1];
