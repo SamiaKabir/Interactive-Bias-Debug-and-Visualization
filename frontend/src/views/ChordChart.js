@@ -289,82 +289,84 @@ const ChordChart= React.memo((props) => {
                 // populate the bias and color matrix 
                 let indx=0;
 
-                for (let [key, value] of onclick_bias_map) {
-                    let sub_groups= JSON.parse(key);
-                    // console.log(key)
-                    // console.log(sub_groups);
-                    if(sub_groups.length==1){
-                        var mat_indx= re_onclick_subgroups.indexOf(sub_groups[0])
-                        var agg_bias_score=0;
-                        value.forEach((word)=>{
-                            var tmp_array=Max_Bias_map.get(word);
-                            tmp_array.forEach((obj)=>{
-                            	if(obj.subgroup==sub_groups[0])
-                                	agg_bias_score+=obj.bias_score;
-                            });
-            
-                        });
-                        // console.log(mat_indx);
-                        Bias_Matrix[mat_indx][mat_indx]=(agg_bias_score*1000);
-                        Color_Matrix[mat_indx][mat_indx]=indx;
-                        // put into bias id map
-                        bias_id_map.set(key,indx);
-                        indx++;
-                        // console.log(agg_bias_score);
-                        // console.log(Bias_Matrix);
-                    }
-            
-                    else if(sub_groups.length==2){
-                        var mat_indx=[];
-                        sub_groups.forEach((sb_group)=>{
-                            mat_indx.push(re_onclick_subgroups.indexOf(sb_group));
-                        })
-                        let top_indx=sub_groups.length
-                        var ag_score_array=[];
-                        for(var i=0;i<top_indx;i++){
-                            ag_score_array.push(0);
-                        }
-                        for(var i=0;i<top_indx;i++){
-                            let current_sb=sub_groups[i]
+                if(onclick_bias_map){
+                    for (let [key, value] of onclick_bias_map) {
+                        let sub_groups= JSON.parse(key);
+                        // console.log(key)
+                        // console.log(sub_groups);
+                        if(sub_groups.length==1){
+                            var mat_indx= re_onclick_subgroups.indexOf(sub_groups[0])
+                            var agg_bias_score=0;
                             value.forEach((word)=>{
-                                let tmp_array=Max_Bias_map.get(word);
+                                var tmp_array=Max_Bias_map.get(word);
                                 tmp_array.forEach((obj)=>{
-                                    let indx_sb= sub_groups.indexOf(obj.subgroup);
-                                    ag_score_array[indx_sb]+=obj.bias_score;
-                                    
-                                })
+                                    if(obj.subgroup==sub_groups[0])
+                                        agg_bias_score+=obj.bias_score;
+                                });
                 
+                            });
+                            // console.log(mat_indx);
+                            Bias_Matrix[mat_indx][mat_indx]=(agg_bias_score*1000);
+                            Color_Matrix[mat_indx][mat_indx]=indx;
+                            // put into bias id map
+                            bias_id_map.set(key,indx);
+                            indx++;
+                            // console.log(agg_bias_score);
+                            // console.log(Bias_Matrix);
+                        }
+                
+                        else if(sub_groups.length==2){
+                            var mat_indx=[];
+                            sub_groups.forEach((sb_group)=>{
+                                mat_indx.push(re_onclick_subgroups.indexOf(sb_group));
                             })
+                            let top_indx=sub_groups.length
+                            var ag_score_array=[];
+                            for(var i=0;i<top_indx;i++){
+                                ag_score_array.push(0);
+                            }
+                            for(var i=0;i<top_indx;i++){
+                                let current_sb=sub_groups[i]
+                                value.forEach((word)=>{
+                                    let tmp_array=Max_Bias_map.get(word);
+                                    tmp_array.forEach((obj)=>{
+                                        let indx_sb= sub_groups.indexOf(obj.subgroup);
+                                        ag_score_array[indx_sb]+=obj.bias_score;
+                                        
+                                    })
+                    
+                                })
+                                
+                            }
+                            // console.log(ag_score_array);
+                            // console.log(mat_indx)
+                            // console.log(Bias_Matrix)
+                            let last_indx=mat_indx[top_indx-1]
+                            for(var i=top_indx-1;i>0;i--){
+                                var current_index=last_indx;
+                                var next_index= mat_indx[i-1];
+                                // console.log(current_index+","+next_index)
+                                // if(Bias_Matrix[current_index][next_index]==0){
+                                    Bias_Matrix[current_index][next_index]= ag_score_array[top_indx-1]*1000;
+                                    Bias_Matrix[next_index][current_index]= ag_score_array[i-1]*1000;
+                                    Color_Matrix[current_index][next_index]= indx;
+                                    Color_Matrix[next_index][current_index]= indx;
+
+                                // }
+                                // else{
+                                //     Bias_Matrix[current_index][next_index]+= ag_score_array[top_indx-1]*1000;
+                                //     Bias_Matrix[next_index][current_index]+= ag_score_array[i-1]*1000;
+                                // }
+
+                            }
+                            // put into bias id map
+                            bias_id_map.set(key,indx);
                             
+                            //per bias there will be one color
+                            indx++;
                         }
-                        // console.log(ag_score_array);
-                        // console.log(mat_indx)
-                        // console.log(Bias_Matrix)
-                        let last_indx=mat_indx[top_indx-1]
-                        for(var i=top_indx-1;i>0;i--){
-                            var current_index=last_indx;
-                            var next_index= mat_indx[i-1];
-                            // console.log(current_index+","+next_index)
-                            // if(Bias_Matrix[current_index][next_index]==0){
-                                Bias_Matrix[current_index][next_index]= ag_score_array[top_indx-1]*1000;
-                                Bias_Matrix[next_index][current_index]= ag_score_array[i-1]*1000;
-                                Color_Matrix[current_index][next_index]= indx;
-                                Color_Matrix[next_index][current_index]= indx;
-
-                            // }
-                            // else{
-                            //     Bias_Matrix[current_index][next_index]+= ag_score_array[top_indx-1]*1000;
-                            //     Bias_Matrix[next_index][current_index]+= ag_score_array[i-1]*1000;
-                            // }
-
-                        }
-                        // put into bias id map
-                        bias_id_map.set(key,indx);
-                        
-                        //per bias there will be one color
-                        indx++;
+                
                     }
-            
                 }
                 // console.log(bias_id_map)
 
