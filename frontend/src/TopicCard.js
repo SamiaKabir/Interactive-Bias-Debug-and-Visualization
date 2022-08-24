@@ -61,8 +61,8 @@ function RenderTopicCard(props) {
       setkeyWord(e.target.value);
     };
     
-    const [keyWords,setKeyWords]= useState([]);
-    const [actualKeyWords,setActualKeyWords]= useState([]);
+    const [keyWords,setKeyWords]= useState([['teacher', 'author', 'mechanic', 'broker', 'baker', 'surveyor', 'laborer', 'surgeon', 'gardener', 'painter', 'dentist', 'janitor', 'athlete', 'manager', 'conductor', 'carpenter', 'housekeeper', 'secretary', 'economist', 'geologist', 'clerk', 'doctor', 'judge', 'physician', 'lawyer', 'artist', 'instructor', 'dancer', 'photographer', 'inspector', 'musician', 'soldier', 'librarian', 'professor', 'psychologist', 'nurse', 'sailor', 'accountant', 'architect', 'chemist', 'administrator', 'physicist', 'scientist', 'farmer']]);
+    const [actualKeyWords,setActualKeyWords]= useState([['teacher', 'author', 'mechanic', 'broker', 'baker', 'surveyor', 'laborer', 'surgeon', 'gardener', 'painter', 'dentist', 'janitor', 'athlete', 'manager', 'conductor', 'carpenter', 'housekeeper', 'secretary', 'economist', 'geologist', 'clerk', 'doctor', 'judge', 'physician', 'lawyer', 'artist', 'instructor', 'dancer', 'photographer', 'inspector', 'musician', 'soldier', 'librarian', 'professor', 'psychologist', 'nurse', 'sailor', 'accountant', 'architect', 'chemist', 'administrator', 'physicist', 'scientist', 'farmer']]);
 
     // console.log(keyWords);
 

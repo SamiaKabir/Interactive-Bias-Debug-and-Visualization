@@ -130,7 +130,7 @@ function App() {
   };
 
   const [addNewCard, setaddNewCard]= useState(0);
-  const [topics, setTopics]= useState([]);
+  const [topics, setTopics]= useState(["Profession"]);
 
   const handleAddTopicCard= () => {
     console.log(topicTitle);
